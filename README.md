@@ -24,6 +24,6 @@ Tailwind file association
 
 <h1>Tutorials</h1>
 
-`Typescript documentation:` https://www.typescriptlang.org/docs/handbook/intro.html <br>
-`React documentation:` https://react.dev/learn <br>
-`Next.js documentation:` https://nextjs.org/learn/foundations/about-nextjs?utm_source=next-site&utm_medium=homepage-cta&utm_campaign=home <br>
+`Typescript documentation:` https://www.typescriptlang.org/ <br>
+`React documentation:` https://react.dev/ <br>
+`Next.js documentation:` https://nextjs.org/ <br>
