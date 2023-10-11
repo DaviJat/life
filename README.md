@@ -1,3 +1,5 @@
+<h1>Comandos e configurações inicias do projeto</h1>
+
 Projeto criado com `npx create-next-app@latest`
 
 ![image](https://github.com/DaviJat/life/assets/91758001/65248dc5-8b44-4ef3-8bdb-cd249a661d75)
