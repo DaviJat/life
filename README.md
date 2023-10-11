@@ -22,7 +22,11 @@ Tailwind file association
 
 ![image](https://user-images.githubusercontent.com/91758001/236224343-28320bd6-21e3-4325-ba0e-a388a63e8f4d.png)
 
-<h1>Tutoriais</h1>
+<h1>Tutorials</h1>
 
-`Typescript documentation`
+`Typescript documentation:`<br>
 https://www.typescriptlang.org/docs/handbook/intro.html
+`React documentation:`<br>
+https://react.dev/learn
+`Next.js documentation:`<br>
+https://nextjs.org/learn/foundations/about-nextjs?utm_source=next-site&utm_medium=homepage-cta&utm_campaign=home
