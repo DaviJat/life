@@ -22,8 +22,12 @@ Tailwind file association
 
 ![image](https://user-images.githubusercontent.com/91758001/236224343-28320bd6-21e3-4325-ba0e-a388a63e8f4d.png)
 
-<h1>Tutorials</h1>
+<h1>Documentação</h1>
 
-`Typescript documentation:` https://www.typescriptlang.org/ <br>
-`React documentation:` https://react.dev/ <br>
-`Next.js documentation:` https://nextjs.org/ <br>
+`Typescript:` https://www.typescriptlang.org/ <br>
+`React:` https://react.dev/ <br>
+`Next.js:` https://nextjs.org/ <br>
+
+<h1>Tutoriais</h1>
+
+https://www.youtube.com/watch?v=a_qbqpDifXM&t=5809s&ab_channel=CodewithGuillaume
