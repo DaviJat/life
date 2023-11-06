@@ -31,3 +31,8 @@ Tailwind file association
 <h1>Tutoriais</h1>
 
 https://www.youtube.com/watch?v=a_qbqpDifXM&t=5809s&ab_channel=CodewithGuillaume
+
+<h1>Template (Next 14)</h1>
+
+https://github.com/bysxx/next14-ts-template-fullstack
+
