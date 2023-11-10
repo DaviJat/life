@@ -22,6 +22,9 @@ Tailwind file association
 
 ![image](https://user-images.githubusercontent.com/91758001/236224343-28320bd6-21e3-4325-ba0e-a388a63e8f4d.png)
 
+Prisma - `npm install prisma --save-dev` <br>
+`npx prisma init`
+
 <h1>Documentação</h1>
 
 `Typescript:` https://www.typescriptlang.org/ <br>
