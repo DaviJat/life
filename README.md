@@ -23,7 +23,8 @@ Tailwind file association
 ![image](https://user-images.githubusercontent.com/91758001/236224343-28320bd6-21e3-4325-ba0e-a388a63e8f4d.png) <br>
 
 Prisma - `npm install prisma --save-dev` <br>
-`npx prisma init`
+`npx prisma init` <br>
+`yarn add @prisma/client`
 
 <h1>Documentação</h1>
 
@@ -37,6 +38,11 @@ Prisma - `npm install prisma --save-dev` <br>
 <a>https://www.youtube.com/watch?v=a_qbqpDifXM&t=5809s&ab_channel=CodewithGuillaume</a> <br>
 `Criar cadastro e login do usuário utilizando NextAuth, Prisma e PostgreSQL:` <br>
 <a>https://www.youtube.com/watch?v=bicCg4GxOP8&t=2179s&ab_channel=CandDev</a>
+
+`Prisma Schema:` Esquema do banco de dados. <br>
+`Prisma Cliente:` Tabelas convertidas para objetos em typescript para podermos trabalhar com eles. <br>
+`Prisma generate:` Atualiza/gera o Prisma Client. <br>
+`Prisma migrate:` Atualiza/gera o banco de dados com base no Prisma Schema.
 
 <h1>Template (Next 14)</h1>
 
