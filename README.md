@@ -31,7 +31,8 @@ Tailwind file association
 <h1>Tutoriais</h1>
 
 O básico do Next.js 14: <br>
-<a>https://www.youtube.com/watch?v=a_qbqpDifXM&t=5809s&ab_channel=CodewithGuillaume</a> <br><br>
+<a>https://www.youtube.com/watch?v=a_qbqpDifXM&t=5809s&ab_channel=CodewithGuillaume</a>
+<hr>
 Criar cadastro e login do usuário utilizando NextAuth, Prisma e PostgreSQL: <br>
 <a>https://www.youtube.com/watch?v=bicCg4GxOP8&t=2179s&ab_channel=CandDev</a>
 
