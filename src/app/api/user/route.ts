@@ -10,7 +10,6 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
     const { email, senha, nome, sobrenome } = body;
 
     // Verificar se email já foi cadastrado
@@ -19,7 +18,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (verificaEmailCadastrado) {
-      return NextResponse.json({ error: 'Email já cadastrado' })
+      return NextResponse.json({ usuario: null, message: 'Email já cadastrado.' }, { status: 201 })
     }
 
     const senhaEncriptada = await hash(senha, 10);
@@ -32,8 +31,10 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ usuario: novoUsuario, message: 'Usuário cadastrado com sucesso' });
+    const { senha: senhaNovoUsuario, ...rest } = novoUsuario;
+
+    return NextResponse.json({ usuario: rest, message: 'Usuário cadastrado com sucesso.' }, { status: 201 });
   } catch (error) {
-    return error;
+    return NextResponse.json({ message: 'Algo de errado aconteceu.' }, { status: 500 });
   }
 }
