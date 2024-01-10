@@ -10,31 +10,39 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, senha, nome, sobrenome } = body;
+    const { email, username, password } = body;
 
-    // Verificar se email já foi cadastrado
-    const verificaEmailCadastrado = await db.usuario.findUnique({
+    // Check if email already exists
+    const existingUserByEmail = await db.user.findUnique({
       where: { email }
     });
 
-    if (verificaEmailCadastrado) {
-      return NextResponse.json({ usuario: null, message: 'Email já cadastrado.' }, { status: 201 })
+    if (existingUserByEmail) {
+      return NextResponse.json({ user: null, message: 'User with this email already exists' }, { status: 409 })
     }
 
-    const senhaEncriptada = await hash(senha, 10);
-    const novoUsuario = await db.usuario.create({
+    // Check if username already exists
+    const existingUserByUsername = await db.user.findUnique({
+      where: { username }
+    });
+
+    if (existingUserByUsername) {
+      return NextResponse.json({ user: null, message: 'User with this username already exists' }, { status: 409 })
+    }
+
+    const hashedPassword = await hash(password, 10);
+    const newUser = await db.user.create({
       data: {
+        username,
         email,
-        senha: senhaEncriptada,
-        nome,
-        sobrenome
+        password: hashedPassword,
       }
     })
 
-    const { senha: senhaNovoUsuario, ...rest } = novoUsuario;
+    const { password: newUserPassword, ...rest } = newUser;
 
-    return NextResponse.json({ usuario: rest, message: 'Usuário cadastrado com sucesso.' }, { status: 201 });
+    return NextResponse.json({ user: rest, message: 'User created successfully' }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ message: 'Algo de errado aconteceu.' }, { status: 500 });
+    return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
   }
 }
