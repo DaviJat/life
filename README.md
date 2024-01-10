@@ -31,8 +31,8 @@ Prisma - `npm install prisma --save-dev` <br>
 `Typescript:` https://www.typescriptlang.org/ <br>
 `React:` https://react.dev/ <br>
 `Next.js:` https://nextjs.org/ <br>
+`Prisma:` https://www.prisma.io/ <br>
 `shadcn/ui:` https://ui.shadcn.com/ <br>
-`shadcn/ui:` https://www.prisma.io/ <br>
 
 
 <h1>Tutoriais</h1>
