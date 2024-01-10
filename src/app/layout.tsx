@@ -1,14 +1,26 @@
 import './globals.css';
 
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+
+import Navbar from '@/components/Navbar';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Life',
-  description: 'Sistema para organizar tudo que eu precisar',
+  description: 'System to organize everything I need',
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
-  <body>{children}</body>
+  <html lang="en">
+    <body className={inter.className}>
+      <main className="h-screen flex flex-col justify-center items-center">
+        <Navbar />
+        {children}
+      </main>
+    </body>
+  </html>
 );
 
 export default RootLayout;
