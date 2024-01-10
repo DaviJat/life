@@ -40,6 +40,10 @@ Prisma - `npm install prisma --save-dev` <br>
 `shadcn/ui:` https://ui.shadcn.com/ <br>
 
 
+<h1>Ícones</h1>
+
+<a>https://lucide.dev/icons/</a>
+
 <h1>Tutoriais</h1>
 
 `O básico do Next.js 14:` <br>
