@@ -10,7 +10,9 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.8.0-dev.53",
+    "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
@@ -19,6 +21,7 @@
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.49.3",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
