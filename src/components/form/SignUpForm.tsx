@@ -16,25 +16,38 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 
-const FormSchema = z.object({
-  email: z
-    .string({
-      required_error: 'Email is required',
-    })
-    .email('Invalid email'),
-  password: z
-    .string({
-      required_error: 'Password is required',
-    })
-    .min(8, 'Password must have than 8 characters'),
-});
+const FormSchema = z
+  .object({
+    username: z.string().min(1, 'Username is required').max(30),
+    email: z
+      .string({
+        required_error: 'Email is required',
+      })
+      .email('Invalid email'),
+    password: z
+      .string({
+        required_error: 'Password is required',
+      })
+      .min(8, 'Password must have than 8 characters'),
+    confirmPassword: z
+      .string({
+        required_error: 'Password confirmation is required',
+      })
+      .min(8, 'Password must have than 8 characters'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ['confirmaPassword'],
+    message: 'Password do not match',
+  });
 
-const SignInForm = () => {
+const SignUpForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      username: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
   });
 
@@ -46,6 +59,19 @@ const SignInForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <div className="space-y-2">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your username" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -76,22 +102,39 @@ const SignInForm = () => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Re-Enter your password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <Button className="w-full mt-6" type="submit">
-          Sign in
+          Sign up
         </Button>
       </form>
       <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
         or
       </div>
       <p className="text-center text-sm text-gray-600 mt-2">
-        If you don&apos;t have an account, please&nbsp;
-        <Link className="text-blue-500 hover:underline" href="/sign-up">
-          Sign up
+        Already have an account? Awesome,&nbsp;
+        <Link className="text-blue-500 hover:underline" href="/sign-in">
+          Sign in
         </Link>
       </p>
     </Form>
   );
 };
 
-export default SignInForm;
+export default SignUpForm;
