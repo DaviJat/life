@@ -45,11 +45,10 @@ const SignInForm = () => {
     const signInData = await signIn('credentials', {
       email: values.email,
       password: values.password,
+      callbackUrl: '/admin',
     });
     if (signInData?.error) {
       console.log(signInData.error);
-    } else {
-      router.push('/admin');
     }
   };
 
