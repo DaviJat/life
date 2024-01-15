@@ -4,6 +4,8 @@
     "airbnb-typescript",
     "airbnb/hooks",
     "plugin:@next/next/recommended",
+    "eslint:recommended",
+    "plugin:prettier/recommended",
     "prettier"
     // "plugin:tailwindcss/recommended"
   ],
