@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
+import { useToast } from '../ui/use-toast';
 
 const FormSchema = z.object({
   email: z
@@ -33,6 +34,8 @@ const FormSchema = z.object({
 
 const SignInForm = () => {
   const router = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,7 +51,11 @@ const SignInForm = () => {
       callbackUrl: '/admin',
     });
     if (signInData?.error) {
-      console.log(signInData.error);
+      toast({
+        title: 'Error',
+        description: 'Oops! Something went wrong',
+        variant: 'destructive',
+      });
     }
   };
 

@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import Navbar from '@/components/Navbar';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,6 +20,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
         <Navbar />
         {children}
       </main>
+      <Toaster />
     </body>
   </html>
 );
