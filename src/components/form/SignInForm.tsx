@@ -48,7 +48,7 @@ const SignInForm = () => {
     const signInData = await signIn('credentials', {
       email: values.email,
       password: values.password,
-      callbackUrl: '/admin',
+      redirect: false,
     });
     if (signInData?.error) {
       toast({
@@ -56,6 +56,9 @@ const SignInForm = () => {
         description: 'Oops! Something went wrong',
         variant: 'destructive',
       });
+    } else {
+      router.refresh();
+      router.push('/admin');
     }
   };
 

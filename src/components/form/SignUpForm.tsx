@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
+import { useToast } from '../ui/use-toast';
 
 const FormSchema = z
   .object({
@@ -53,6 +54,7 @@ const SignUpForm = () => {
   });
 
   const router = useRouter();
+  const { toast } = useToast();
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     const response = await fetch('/api/user', {
@@ -70,7 +72,11 @@ const SignUpForm = () => {
     if (response.ok) {
       router.push('/sign-in');
     } else {
-      console.log('Registration failed');
+      toast({
+        title: 'Error',
+        description: 'Oops! Something went wrong',
+        variant: 'destructive',
+      });
     }
   };
 
