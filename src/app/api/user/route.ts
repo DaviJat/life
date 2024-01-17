@@ -2,7 +2,9 @@ import { hash } from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import authOptions from "@/lib/auth";
 import db from "@/lib/db";
+import { getServerSession } from "next-auth";
 
 const userSchema = z
   .object({
@@ -20,7 +22,9 @@ const userSchema = z
   })
 
 export async function GET() {
-  return NextResponse.json({ success: true })
+  const session = await getServerSession(authOptions);
+
+  return NextResponse.json({ authenticated: !!session })
 }
 
 export async function POST(request: NextRequest) {
