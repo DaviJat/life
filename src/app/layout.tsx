@@ -1,22 +1,31 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+import '@/styles/globals.css';
 
-const inter = Inter({ subsets: ['latin'] })
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+
+import Navbar from '@/components/Navbar';
+import Provider from '@/components/Provider';
+import { Toaster } from '@/components/ui/toaster';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Life',
-  description: 'Sistema para organizar tudo que eu precisar',
-}
+  description: 'System to organize everything I need',
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="pt-br">
-      <body className={inter.className}>{children}</body>
-    </html>
-  )
-}
+const RootLayout = ({ children }: { children: React.ReactNode }) => (
+  <html lang="en">
+    <body className={inter.className}>
+      <Provider>
+        <main className="h-screen flex flex-col justify-center items-center">
+          <Navbar />
+          {children}
+        </main>
+        <Toaster />
+      </Provider>
+    </body>
+  </html>
+);
+
+export default RootLayout;
