@@ -17,9 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang="en">
     <body className={inter.className}>
       <Provider>
-        <main className="h-screen flex flex-col justify-center items-center">
-          {children}
-        </main>
+        <main>{children}</main>
         <Toaster />
       </Provider>
     </body>
