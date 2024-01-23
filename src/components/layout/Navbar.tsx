@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import authOptions from '@/lib/auth';
 import { getServerSession } from 'next-auth';
-import UserAccountNav from './UserAccountNav';
+import UserAccountNav from '../UserAccountNav';
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
