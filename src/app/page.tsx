@@ -1,14 +1,14 @@
 import authOptions from '@/lib/auth';
 import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
 
-  return (
-    <div>
-      <h1 className="text-4xl">Home</h1>
-    </div>
-  );
+  if (session?.user) {
+    return redirect('/home');
+  }
+  return redirect('/sign-in');
 };
 
 export default Home;
