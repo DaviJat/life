@@ -58,6 +58,6 @@ Prisma - `npm install prisma --save-dev` <br>
 
 <h1>Template (Next 14)</h1>
 
-Cor principal: #66ff9c
+Cor principal: `#66ff9c` <br>
 https://github.com/bysxx/next14-ts-template-fullstack
 
