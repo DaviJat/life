@@ -3,29 +3,16 @@ import Sidebar from '@/components/layout/Sidebar';
 import { FC, ReactNode } from 'react';
 
 import SidebarItem from '@/components/layout/SidebarItem';
-import {
-  BarChart3,
-  Boxes,
-  LayoutDashboard,
-  LifeBuoy,
-  Package,
-  Receipt,
-  Settings,
-  UserCircle,
-} from 'lucide-react';
+import { BarChart3, Boxes, LayoutDashboard, LifeBuoy, Package, Receipt, Settings, UserCircle } from 'lucide-react';
 
 interface DashboardLayoutProps {
   children: ReactNode;
 }
 
 const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => (
-  <div>
+  <>
     <Sidebar>
-      <SidebarItem
-        icon={<LayoutDashboard size={20} />}
-        text="Dashboard"
-        alert
-      />
+      <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" alert />
       <SidebarItem icon={<BarChart3 size={20} />} text="Statistics" active />
       <SidebarItem icon={<UserCircle size={20} />} text="Users" />
       <SidebarItem icon={<Boxes size={20} />} text="Inventory" />
@@ -37,7 +24,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => (
     </Sidebar>
     <Navbar></Navbar>
     {children}
-  </div>
+  </>
 );
 
 export default DashboardLayout;
