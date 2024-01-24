@@ -12,7 +12,7 @@ export const SidebarContext = createContext({ expanded: true });
 const Sidebar = ({ children }: SidebarProps) => {
   const [expanded, setExpanded] = useState(true);
   return (
-    <aside className={`h-screen ${expanded ? 'max-w-52' : 'w-min'}`}>
+    <aside className="h-screen">
       <nav className="h-full inline-flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
