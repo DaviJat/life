@@ -5,7 +5,7 @@ const Navbar = async () => {
   const session = await getServerSession(authOptions);
 
   return (
-    <div>
+    <div className="flex border-b p-4">
       <p>Navbar</p>
     </div>
   );

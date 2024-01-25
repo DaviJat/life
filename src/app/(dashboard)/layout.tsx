@@ -19,7 +19,7 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => (
-  <div className="inline-flex">
+  <div className="inline-flex w-screen">
     <Sidebar>
       <SidebarItem
         icon={<LayoutDashboard size={20} />}
@@ -35,9 +35,9 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => (
       <SidebarItem icon={<Settings size={20} />} text="Settings" />
       <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
     </Sidebar>
-    <div>
+    <div className="w-full">
       <Navbar></Navbar>
-      {children}
+      <div className="container">{children}</div>
     </div>
   </div>
 );
