@@ -17,9 +17,7 @@ const Sidebar = ({ children }: SidebarProps) => {
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src="https://img.logoipsum.com/243.svg"
-            className={`overflow-hidden transition-all ${
-              expanded ? 'w-32' : 'w-0'
-            }`}
+            className={`overflow-hidden transition-all ${expanded ? 'w-32' : 'w-0'}`}
             alt=""
           />
           <button

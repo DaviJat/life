@@ -13,7 +13,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <div className="inline-flex w-screen">
       <Sidebar>
-        <SidebarItem icon={<Home size={20} />} text="Home" route="/home" active />
+        <SidebarItem icon={<Home size={20} />} text="Home" route="/home" />
         <SidebarItem icon={<ClipboardList size={20} />} text="Tarefas" route="/tarefas" />
         <SidebarItem icon={<CircleDollarSign size={20} />} text="Financeiro" route="/financeiro" />
       </Sidebar>
