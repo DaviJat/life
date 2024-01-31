@@ -1,15 +1,19 @@
-import "next-auth"
+import "next-auth";
 
 declare module "next-auth" {
     interface User {
-        username: string
+        id: number;
+        email: string;
+        nome: string;
+        sobrenome: string;
     }
+
     interface Session {
         user: User & {
-            username: string
+            nome: string;
         }
         token: {
-            username: string
+            nome: string;
         }
     }
 }

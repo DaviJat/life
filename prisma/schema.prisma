@@ -10,11 +10,89 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TipoLocalDinheiro {
+  fisico
+  virtual
+}
+
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  username  String    @unique
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  nome          String
+  sobrenome     String
+  senha         String
+  data_cadastro DateTime @default(now())
+  data_edicao   DateTime @updatedAt
+}
+
+model Pessoa {
+  id             Int              @id @default(autoincrement())
+  nome           String
+  telefone       String
+  ContasAPagar   ContasAPagar[]
+  ContasAReceber ContasAReceber[]
+  data_cadastro  DateTime         @default(now())
+  data_edicao    DateTime         @updatedAt
+}
+
+model LocalDinheiro {
+  id              Int               @id @default(autoincrement())
+  descricao       String
+  tipo            TipoLocalDinheiro
+  Carteira        Carteira[]
+  EntradaCarteira EntradaCarteira[]
+  SaidaCarteira   SaidaCarteira[]
+  data_cadastro   DateTime          @default(now())
+  data_edicao     DateTime          @updatedAt
+}
+
+model Carteira {
+  id                Int           @id @default(autoincrement())
+  saldo             Float
+  local_dinheiro    LocalDinheiro @relation(fields: [local_dinheiro_id], references: [id])
+  local_dinheiro_id Int
+  data_cadastro     DateTime      @default(now())
+  data_edicao       DateTime      @updatedAt
+}
+
+model EntradaCarteira {
+  id                Int           @id @default(autoincrement())
+  descricao         String
+  valor             Float
+  local_dinheiro    LocalDinheiro @relation(fields: [local_dinheiro_id], references: [id])
+  local_dinheiro_id Int
+  data_cadastro     DateTime      @default(now())
+  data_edicao       DateTime      @updatedAt
+}
+
+model SaidaCarteira {
+  id                Int           @id @default(autoincrement())
+  descricao         String
+  valor             Float
+  local_dinheiro    LocalDinheiro @relation(fields: [local_dinheiro_id], references: [id])
+  local_dinheiro_id Int
+  data_cadastro     DateTime      @default(now())
+  data_edicao       DateTime      @updatedAt
+}
+
+model ContasAPagar {
+  id            Int      @id @default(autoincrement())
+  descricao     String
+  valor         Float
+  pessoa        Pessoa   @relation(fields: [pessoa_id], references: [id])
+  pessoa_id     Int
+  pago          Boolean
+  data_cadastro DateTime @default(now())
+  data_edicao   DateTime @updatedAt
+}
+
+model ContasAReceber {
+  id            Int      @id @default(autoincrement())
+  descricao     String
+  valor         Float
+  pessoa        Pessoa   @relation(fields: [pessoa_id], references: [id])
+  pessoa_id     Int
+  pago          Boolean
+  data_cadastro DateTime @default(now())
+  data_edicao   DateTime @updatedAt
 }
