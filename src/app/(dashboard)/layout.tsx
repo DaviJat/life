@@ -14,8 +14,8 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
     <div className="inline-flex w-screen">
       <Sidebar>
         <SidebarItem icon={<Home size={20} />} text="Home" route="/home" />
-        <SidebarItem icon={<ClipboardList size={20} />} text="Tarefas" route="/tarefas" />
-        <SidebarItem icon={<CircleDollarSign size={20} />} text="Financeiro" route="/financeiro" />
+        <SidebarItem icon={<ClipboardList size={20} />} text="Tarefas" route="/task" />
+        <SidebarItem icon={<CircleDollarSign size={20} />} text="Financeiro" route="/finance" />
       </Sidebar>
       <div className="w-full">
         <Navbar />
