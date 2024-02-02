@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,89 +7,88 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum TipoLocalDinheiro {
-  fisico
-  virtual
+enum MoneyLocationType {
+  Physical
+  Virtual
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  email         String   @unique
-  nome          String
-  sobrenome     String
-  senha         String
-  data_cadastro DateTime @default(now())
-  data_edicao   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Pessoa {
+model Person {
   id             Int              @id @default(autoincrement())
-  nome           String
-  telefone       String
-  ContasAPagar   ContasAPagar[]
-  ContasAReceber ContasAReceber[]
-  data_cadastro  DateTime         @default(now())
-  data_edicao    DateTime         @updatedAt
+  name           String
+  phone          String
+  BillsToPay     BillsToPay[]
+  BillsToReceive BillsToReceive[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
-model LocalDinheiro {
-  id              Int               @id @default(autoincrement())
-  descricao       String
-  tipo            TipoLocalDinheiro
-  Carteira        Carteira[]
-  EntradaCarteira EntradaCarteira[]
-  SaidaCarteira   SaidaCarteira[]
-  data_cadastro   DateTime          @default(now())
-  data_edicao     DateTime          @updatedAt
+model MoneyLocation {
+  id           Int               @id @default(autoincrement())
+  description  String
+  type         MoneyLocationType
+  Wallets      Wallet[]
+  WalletEntry  WalletEntry[]
+  WalletExit   WalletExit[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 }
 
-model Carteira {
+model Wallet {
   id                Int           @id @default(autoincrement())
-  saldo             Float
-  local_dinheiro    LocalDinheiro @relation(fields: [local_dinheiro_id], references: [id])
-  local_dinheiro_id Int
-  data_cadastro     DateTime      @default(now())
-  data_edicao       DateTime      @updatedAt
+  balance           Float
+  moneyLocation    MoneyLocation @relation(fields: [moneyLocationId], references: [id])
+  moneyLocationId Int
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
 
-model EntradaCarteira {
+model WalletEntry {
   id                Int           @id @default(autoincrement())
-  descricao         String
-  valor             Float
-  local_dinheiro    LocalDinheiro @relation(fields: [local_dinheiro_id], references: [id])
-  local_dinheiro_id Int
-  data_cadastro     DateTime      @default(now())
-  data_edicao       DateTime      @updatedAt
+  description       String
+  value             Float
+  moneyLocation    MoneyLocation @relation(fields: [moneyLocationId], references: [id])
+  moneyLocationId Int
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
 
-model SaidaCarteira {
+model WalletExit {
   id                Int           @id @default(autoincrement())
-  descricao         String
-  valor             Float
-  local_dinheiro    LocalDinheiro @relation(fields: [local_dinheiro_id], references: [id])
-  local_dinheiro_id Int
-  data_cadastro     DateTime      @default(now())
-  data_edicao       DateTime      @updatedAt
+  description       String
+  value             Float
+  moneyLocation    MoneyLocation @relation(fields: [moneyLocationId], references: [id])
+  moneyLocationId Int
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
 
-model ContasAPagar {
+model BillsToPay {
   id            Int      @id @default(autoincrement())
-  descricao     String
-  valor         Float
-  pessoa        Pessoa   @relation(fields: [pessoa_id], references: [id])
-  pessoa_id     Int
-  pago          Boolean
-  data_cadastro DateTime @default(now())
-  data_edicao   DateTime @updatedAt
+  description   String
+  value         Float
+  person        Person   @relation(fields: [personId], references: [id])
+  personId     Int
+  paid          Boolean
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
-model ContasAReceber {
+model BillsToReceive {
   id            Int      @id @default(autoincrement())
-  descricao     String
-  valor         Float
-  pessoa        Pessoa   @relation(fields: [pessoa_id], references: [id])
-  pessoa_id     Int
-  pago          Boolean
-  data_cadastro DateTime @default(now())
-  data_edicao   DateTime @updatedAt
+  description   String
+  value         Float
+  person        Person   @relation(fields: [personId], references: [id])
+  personId     Int
+  paid          Boolean
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

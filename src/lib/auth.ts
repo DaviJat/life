@@ -19,10 +19,10 @@ const authOptions: NextAuthOptions = {
             name: 'Credentials',
             credentials: {
                 email: { label: "Email", type: "email", placeholder: "Enter your email" },
-                senha: { label: "Senha", type: "password" }
+                password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                if (!credentials?.email || !credentials?.senha) {
+                if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
                 const existingUser = await db.user.findUnique({
@@ -33,14 +33,13 @@ const authOptions: NextAuthOptions = {
                 if (!existingUser) {
                     return null
                 }
-                const senhaMatch = await compare(credentials.senha, existingUser.senha);
-                if (!senhaMatch) {
+                const passwordMatch = await compare(credentials.password, existingUser.password);
+                if (!passwordMatch) {
                     return null;
                 }
                 return {
                     id: `${existingUser.id}`,
-                    nome: existingUser.nome,
-                    sobrenome: existingUser.sobrenome,
+                    username: existingUser.username,
                     email: existingUser.email
                 }
             }
@@ -51,8 +50,7 @@ const authOptions: NextAuthOptions = {
             if (user) {
                 return {
                     ...token,
-                    nome: user.nome,
-                    sobrenome: user.sobrenome,
+                    username: user.username
                 }
             }
             return token
@@ -62,8 +60,7 @@ const authOptions: NextAuthOptions = {
                 ...session,
                 user: {
                     ...session.user,
-                    nome: token.nome,
-                    sobrenome: token.sobrenome,
+                    username: token.username
                 }
             }
         }
