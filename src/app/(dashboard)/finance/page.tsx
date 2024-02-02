@@ -9,11 +9,11 @@ const page = async () => {
   if (session?.user) {
     return (
       <div>
-        <Link href={'financeiro/carteira'}>Carteira</Link>
-        <Link href={'financeiro/entradaCarteira'}>Entrada</Link>
-        <Link href={'financeiro/saidaCarteira'}>Saída</Link>
-        <Link href={'financeiro/contasAPagar'}>Contas a pagar</Link>
-        <Link href={'financeiro/contasAReceber'}>Contas a receber</Link>
+        <Link href={'finance/wallet'}>Carteira</Link>
+        <Link href={'finance/'}>Entrada</Link>
+        <Link href={'finance/'}>Saída</Link>
+        <Link href={'finance/'}>Contas a pagar</Link>
+        <Link href={'finance/'}>Contas a receber</Link>
       </div>
     );
   }
