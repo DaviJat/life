@@ -44,7 +44,7 @@ model MoneyLocation {
 
 model Wallet {
   id                Int           @id @default(autoincrement())
-  balance           Float
+  amount           Float
   moneyLocation    MoneyLocation @relation(fields: [moneyLocationId], references: [id])
   moneyLocationId Int
   createdAt         DateTime      @default(now())
