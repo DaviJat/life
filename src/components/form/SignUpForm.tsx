@@ -63,6 +63,11 @@ const SignUpForm = () => {
     });
 
     if (response.ok) {
+      toast({
+        title: 'Error',
+        description: 'Oops! Something went wrong',
+        variant: 'destructive',
+      });
       router.push('/sign-in');
     } else {
       toast({
