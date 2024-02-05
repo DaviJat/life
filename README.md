@@ -1,4 +1,4 @@
-![image width="300"](https://github.com/DaviJat/life/assets/91758001/5ff7b801-f190-41a8-830d-740731f6aa8e)
+![image](https://github.com/DaviJat/life/assets/91758001/5ff7b801-f190-41a8-830d-740731f6aa8e | width=100)
 
 <h1>Comandos e configurações inicias do projeto</h1>
 
