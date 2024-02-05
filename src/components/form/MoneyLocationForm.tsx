@@ -6,9 +6,11 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const FormSchema = z.object({
   description: z.string().max(20),
+  type: z.string(),
 });
 
 function MoneyLocationForm() {
@@ -16,6 +18,7 @@ function MoneyLocationForm() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       description: '',
+      type: '',
     },
   });
 
@@ -44,6 +47,27 @@ function MoneyLocationForm() {
                 <FormControl>
                   <Input placeholder="Descrição do local" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a verified email to display" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Virtual">Virtual</SelectItem>
+                    <SelectItem value="Physical">Physical</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
