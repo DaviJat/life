@@ -15,14 +15,14 @@ import { useToast } from '../ui/use-toast';
 const FormSchema = z.object({
   email: z
     .string({
-      required_error: 'Email is required',
+      required_error: 'O e-mail é obrigatório',
     })
-    .email('Invalid email'),
+    .email('E-mail inválido'),
   password: z
     .string({
-      required_error: 'Password is required',
+      required_error: 'A senha é obrigatória',
     })
-    .min(8, 'Password must have than 8 characters'),
+    .min(8, 'A senha deve ter no mínimo 8 caracteres'),
 });
 
 const SignInForm = () => {
@@ -45,8 +45,7 @@ const SignInForm = () => {
     });
     if (signInData?.error) {
       toast({
-        title: 'Error',
-        description: 'Oops! Something went wrong',
+        description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
         variant: 'destructive',
       });
     } else {
