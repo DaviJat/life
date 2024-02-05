@@ -31,7 +31,7 @@ const FormSchema = z
       .min(8, 'Password must have than 8 characters'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmaPassword'],
+    path: ['confirmPassword'],
     message: 'Password do not match',
   });
 
