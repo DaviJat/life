@@ -13,26 +13,26 @@ import { useToast } from '../ui/use-toast';
 
 const FormSchema = z
   .object({
-    username: z.string().min(1, 'Username is required').max(30),
+    username: z.string().min(1, 'Nome de usuário é obrigatório').max(30),
     email: z
       .string({
-        required_error: 'Email is required',
+        required_error: 'Email é obrigatório',
       })
-      .email('Invalid email'),
+      .email('Email inválido'),
     password: z
       .string({
-        required_error: 'Password is required',
+        required_error: 'Senha é obrigatória',
       })
-      .min(8, 'Password must have than 8 characters'),
+      .min(8, 'A senha deve ter pelo menos 8 caracteres'),
     confirmPassword: z
       .string({
-        required_error: 'Password confirmation is required',
+        required_error: 'Confirmação de senha é obrigatória',
       })
-      .min(8, 'Password must have than 8 characters'),
+      .min(8, 'A senha deve ter pelo menos 8 caracteres'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
-    message: 'Password do not match',
+    message: 'As senhas não coincidem',
   });
 
 const SignUpForm = () => {
@@ -64,16 +64,15 @@ const SignUpForm = () => {
 
     if (response.ok) {
       toast({
-        title: 'Error',
-        description: 'Oops! Something went wrong',
-        variant: 'destructive',
+        title: 'Sucesso',
+        description: 'Cadastro realizado com sucesso!',
+        variant: 'default',
       });
       router.push('/sign-in');
     } else {
       toast({
         title: 'Error',
         description: 'Oops! Something went wrong',
-        variant: 'destructive',
       });
     }
   };
@@ -136,7 +135,7 @@ const SignUpForm = () => {
           />
         </div>
         <Button className="w-full mt-6" type="submit">
-          Sign up
+          Cadastrar
         </Button>
       </form>
       <div className="text-white mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-white after:ml-4 after:block after:h-px after:flex-grow after:bg-white">
