@@ -13,26 +13,26 @@ import { useToast } from '../ui/use-toast';
 
 const FormSchema = z
   .object({
-    username: z.string().min(1, 'Username is required').max(30),
+    username: z.string().min(1, 'Nome de usuário é obrigatório').max(30),
     email: z
       .string({
-        required_error: 'Email is required',
+        required_error: 'Email é obrigatório',
       })
-      .email('Invalid email'),
+      .email('Email inválido'),
     password: z
       .string({
-        required_error: 'Password is required',
+        required_error: 'Senha é obrigatória',
       })
-      .min(8, 'Password must have than 8 characters'),
+      .min(8, 'A senha deve ter pelo menos 8 caracteres'),
     confirmPassword: z
       .string({
-        required_error: 'Password confirmation is required',
+        required_error: 'Confirmação de senha é obrigatória',
       })
-      .min(8, 'Password must have than 8 characters'),
+      .min(8, 'A senha deve ter pelo menos 8 caracteres'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmaPassword'],
-    message: 'Password do not match',
+    path: ['confirmPassword'],
+    message: 'As senhas não coincidem',
   });
 
 const SignUpForm = () => {
@@ -63,11 +63,13 @@ const SignUpForm = () => {
     });
 
     if (response.ok) {
+      toast({
+        description: 'Cadastro realizado com sucesso! Agora você pode fazer login.',
+      });
       router.push('/sign-in');
     } else {
       toast({
-        title: 'Error',
-        description: 'Oops! Something went wrong',
+        description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
         variant: 'destructive',
       });
     }
@@ -82,9 +84,9 @@ const SignUpForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel className="text-white">Nome de usuário</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your username" {...field} />
+                  <Input placeholder="Digite seu nome de usuário" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -95,9 +97,9 @@ const SignUpForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-white">E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
+                  <Input placeholder="Digite seu e-mail" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -108,9 +110,9 @@ const SignUpForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-white">Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Enter your password" {...field} />
+                  <Input type="password" placeholder="Digite sua senha" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -121,9 +123,9 @@ const SignUpForm = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-white">Confirme sua senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Re-Enter your password" {...field} />
+                  <Input type="password" placeholder="Digite novamente sua senha" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -131,16 +133,16 @@ const SignUpForm = () => {
           />
         </div>
         <Button className="w-full mt-6" type="submit">
-          Sign up
+          Cadastrar
         </Button>
       </form>
-      <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
-        or
+      <div className="text-white mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-white after:ml-4 after:block after:h-px after:flex-grow after:bg-white">
+        ou
       </div>
-      <p className="text-center text-sm text-gray-600 mt-2">
-        Already have an account? Awesome,&nbsp;
+      <p className="text-center text-sm text-white mt-2">
+        Já possui uma conta?&nbsp;
         <Link className="text-blue-500 hover:underline" href="/sign-in">
-          Sign in
+          Faça login
         </Link>
       </p>
     </Form>

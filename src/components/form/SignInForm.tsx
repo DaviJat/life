@@ -15,14 +15,14 @@ import { useToast } from '../ui/use-toast';
 const FormSchema = z.object({
   email: z
     .string({
-      required_error: 'Email is required',
+      required_error: 'O e-mail é obrigatório',
     })
-    .email('Invalid email'),
+    .email('E-mail inválido'),
   password: z
     .string({
-      required_error: 'Password is required',
+      required_error: 'A senha é obrigatória',
     })
-    .min(8, 'Password must have than 8 characters'),
+    .min(8, 'A senha deve ter no mínimo 8 caracteres'),
 });
 
 const SignInForm = () => {
@@ -45,8 +45,7 @@ const SignInForm = () => {
     });
     if (signInData?.error) {
       toast({
-        title: 'Error',
-        description: 'Oops! Something went wrong',
+        description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
         variant: 'destructive',
       });
     } else {
@@ -64,9 +63,9 @@ const SignInForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-white">E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
+                  <Input placeholder="Digite seu e-mail" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,26 +76,26 @@ const SignInForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-white">Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Enter your password" {...field} />
+                  <Input type="password" placeholder="Digite sua senha" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <Button className="w-full mt-6" type="submit">
-          Sign in
+        <Button className="bg-gray-900 w-full mt-6" type="submit">
+          Entrar
         </Button>
       </form>
-      <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
-        or
+      <div className="text-white mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-white after:ml-4 after:block after:h-px after:flex-grow after:bg-white">
+        ou
       </div>
-      <p className="text-center text-sm text-gray-600 mt-2">
-        If you don&apos;t have an account, please&nbsp;
+      <p className="text-center text-sm text-white mt-2">
+        Se ainda não tiver uma conta, por favor,&nbsp;
         <Link className="text-blue-500 hover:underline" href="/sign-up">
-          Sign up
+          Cadastre-se
         </Link>
       </p>
     </Form>
