@@ -6,9 +6,11 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout: FC<AuthLayoutProps> = ({ children }) => (
-  <div className="container flex flex-col items-center bg-gray-800 px-8 pt-2 pb-4 rounded-md lg: w-80">
-    <Image src="/images/logo-fundo-transparente.png" width={200} height={200} alt="Picture of the author" />
-    {children}
+  <div className="bg-gray-800 h-screen">
+    <div className="container flex flex-col items-center justify-center h-screen w-80">
+      <Image src="/images/logo-fundo-transparente.png" width={200} height={200} alt="Picture of the author" />
+      {children}
+    </div>
   </div>
 );
 

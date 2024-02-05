@@ -64,9 +64,9 @@ const SignInForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-white">E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
+                  <Input placeholder="Digite seu e-mail" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,26 +77,26 @@ const SignInForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-white">Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Enter your password" {...field} />
+                  <Input type="password" placeholder="Digite sua senha" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <Button className="w-full mt-6" type="submit">
-          Sign in
+        <Button className="bg-gray-900 w-full mt-6" type="submit">
+          Entrar
         </Button>
       </form>
-      <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
-        or
+      <div className="text-white mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-white after:ml-4 after:block after:h-px after:flex-grow after:bg-white">
+        ou
       </div>
-      <p className="text-center text-sm text-gray-600 mt-2">
-        If you don&apos;t have an account, please&nbsp;
+      <p className="text-center text-sm text-white mt-2">
+        Se ainda não tiver uma conta, por favor,&nbsp;
         <Link className="text-blue-500 hover:underline" href="/sign-up">
-          Sign up
+          Cadastre-se
         </Link>
       </p>
     </Form>
