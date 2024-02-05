@@ -1,3 +1,5 @@
+![image](https://github.com/DaviJat/life/assets/91758001/5ff7b801-f190-41a8-830d-740731f6aa8e)
+
 <h1>Comandos e configurações inicias do projeto</h1>
 
 Projeto criado com `npx create-next-app@latest` - Oct 11, 2023
@@ -59,5 +61,6 @@ Prisma - `npm install prisma --save-dev` <br>
 <h1>Template (Next 14)</h1>
 
 Cor principal: `#66ff9c` <br>
+Cor de fundo escura: `#1f2937 - Tailwind: gray-800` <br>
 https://github.com/bysxx/next14-ts-template-fullstack
 
