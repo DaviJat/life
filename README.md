@@ -1,4 +1,4 @@
-![image](https://github.com/DaviJat/life/assets/91758001/5ff7b801-f190-41a8-830d-740731f6aa8e | width=100)
+<img src='[figure/rstudio.png](https://github.com/DaviJat/life/assets/91758001/5ff7b801-f190-41a8-830d-740731f6aa8e)' width='300'>
 
 <h1>Comandos e configurações inicias do projeto</h1>
 
