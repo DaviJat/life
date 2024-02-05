@@ -64,15 +64,13 @@ const SignUpForm = () => {
 
     if (response.ok) {
       toast({
-        title: 'Sucesso',
-        description: 'Cadastro realizado com sucesso!',
-        variant: 'default',
+        description: 'Cadastro realizado com sucesso! Agora você pode fazer login.',
       });
       router.push('/sign-in');
     } else {
       toast({
-        title: 'Error',
-        description: 'Oops! Something went wrong',
+        description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
+        variant: 'destructive',
       });
     }
   };
