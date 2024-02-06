@@ -20,8 +20,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { description } = userSchema.parse(body);
 
-    console.log(description);
-
     return NextResponse.json({ message: description }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });

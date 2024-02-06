@@ -56,11 +56,11 @@ function MoneyLocationForm() {
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Tipo do dinheiro</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
+                      <SelectValue placeholder="Selecione o tipo do dinheiro" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
