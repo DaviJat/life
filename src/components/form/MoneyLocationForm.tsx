@@ -7,10 +7,11 @@ import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { toast } from '../ui/use-toast';
 
 const FormSchema = z.object({
   description: z.string().max(20),
-  type: z.string(),
+  type: z.enum(['Physical', 'Virtual']),
 });
 
 function MoneyLocationForm() {
@@ -18,7 +19,7 @@ function MoneyLocationForm() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       description: '',
-      type: '',
+      type: undefined,
     },
   });
 
@@ -30,8 +31,20 @@ function MoneyLocationForm() {
       },
       body: JSON.stringify({
         description: values.description,
+        type: values.type,
       }),
     });
+
+    if (response.ok) {
+      toast({
+        description: 'Localização dinheiro cadastrada com sucesso',
+      });
+    } else {
+      toast({
+        description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -65,7 +78,7 @@ function MoneyLocationForm() {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="Virtual">Virtual</SelectItem>
-                    <SelectItem value="Physical">Physical</SelectItem>
+                    <SelectItem value="Physical">Físico</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

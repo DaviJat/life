@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import authOptions from "@/lib/auth";
+import db from "@/lib/db";
 import { getServerSession } from "next-auth";
 
-const userSchema = z
-  .object({
-    description: z.string().min(1, 'Description is required').max(60),
-  })
+const userSchema = z.object({
+  description: z.string().min(1, 'Description is required').max(60),
+  type: z.enum(['Physical', 'Virtual']),
+});
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -18,10 +19,19 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { description } = userSchema.parse(body);
+    const { description, type } = userSchema.parse(body);
 
-    return NextResponse.json({ message: description }, { status: 201 });
+    console.log(body);
+
+    const newMoneyLocation = await db.moneyLocation.create({
+      data: {
+        description,
+        type
+      }
+    })
+    return NextResponse.json({ moneyLocation: newMoneyLocation, message: 'Money location created successfully' }, { status: 201 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
   }
 }
