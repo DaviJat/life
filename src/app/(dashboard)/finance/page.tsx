@@ -9,6 +9,7 @@ const page = async () => {
   if (session?.user) {
     return (
       <div>
+        <Link href={'finance/money-location'}>Local dinheiro</Link>
         <Link href={'finance/wallet'}>Carteira</Link>
         <Link href={'finance/'}>Entrada</Link>
         <Link href={'finance/'}>Saída</Link>
