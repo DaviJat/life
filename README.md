@@ -64,7 +64,7 @@ Cor principal: `#66ff9c` <br>
 Cor de fundo escura: `#1f2937 - Tailwind: gray-800` <br>
 https://github.com/bysxx/next14-ts-template-fullstack
 
-<h1>Degin</h1>
+<h1>Design</h1>
 
 `https://m3.material.io/styles/color/roles`
 
