@@ -214,10 +214,10 @@
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@prisma/client@^5.10.0-dev.12", "@prisma/client@>=2.26.0 || >=3":
-  version "5.10.0-dev.12"
-  resolved "https://registry.npmjs.org/@prisma/client/-/client-5.10.0-dev.12.tgz"
-  integrity sha512-55w7wy6dL1K75QOaDeW8adyn8IEv4SdNIDa3aShVLIsEsNayxTL5Ql8LEjzytKIvoyw7GydcbcM9BJFRwvmYkQ==
+"@prisma/client@^5.9.1", "@prisma/client@>=2.26.0 || >=3":
+  version "5.9.1"
+  resolved "https://registry.npmjs.org/@prisma/client/-/client-5.9.1.tgz"
+  integrity sha512-caSOnG4kxcSkhqC/2ShV7rEoWwd3XrftokxJqOCMVvia4NYV/TPtJlS9C2os3Igxw/Qyxumj9GBQzcStzECvtQ==
 
 "@prisma/debug@5.10.0-dev.12":
   version "5.10.0-dev.12"
