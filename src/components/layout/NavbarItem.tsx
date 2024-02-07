@@ -24,26 +24,26 @@ function NavbarItem({ icon, text, route, alert }: NavbarItemProps) {
   return (
     <>
       {isMobile ? (
-        <div className="text-white p-5">{icon}</div>
+        <div className="text-primary-foreground p-5">{icon}</div>
       ) : (
         <Link href={route}>
           <li
             className={`
           relative flex items-center py-2 px-3 my-1
           font-medium rounded-md cursor-pointer
-          transition-colors group
-          ${isActive ? 'bg-primary text-white' : 'hover:bg-primary text-white'}
+          transition-colors group text-primary-foreground
+          ${isActive ? 'bg-primary ' : 'hover:bg-primary-hover'}
         `}
           >
             {icon}
-            <span className={`overflow-hidden transition-all ${expanded ? 'w-32 ml-3' : 'w-0'}`}>{text}</span>
+            <span className={`overflow-hidden transition-all ${expanded ? 'w-28 ml-3' : 'w-0'}`}>{text}</span>
             {alert && <div className={`absolute right-2 w-2 h-2 rounded bg-primary ${expanded ? '' : 'top-2'}`} />}
 
-            {!expanded && isActive && (
+            {!expanded && (
               <div
                 className={`
               absolute left-full rounded-md px-2 py-1 ml-6
-              bg-primary text-white text-sm
+              bg-primary text-primary-foreground text-sm
               invisible opacity-80 -translate-x-3 transition-all
               group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
           `}

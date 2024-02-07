@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronFirst, ChevronLast, MoreVertical } from 'lucide-react';
+import { ChevronFirst, ChevronLast, CircleUserRound, MoreVertical } from 'lucide-react';
 import { ReactNode, createContext, useState } from 'react';
 
 interface NavbarProps {
@@ -19,10 +19,10 @@ const Navbar = ({ children }: NavbarProps) => {
   return (
     <>
       {isMobile ? (
-        <div className="flex justify-around bg-foreground">{children}</div>
+        <div className="flex justify-around bg-navbar">{children}</div>
       ) : (
         <aside className="h-screen">
-          <nav className="h-full inline-flex flex-col bg-foreground shadow-sm">
+          <nav className="h-full inline-flex flex-col bg-navbar shadow-sm">
             <div className="p-4 pb-2 flex justify-between items-center">
               <img
                 src="/images/logo-fundo-transparente.png"
@@ -31,7 +31,7 @@ const Navbar = ({ children }: NavbarProps) => {
               />
               <button
                 onClick={() => setExpanded((curr) => !curr)}
-                className="p-1.5 rounded-lg text-white bg-foreground hover:bg-primary"
+                className="p-1.5 rounded-lg transition-colors text-primary-foreground hover:bg-primary-hover"
               >
                 {expanded ? <ChevronFirst /> : <ChevronLast />}
               </button>
@@ -39,16 +39,12 @@ const Navbar = ({ children }: NavbarProps) => {
             <NavbarContext.Provider value={{ expanded }}>
               <ul className="flex-1 px-3">{children}</ul>
             </NavbarContext.Provider>
-            <div className="border-t flex p-3">
-              <img
-                src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-                alt=""
-                className="w-10 h-10 rounded-md"
-              />
+            <div className="border-t flex p-3 text-navbar-foreground justify-center">
+              <CircleUserRound className="h-full" size={28} />
               <div
                 className={`
               flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? 'w-52 ml-3' : 'w-0'}
+              overflow-hidden transition-all ${expanded ? 'w-48 ml-3' : 'w-0'}
           `}
               >
                 <div className="leading-4">
