@@ -66,5 +66,5 @@ https://github.com/bysxx/next14-ts-template-fullstack
 
 <h1>Design</h1>
 
-`https://m3.material.io/styles/color/roles`
+`Color names:` <a>https://m3.material.io/styles/color/roles</a>
 
