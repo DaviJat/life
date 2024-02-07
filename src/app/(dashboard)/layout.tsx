@@ -1,24 +1,20 @@
 'use client';
 
 import Navbar from '@/components/layout/Navbar';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 
 import NavbarItem from '@/components/layout/NavbarItem';
 import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 interface DashboardLayoutProps {
   children: ReactNode;
 }
 
 const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  window.addEventListener('resize', () => {
-    setIsMobile(window.innerWidth < 768);
-  });
-
   return (
     <>
-      {isMobile ? (
+      <MobileView>
         <div>
           <div>conteudo</div>
           <div className="fixed bottom-0 w-full">
@@ -29,7 +25,8 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
             </Navbar>
           </div>
         </div>
-      ) : (
+      </MobileView>
+      <BrowserView>
         <div className="inline-flex w-screen">
           <Navbar>
             <NavbarItem icon={<Home size={20} />} text="Home" route="/home" />
@@ -40,7 +37,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
             <div className="container">{children}</div>
           </div>
         </div>
-      )}
+      </BrowserView>
     </>
   );
 };
