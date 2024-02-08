@@ -1,10 +1,10 @@
-import MoneyLocationTable from '@/components/table/MoneyLocationTable';
+import MoneyLocationForm from '@/components/form/MoneyLocationForm';
 
 function page() {
   return (
     <div>
       <h1>Money Location</h1>
-      <MoneyLocationTable />
+      <MoneyLocationForm />
     </div>
   );
 }

@@ -14,7 +14,7 @@ function TopbarMobile() {
   // Função para navegar para a rota de cadastro com base na rota atual
   const goToCreate = () => {
     const segments = currentPath.split('/'); // Dividindo a URL em segmentos
-    const basePath = segments.slice(0, 3).join('/'); // Pegando os três primeiros segmentos (incluindo a segunda barra)
+    const basePath = segments.slice(0, 4).join('/'); // Pegando os três primeiros segmentos (incluindo a segunda barra)
     router.push(`${basePath}/create`); // Navegando para /algumacoisa/create
   };
 
