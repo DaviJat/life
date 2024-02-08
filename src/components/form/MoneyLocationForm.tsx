@@ -49,7 +49,6 @@ function MoneyLocationForm() {
 
   return (
     <div>
-      <h1>MoneyLocationForm</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
