@@ -13,6 +13,7 @@ import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
 const NavbarMobile = () => {
   return (
     <Menubar className="flex justify-evenly bg-navbar text-navbar-foreground rounded-none border-b-4 p-6">
+      {/* ------- Finance ------- */}
       <MenubarMenu>
         <MenubarTrigger className="px-10">
           <CircleDollarSign />
@@ -42,6 +43,8 @@ const NavbarMobile = () => {
           </Link>
         </MenubarContent>
       </MenubarMenu>
+
+      {/* ------- Home ------- */}
       <MenubarMenu>
         <Link href={'/home'}>
           <MenubarTrigger className="px-10">
@@ -49,6 +52,8 @@ const NavbarMobile = () => {
           </MenubarTrigger>
         </Link>
       </MenubarMenu>
+
+      {/* ------- Task ------- */}
       <MenubarMenu>
         <Link href={'/task'}>
           <MenubarTrigger className="px-10">
