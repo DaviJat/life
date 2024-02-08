@@ -8,8 +8,9 @@ const UserAccountNav = () => {
     <Button
       onClick={() =>
         signOut({
-          redirect: true,
-          callbackUrl: `${window.location.origin}/sign-in`,
+          redirect: false,
+        }).then(() => {
+          window.location.reload();
         })
       }
       variant="destructive"
