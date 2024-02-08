@@ -34,7 +34,10 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
     <>
       {isMobile ? (
         <div>
-          <div className="h-full">{children}</div>
+          <div className="w-full bg-navbar flex justify-center mb-4">
+            <img className="w-28" src="/images/logo-fundo-transparente.png" alt="" />
+          </div>
+          <div className="h-full container">{children}</div>
           <div className="fixed bottom-0 w-full">
             <NavbarMobile />
           </div>
