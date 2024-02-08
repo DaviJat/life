@@ -1,11 +1,11 @@
 'use client';
 
-import Navbar from '@/components/layout/Navbar';
+import Navbar from '@/components/layout/desktop/Navbar';
 import { FC, ReactNode, useEffect, useState } from 'react';
 
-import NavbarItem from '@/components/layout/NavbarItem';
-import NavbarMobile from '@/components/layout/NavbarMobile';
-import NavbarMobileItem from '@/components/layout/NavbarMobileItem';
+import NavbarItem from '@/components/layout/desktop/NavbarItem';
+import NavbarMobile from '@/components/layout/mobile/NavbarMobile';
+import NavbarMobileItem from '@/components/layout/mobile/NavbarMobileItem';
 import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
 
 interface DashboardLayoutProps {
