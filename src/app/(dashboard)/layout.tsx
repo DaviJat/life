@@ -5,7 +5,6 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 
 import NavbarItem from '@/components/layout/desktop/NavbarItem';
 import NavbarMobile from '@/components/layout/mobile/NavbarMobile';
-import NavbarMobileItem from '@/components/layout/mobile/NavbarMobileItem';
 import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -35,14 +34,10 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
     <>
       {isMobile ? (
         <div>
-          <div className="h-full">
-            <div className="container">{children}</div>
+          <div className="h-full">{children}</div>
+          <div className="fixed bottom-0 w-full">
+            <NavbarMobile />
           </div>
-          <NavbarMobile>
-            <NavbarMobileItem icon={<CircleDollarSign size={20} />} route="/finance" />
-            <NavbarMobileItem icon={<Home size={20} />} route="/home" />
-            <NavbarMobileItem icon={<ClipboardList size={20} />} route="/task" />
-          </NavbarMobile>
         </div>
       ) : (
         <div className="inline-flex w-screen">

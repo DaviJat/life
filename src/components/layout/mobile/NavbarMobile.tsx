@@ -1,14 +1,62 @@
-import { ReactNode } from 'react';
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from '@/components/ui/menubar';
+import Link from 'next/link';
 
-interface NavbarMobileProps {
-  children: ReactNode;
-}
+import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
 
-const NavbarMobile = ({ children }: NavbarMobileProps) => {
+const NavbarMobile = () => {
   return (
-    <nav className="fixed bottom-0 flex justify-evenly w-full bg-navbar text-navbar-foreground border-b-4">
-      {children}
-    </nav>
+    <Menubar className="flex justify-evenly bg-navbar text-navbar-foreground rounded-none border-b-4 p-6">
+      <MenubarMenu>
+        <MenubarTrigger className="px-10">
+          <CircleDollarSign />
+        </MenubarTrigger>
+        <MenubarContent>
+          <Link href={'/finance/money-location'}>
+            <MenubarItem>Local dinheiro</MenubarItem>
+          </Link>
+          <Link href={'/finance/wallet'}>
+            <MenubarItem>Carteira</MenubarItem>
+          </Link>
+          <MenubarSeparator />
+          <Link href={'/finance'}>
+            <MenubarItem>Entrada</MenubarItem>
+          </Link>
+          <Link href={'/finance'}>
+            <Link href={'/finance'}>
+              <MenubarItem>Saída</MenubarItem>
+            </Link>
+          </Link>
+          <MenubarSeparator />
+          <Link href={'/finance'}>
+            <MenubarItem>Contas a pagar</MenubarItem>
+          </Link>
+          <Link href={'/finance'}>
+            <MenubarItem>Contas a receber</MenubarItem>
+          </Link>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <Link href={'/home'}>
+          <MenubarTrigger className="px-10">
+            <Home />
+          </MenubarTrigger>
+        </Link>
+      </MenubarMenu>
+      <MenubarMenu>
+        <Link href={'/task'}>
+          <MenubarTrigger className="px-10">
+            <ClipboardList />
+          </MenubarTrigger>
+        </Link>
+      </MenubarMenu>
+    </Menubar>
   );
 };
 
