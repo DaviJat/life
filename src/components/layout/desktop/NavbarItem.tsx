@@ -15,8 +15,6 @@ function NavbarItem({ icon, text, route }: NavbarItemProps) {
   const { expanded } = useContext(NavbarContext);
   const pathname = usePathname();
   const isActive = pathname === route;
-  const showText = expanded || isActive;
-
   return (
     <Link href={route}>
       <li
@@ -28,9 +26,9 @@ function NavbarItem({ icon, text, route }: NavbarItemProps) {
         `}
       >
         {icon}
-        <span className={`overflow-hidden transition-all ${showText ? 'w-28 ml-3' : 'w-0'}`}>{text}</span>
+        <span className={`overflow-hidden transition-all ${expanded ? 'w-28 ml-3' : 'w-0'}`}>{text}</span>
 
-        {!showText && (
+        {!expanded && (
           <div
             className={`
               absolute left-full rounded-md px-2 py-1 ml-6
