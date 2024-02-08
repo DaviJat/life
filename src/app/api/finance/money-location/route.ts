@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import authOptions from "@/lib/auth";
 import db from "@/lib/db";
-import { getServerSession } from "next-auth";
 
 const userSchema = z.object({
   description: z.string().min(1, 'Description is required').max(60),
@@ -11,9 +9,14 @@ const userSchema = z.object({
 });
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
+  try {
+    const moneyLocations = await db.moneyLocation.findMany(); // Busca todas as money locations do banco de dados
 
-  return NextResponse.json({ authenticated: !!session })
+    return NextResponse.json({ moneyLocations });
+  } catch (error) {
+    console.error("Error fetching money locations:", error);
+    return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
+  }
 }
 
 export async function POST(request: NextRequest) {
