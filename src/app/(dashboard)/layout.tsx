@@ -3,9 +3,9 @@
 import Navbar from '@/components/layout/desktop/Navbar';
 import { FC, ReactNode, useEffect, useState } from 'react';
 
-import UserAccountNav from '@/components/UserAccountNav';
 import NavbarItem from '@/components/layout/desktop/NavbarItem';
 import NavbarMobile from '@/components/layout/mobile/NavbarMobile';
+import TopbarMobile from '@/components/layout/mobile/TopbarMobile';
 import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -35,10 +35,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
     <>
       {isMobile ? (
         <div>
-          <div className="w-full bg-navbar flex justify-center mb-4">
-            <img className="w-28" src="/images/logo-fundo-transparente.png" alt="" />
-            <UserAccountNav />
-          </div>
+          <TopbarMobile />
           <div className="h-full container">{children}</div>
           <div className="fixed bottom-0 w-full">
             <NavbarMobile />
