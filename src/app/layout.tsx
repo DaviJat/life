@@ -17,7 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang="en">
     <body className={inter.className}>
       <Provider>
-        <main>{children}</main>
+        <main className="bg-background">{children}</main>
         <Toaster />
       </Provider>
     </body>
