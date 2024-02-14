@@ -1,3 +1,6 @@
+// Este arquivo define as opções de autenticação para o NextAuth.js.
+// Ele configura como o NextAuth.js lidará com a autenticação de usuários.
+
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { compare } from "bcrypt"
 import { NextAuthOptions } from "next-auth"
