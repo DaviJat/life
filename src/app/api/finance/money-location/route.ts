@@ -10,7 +10,7 @@ const userSchema = z.object({
 
 export async function GET() {
   try {
-    const moneyLocations = await db.moneyLocation.findMany(); // Busca todas as money locations do banco de dados
+    const moneyLocations = await db.moneyLocation.findMany();
 
     return NextResponse.json({ moneyLocations });
   } catch (error) {
