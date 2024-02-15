@@ -12,10 +12,10 @@ async function page() {
   const data = await getMoneyLocations();
 
   return (
-    <div>
+    <>
       <h1>Money Location</h1>
       <DataTable columns={columns} data={data} />
-    </div>
+    </>
   );
 }
 
