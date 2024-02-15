@@ -9,12 +9,16 @@ import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { toast } from '../ui/use-toast';
 
+interface MoneyLocationFormProps {
+  id?: string;
+}
+
 const FormSchema = z.object({
   description: z.string().max(20),
   type: z.enum(['Physical', 'Virtual']),
 });
 
-function MoneyLocationForm() {
+function MoneyLocationForm({ id }: MoneyLocationFormProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -22,6 +26,8 @@ function MoneyLocationForm() {
       type: undefined,
     },
   });
+
+  console.log(id);
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     const response = await fetch('/api/finance/money-location', {
