@@ -1,12 +1,10 @@
 import MoneyLocationForm from '@/components/form/MoneyLocationForm';
 
-function page() {
-  return (
-    <div>
-      <h1>Money Location</h1>
-      <MoneyLocationForm />
-    </div>
-  );
-}
+const page = () => (
+  <div>
+    <h1>Money Location</h1>
+    <MoneyLocationForm />
+  </div>
+);
 
 export default page;

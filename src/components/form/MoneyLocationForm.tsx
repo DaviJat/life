@@ -27,8 +27,6 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
     },
   });
 
-  console.log(id);
-
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     const response = await fetch('/api/finance/money-location', {
       method: 'POST',
