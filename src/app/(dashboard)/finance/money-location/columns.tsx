@@ -1,34 +1,33 @@
 'use client';
 
+import { MoneyLocation } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
-
-export type MoneyLocation = {
-  id: number;
-  description: string;
-  type: string;
-  createdAt: string;
-  updatedAt: string;
-};
 
 export const columns: ColumnDef<MoneyLocation>[] = [
   {
     accessorKey: 'id',
-    header: 'ID',
+    header: 'Id',
   },
   {
     accessorKey: 'description',
-    header: 'Description',
+    header: 'Descrição',
   },
   {
     accessorKey: 'type',
-    header: 'Type',
+    header: 'Tipo',
+    cell: ({ row }) => {
+      const type = row.getValue('type');
+      const typeTranslated = type === 'Physical' ? 'Físico' : type === 'Virtual' ? 'Virtual' : type;
+      return typeTranslated;
+    },
   },
   {
     accessorKey: 'createdAt',
-    header: 'Created At',
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: 'Updated At',
+    header: 'Data cadastro',
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('createdAt'));
+      const formatted = date.toLocaleDateString();
+      return formatted;
+    },
   },
 ];

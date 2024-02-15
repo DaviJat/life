@@ -12,7 +12,7 @@ export async function GET() {
   try {
     const moneyLocations = await db.moneyLocation.findMany();
 
-    return NextResponse.json({ moneyLocations });
+    return NextResponse.json(moneyLocations);
   } catch (error) {
     console.error("Error fetching money locations:", error);
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });

@@ -1,5 +1,6 @@
 import DataTable from '@/components/table/data-table';
-import { MoneyLocation, columns } from './columns';
+import { MoneyLocation } from '@prisma/client';
+import { columns } from './columns';
 
 async function getMoneyLocations(): Promise<MoneyLocation[]> {
   const response = await fetch(process.env.URL + '/api/finance/money-location');
