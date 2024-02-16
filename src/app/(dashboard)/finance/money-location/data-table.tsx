@@ -14,8 +14,8 @@ import {
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useState } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+import { Button } from '../../../../components/ui/button';
+import { Input } from '../../../../components/ui/input';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,7 +42,7 @@ export default function DataTable<TData, TValue>({ columns, data }: DataTablePro
   });
 
   return (
-    <div>
+    <div className="w-auto">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter description..."
@@ -84,19 +84,14 @@ export default function DataTable<TData, TValue>({ columns, data }: DataTablePro
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
-        </div>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          Previous
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          Next
+        </Button>
       </div>
     </div>
   );

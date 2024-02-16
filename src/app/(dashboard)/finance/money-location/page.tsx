@@ -1,4 +1,4 @@
-import DataTable from '@/components/table/data-table';
+import DataTable from '@/app/(dashboard)/finance/money-location/data-table';
 import { MoneyLocation } from '@prisma/client';
 import { columns } from './columns';
 
@@ -14,7 +14,9 @@ async function page() {
   return (
     <>
       <h1>Money Location</h1>
-      <DataTable columns={columns} data={data} />
+      <div>
+        <DataTable columns={columns} data={data} />
+      </div>
     </>
   );
 }

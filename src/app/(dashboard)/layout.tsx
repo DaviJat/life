@@ -42,13 +42,13 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
           </div>
         </div>
       ) : (
-        <div className="inline-flex w-screen">
+        <div className="inline-flex w-full">
           <Navbar>
             <NavbarItem icon={<Home size={20} />} text="Home" route="/home" />
             <NavbarItem icon={<ClipboardList size={20} />} text="Tarefas" route="/task" />
             <NavbarItem icon={<CircleDollarSign size={20} />} text="Financeiro" route="/finance" />
           </Navbar>
-          <div className="w-full">
+          <div className="w-full overflow-y-auto max-h-screen">
             <div className="container">{children}</div>
           </div>
         </div>
