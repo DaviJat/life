@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
@@ -26,6 +27,22 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
       type: undefined,
     },
   });
+
+  useEffect(() => {
+    if (id) {
+      getDataById();
+    }
+  }, [form, id]);
+
+  const getDataById = async () => {
+    try {
+      const response = await fetch(`/api/finance/money-location/?id=${id}`);
+      const data = await response.json();
+      form.reset(data);
+    } catch (error) {
+      console.error('Erro ao obter dados por ID:', error);
+    }
+  };
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     const response = await fetch('/api/finance/money-location', {
@@ -73,7 +90,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tipo do dinheiro</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o tipo do dinheiro" />
