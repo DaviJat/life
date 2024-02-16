@@ -45,26 +45,50 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
   };
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    const response = await fetch('/api/finance/money-location', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        description: values.description,
-        type: values.type,
-      }),
-    });
+    if (id) {
+      const response = await fetch(`/api/finance/money-location/?id=${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          description: values.description,
+          type: values.type,
+        }),
+      });
 
-    if (response.ok) {
-      toast({
-        description: 'Localização dinheiro cadastrada com sucesso',
-      });
+      if (response.ok) {
+        toast({
+          description: 'Localização dinheiro editada com sucesso',
+        });
+      } else {
+        toast({
+          description: 'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde.',
+          variant: 'destructive',
+        });
+      }
     } else {
-      toast({
-        description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
-        variant: 'destructive',
+      const response = await fetch('/api/finance/money-location', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          description: values.description,
+          type: values.type,
+        }),
       });
+
+      if (response.ok) {
+        toast({
+          description: 'Localização dinheiro cadastrada com sucesso',
+        });
+      } else {
+        toast({
+          description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 

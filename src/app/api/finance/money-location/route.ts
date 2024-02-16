@@ -51,3 +51,45 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    const id = request.nextUrl.searchParams.get("id");
+
+    // Verificar se o parâmetro id está presente e é uma string não vazia
+    if (!id) {
+      return NextResponse.json({ message: 'ID parameter is missing or invalid' }, { status: 400 });
+    }
+
+    const body = await request.json();
+    const { description, type } = userSchema.parse(body);
+
+    // Verificar se a localização do dinheiro com o ID fornecido existe
+    const existingMoneyLocation = await db.moneyLocation.findUnique({
+      where: {
+        id: parseInt(id, 10),
+      },
+    });
+
+    // Se a localização do dinheiro não existir, retorne um erro 404
+    if (!existingMoneyLocation) {
+      return NextResponse.json({ message: 'Money location not found' }, { status: 404 });
+    }
+
+    // Atualizar a localização do dinheiro com os novos dados
+    const updatedMoneyLocation = await db.moneyLocation.update({
+      where: {
+        id: parseInt(id, 10),
+      },
+      data: {
+        description,
+        type,
+      },
+    });
+
+    return NextResponse.json({ moneyLocation: updatedMoneyLocation, message: 'Money location updated successfully' }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
+  }
+}
