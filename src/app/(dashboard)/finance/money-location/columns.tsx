@@ -22,6 +22,9 @@ export const columns: ColumnDef<MoneyLocation>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return <div className="px-2">{row.getValue('id')}</div>;
+    },
   },
   {
     accessorKey: 'description',
@@ -32,6 +35,9 @@ export const columns: ColumnDef<MoneyLocation>[] = [
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      return <div className="px-2">{row.getValue('description')}</div>;
     },
   },
   {
