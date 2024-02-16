@@ -9,16 +9,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoneyLocation } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
 
 export const columns: ColumnDef<MoneyLocation>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <Button className="px-2" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Id
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -27,9 +27,9 @@ export const columns: ColumnDef<MoneyLocation>[] = [
     accessorKey: 'description',
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <Button className="px-2" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Descrição
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },

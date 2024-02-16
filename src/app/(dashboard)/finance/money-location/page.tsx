@@ -13,10 +13,8 @@ async function page() {
 
   return (
     <>
-      <h1>Money Location</h1>
-      <div>
-        <DataTable columns={columns} data={data} />
-      </div>
+      <h1 className="font-semibold text-2xl">Local dinheiro</h1>
+      <DataTable columns={columns} data={data} />
     </>
   );
 }

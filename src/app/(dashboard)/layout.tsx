@@ -36,7 +36,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
       {isMobile ? (
         <div>
           <TopbarMobile />
-          <div className="h-full container">{children}</div>
+          <div className="h-full container mb-12">{children}</div>
           <div className="fixed bottom-0 w-full">
             <NavbarMobile />
           </div>
@@ -49,7 +49,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
             <NavbarItem icon={<CircleDollarSign size={20} />} text="Financeiro" route="/finance" />
           </Navbar>
           <div className="w-full overflow-y-auto max-h-screen">
-            <div className="container">{children}</div>
+            <div className="container pt-4">{children}</div>
           </div>
         </div>
       )}
