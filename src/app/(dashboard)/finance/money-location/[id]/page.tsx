@@ -1,3 +1,5 @@
+'use client';
+
 import MoneyLocationForm from '@/components/form/MoneyLocationForm';
 import { useParams } from 'next/navigation';
 
