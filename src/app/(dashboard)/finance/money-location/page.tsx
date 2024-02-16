@@ -5,7 +5,7 @@ import { columns } from './columns';
 async function getMoneyLocations(): Promise<MoneyLocation[]> {
   const response = await fetch(process.env.URL + '/api/finance/money-location');
   const data = await response.json();
-  return data.moneyLocations;
+  return data;
 }
 
 async function page() {

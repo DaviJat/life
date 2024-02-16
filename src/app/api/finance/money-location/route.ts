@@ -24,8 +24,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { description, type } = userSchema.parse(body);
 
-    console.log(body);
-
     const newMoneyLocation = await db.moneyLocation.create({
       data: {
         description,
