@@ -19,12 +19,12 @@ function TopbarMobile() {
   };
 
   return (
-    <div className="w-full bg-navbar flex justify-between items-center mb-4">
-      <button className="ml-2 text-navbar-foreground" onClick={goBack}>
+    <div className="w-full bg-surface flex justify-between items-center mb-4">
+      <button className="ml-2 text-surface-foreground" onClick={goBack}>
         Voltar
       </button>
       <img className="w-28" src="/images/logo-fundo-transparente.png" alt="" />
-      <button className="mr-2 text-navbar-foreground" onClick={goToCreate}>
+      <button className="mr-2 text-surface-foreground" onClick={goToCreate}>
         Criar
       </button>
     </div>

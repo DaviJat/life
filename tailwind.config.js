@@ -18,9 +18,9 @@ module.exports = {
         border: 'var(--border)',
         input: 'var(--input)',
         ring: 'var(--ring)',
-        navbar: {
-          DEFAULT: 'var(--navbar)',
-          foreground: 'var(--navbar-foreground)',
+        surface: {
+          DEFAULT: 'var(--surface)',
+          foreground: 'var(--surface-foreground)',
         },
         primary: {
           DEFAULT: 'var(--primary)',

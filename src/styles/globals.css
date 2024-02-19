@@ -9,8 +9,8 @@
     --foreground: #0f172a;
 
     /* Background color <Navbar /> */
-    --navbar: #233142;
-    --navbar-foreground: #f8fafc;
+    --surface: #233142;
+    --surface-foreground: #f8fafc;
 
     /* Muted backgrounds such as <TabsList />, <Skeleton /> and <Switch /> */
     --muted: #f1f5f9;
