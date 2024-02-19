@@ -30,9 +30,7 @@ const NavbarMobile = () => {
             <MenubarItem>Entrada</MenubarItem>
           </Link>
           <Link href={'/finance'}>
-            <Link href={'/finance'}>
-              <MenubarItem>Saída</MenubarItem>
-            </Link>
+            <MenubarItem>Saída</MenubarItem>
           </Link>
           <MenubarSeparator />
           <Link href={'/finance'}>
