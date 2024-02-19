@@ -13,16 +13,8 @@ import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
 
 const FormSchema = z.object({
-  email: z
-    .string({
-      required_error: 'O e-mail é obrigatório',
-    })
-    .email('E-mail inválido'),
-  password: z
-    .string({
-      required_error: 'A senha é obrigatória',
-    })
-    .min(8, 'A senha deve ter no mínimo 8 caracteres'),
+  email: z.string().min(1, 'O e-mail é obrigatório').email('E-mail inválido'),
+  password: z.string().min(1, 'A senha é obrigatória'),
 });
 
 const SignInForm = () => {
@@ -44,10 +36,17 @@ const SignInForm = () => {
       redirect: false,
     });
     if (signInData?.error) {
-      toast({
-        description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
-        variant: 'destructive',
-      });
+      if (signInData.error === 'CredentialsSignin') {
+        toast({
+          description: 'Email ou senha incorretos. Por favor, tente novamente.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          description: 'Ops! Houve um problema durante o login. Por favor, tente novamente mais tarde.',
+          variant: 'destructive',
+        });
+      }
     } else {
       router.refresh();
       router.push('/home');
@@ -65,7 +64,7 @@ const SignInForm = () => {
               <FormItem>
                 <FormLabel className="text-white">E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="Digite seu e-mail" {...field} />
+                  <Input placeholder="Digite seu e-mail" autoComplete="off" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -78,14 +77,14 @@ const SignInForm = () => {
               <FormItem>
                 <FormLabel className="text-white">Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Digite sua senha" {...field} />
+                  <Input type="password" placeholder="Digite sua senha" autoComplete="off" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <Button className="bg-gray-900 w-full mt-6" type="submit">
+        <Button className="bg-primary w-full mt-6" type="submit">
           Entrar
         </Button>
       </form>
@@ -94,7 +93,7 @@ const SignInForm = () => {
       </div>
       <p className="text-center text-sm text-white mt-2">
         Se ainda não tiver uma conta, por favor,&nbsp;
-        <Link className="text-blue-500 hover:underline" href="/sign-up">
+        <Link className="text-primary hover:underline" href="/sign-up">
           Cadastre-se
         </Link>
       </p>

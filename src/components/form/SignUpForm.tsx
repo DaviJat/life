@@ -13,22 +13,13 @@ import { useToast } from '../ui/use-toast';
 
 const FormSchema = z
   .object({
-    username: z.string().min(1, 'Nome de usuário é obrigatório').max(30),
-    email: z
-      .string({
-        required_error: 'Email é obrigatório',
-      })
-      .email('Email inválido'),
-    password: z
-      .string({
-        required_error: 'Senha é obrigatória',
-      })
-      .min(8, 'A senha deve ter pelo menos 8 caracteres'),
-    confirmPassword: z
-      .string({
-        required_error: 'Confirmação de senha é obrigatória',
-      })
-      .min(8, 'A senha deve ter pelo menos 8 caracteres'),
+    username: z
+      .string()
+      .min(1, 'O nome de usuário é obrigatório')
+      .max(30, 'O nome de usuário deve ter no máximo 30 caracteres'),
+    email: z.string().min(1, 'O e-mail é obrigatório').email('E-mail inválido'),
+    password: z.string().min(1, 'A senha é obrigatória').min(8, 'A senha deve ter pelo menos 8 caracteres'),
+    confirmPassword: z.string().min(1, 'Confime sua senha').min(8, 'A senha deve ter pelo menos 8 caracteres'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -62,14 +53,16 @@ const SignUpForm = () => {
       }),
     });
 
+    const data = await response.json();
+
     if (response.ok) {
       toast({
-        description: 'Cadastro realizado com sucesso! Agora você pode fazer login.',
+        description: data.message,
       });
       router.push('/sign-in');
     } else {
       toast({
-        description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
+        description: data.message,
         variant: 'destructive',
       });
     }
@@ -86,7 +79,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel className="text-white">Nome de usuário</FormLabel>
                 <FormControl>
-                  <Input placeholder="Digite seu nome de usuário" {...field} />
+                  <Input placeholder="Digite seu nome de usuário" autoComplete="off" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -99,7 +92,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel className="text-white">E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="Digite seu e-mail" {...field} />
+                  <Input placeholder="Digite seu e-mail" autoComplete="off" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -112,7 +105,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel className="text-white">Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Digite sua senha" {...field} />
+                  <Input type="password" placeholder="Digite sua senha" autoComplete="off" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -125,7 +118,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel className="text-white">Confirme sua senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Digite novamente sua senha" {...field} />
+                  <Input type="password" placeholder="Digite novamente sua senha" autoComplete="off" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -141,7 +134,7 @@ const SignUpForm = () => {
       </div>
       <p className="text-center text-sm text-white mt-2">
         Já possui uma conta?&nbsp;
-        <Link className="text-blue-500 hover:underline" href="/sign-in">
+        <Link className="text-primary hover:underline" href="/sign-in">
           Faça login
         </Link>
       </p>

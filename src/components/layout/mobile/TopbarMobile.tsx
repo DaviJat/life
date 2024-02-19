@@ -1,5 +1,6 @@
 'use client';
 
+import UserAccountNav from '@/components/UserAccountNav';
 import { usePathname, useRouter } from 'next/navigation';
 
 function TopbarMobile() {
@@ -23,6 +24,7 @@ function TopbarMobile() {
       <button className="ml-2 text-surface-foreground" onClick={goBack}>
         Voltar
       </button>
+      <UserAccountNav></UserAccountNav>
       <img className="w-28" src="/images/logo-fundo-transparente.png" alt="" />
       <button className="mr-2 text-surface-foreground" onClick={goToCreate}>
         Criar

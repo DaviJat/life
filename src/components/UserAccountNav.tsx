@@ -10,7 +10,7 @@ const UserAccountNav = () => {
         signOut({
           redirect: false,
         }).then(() => {
-          window.location.reload();
+          window.location.replace('/sign-in');
         })
       }
       variant="destructive"

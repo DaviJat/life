@@ -32,13 +32,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, username, password } = userSchema.parse(body);
 
-    // Check if email already exists
     const existingUserByEmail = await db.user.findUnique({
       where: { email }
     });
 
     if (existingUserByEmail) {
-      return NextResponse.json({ user: null, message: 'User with this email already exists' }, { status: 409 })
+      return NextResponse.json({ message: 'Este e-mail já está em uso. Por favor, use outro e-mail ou faça login.' }, { status: 409 })
     }
 
     const hashedPassword = await hash(password, 10);
@@ -52,8 +51,8 @@ export async function POST(request: NextRequest) {
 
     const { password: newUserPassword, ...rest } = newUser;
 
-    return NextResponse.json({ user: rest, message: 'User created successfully' }, { status: 201 });
+    return NextResponse.json({ user: rest, message: 'Cadastro realizado com sucesso! Agora você pode fazer login.' }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.' }, { status: 500 });
   }
 }
