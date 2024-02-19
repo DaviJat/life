@@ -21,6 +21,7 @@ module.exports = {
         surface: {
           DEFAULT: 'var(--surface)',
           foreground: 'var(--surface-foreground)',
+          hover: 'var(--surface-hover)',
         },
         primary: {
           DEFAULT: 'var(--primary)',

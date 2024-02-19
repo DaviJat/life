@@ -23,7 +23,7 @@ const Navbar = ({ children }: NavbarProps) => {
           />
           <button
             onClick={() => setExpanded((curr) => !curr)}
-            className="p-1.5 rounded-lg transition-colors text-primary-foreground hover:bg-primary-hover"
+            className="p-1.5 rounded-lg transition-colors text-surface-foreground hover:bg-surface-hover"
           >
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
