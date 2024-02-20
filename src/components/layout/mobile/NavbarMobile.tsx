@@ -9,13 +9,17 @@ import {
 import Link from 'next/link';
 
 import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const NavbarMobile = () => {
+  const pathname = usePathname();
+  const firstPartOfPathname = pathname.split('/')[1];
+
   return (
     <Menubar className="flex justify-evenly bg-surface text-surface-foreground rounded-none border-b-4 p-6">
       {/* ------- Finance ------- */}
       <MenubarMenu>
-        <MenubarTrigger className="px-10">
+        <MenubarTrigger className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'finance' ? '!bg-accent' : ''}`}>
           <CircleDollarSign />
         </MenubarTrigger>
         <MenubarContent>
@@ -45,18 +49,18 @@ const NavbarMobile = () => {
       {/* ------- Home ------- */}
       <MenubarMenu>
         <Link href={'/home'}>
-          <MenubarTrigger className="px-10">
+          <div className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'home' ? 'bg-accent' : ''}`}>
             <Home />
-          </MenubarTrigger>
+          </div>
         </Link>
       </MenubarMenu>
 
       {/* ------- Task ------- */}
       <MenubarMenu>
         <Link href={'/task'}>
-          <MenubarTrigger className="px-10">
+          <div className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'task' ? 'bg-accent' : ''}`}>
             <ClipboardList />
-          </MenubarTrigger>
+          </div>
         </Link>
       </MenubarMenu>
     </Menubar>
