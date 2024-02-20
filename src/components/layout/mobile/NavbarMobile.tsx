@@ -16,7 +16,7 @@ const NavbarMobile = () => {
   const firstPartOfPathname = pathname.split('/')[1];
 
   return (
-    <Menubar className="flex justify-evenly bg-surface text-surface-foreground rounded-none border-b-4 p-6">
+    <Menubar className="flex justify-evenly bg-surface text-surface-foreground rounded-none border-none p-6">
       {/* ------- Finance ------- */}
       <MenubarMenu>
         <MenubarTrigger className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'finance' ? '!bg-accent' : ''}`}>
