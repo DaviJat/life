@@ -25,8 +25,11 @@
     --accent: #59a72c;
     --accent-foreground: #f8fafc;
 
+    --surface-accent: #dee9f582;
+    --surface-accent-foreground: #0f172a;
+
     /* Secondary colors for <Button /> */
-    --secondary: #091022;
+    --secondary: #1f2937;
     --secondary-foreground: #f8fafc;
 
     /* Muted backgrounds such as <TabsList />, <Skeleton /> and <Switch /> */

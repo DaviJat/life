@@ -44,6 +44,10 @@ module.exports = {
           DEFAULT: 'var(--accent)',
           foreground: 'var(--accent-foreground)',
         },
+        'surface-accent': {
+          DEFAULT: 'var(--surface-accent)',
+          foreground: 'var(--surface-accent-foreground)',
+        },
         popover: {
           DEFAULT: 'var(--popover)',
           foreground: 'var(--popover-foreground)',
