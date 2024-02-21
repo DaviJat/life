@@ -19,7 +19,7 @@ function TopbarMobile() {
   };
 
   return (
-    <div className="w-full bg-surface flex justify-between items-center mb-4">
+    <div className="w-full bg-surface flex justify-between items-center mb-4 shadow-lg">
       <button className="ml-2 text-surface-foreground" onClick={goBack}>
         Voltar
       </button>
