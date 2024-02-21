@@ -93,7 +93,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
   };
 
   return (
-    <div>
+    <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -134,7 +134,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
           </Button>
         </form>
       </Form>
-    </div>
+    </>
   );
 }
 

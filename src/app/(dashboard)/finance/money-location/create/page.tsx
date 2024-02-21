@@ -2,7 +2,7 @@ import MoneyLocationForm from '@/components/form/MoneyLocationForm';
 
 const page = () => (
   <div>
-    <h1>Money Location</h1>
+    <h1 className="font-semibold text-2xl">Cadastrar local dinheiro</h1>
     <MoneyLocationForm />
   </div>
 );
