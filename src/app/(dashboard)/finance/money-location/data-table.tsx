@@ -45,6 +45,7 @@ export default function DataTable<TData, TValue>({ columns, data }: DataTablePro
     <div className="w-auto">
       <div className="flex items-center py-4">
         <Input
+          name="search"
           placeholder="Buscar por descrição..."
           value={(table.getColumn('description')?.getFilterValue() as string) ?? ''}
           onChange={(event) => table.getColumn('description')?.setFilterValue(event.target.value)}
