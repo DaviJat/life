@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
@@ -27,6 +28,7 @@ const FormSchema = z
   });
 
 const SignUpForm = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -41,6 +43,7 @@ const SignUpForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setIsLoading(true);
     const response = await fetch('/api/user', {
       method: 'POST',
       headers: {
@@ -66,6 +69,7 @@ const SignUpForm = () => {
         variant: 'destructive',
       });
     }
+    setIsLoading(false);
   };
 
   return (
@@ -125,8 +129,8 @@ const SignUpForm = () => {
             )}
           />
         </div>
-        <Button className="w-full mt-6" type="submit">
-          Cadastrar
+        <Button className="w-full mt-6" type="submit" disabled={isLoading}>
+          {isLoading ? 'Cadastrando...' : 'Cadastrar'}
         </Button>
       </form>
       <div className="text-white mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-white after:ml-4 after:block after:h-px after:flex-grow after:bg-white">

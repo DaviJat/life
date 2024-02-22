@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
@@ -20,6 +21,7 @@ const FormSchema = z.object({
 const SignInForm = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -30,6 +32,7 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setIsLoading(true);
     const signInData = await signIn('credentials', {
       email: values.email,
       password: values.password,
@@ -51,6 +54,7 @@ const SignInForm = () => {
       router.refresh();
       router.push('/home');
     }
+    setIsLoading(false);
   };
 
   return (
@@ -84,8 +88,8 @@ const SignInForm = () => {
             )}
           />
         </div>
-        <Button className="bg-primary w-full mt-6" type="submit">
-          Entrar
+        <Button className="bg-primary w-full mt-6" type="submit" disabled={isLoading}>
+          {isLoading ? 'Validando login...' : 'Entrar'}
         </Button>
       </form>
       <div className="text-white mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-white after:ml-4 after:block after:h-px after:flex-grow after:bg-white">

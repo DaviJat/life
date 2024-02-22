@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
@@ -20,6 +20,7 @@ const FormSchema = z.object({
 });
 
 function MoneyLocationForm({ id }: MoneyLocationFormProps) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -45,6 +46,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
   };
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setIsLoading(true);
     if (id) {
       const response = await fetch(`/api/finance/money-location/?id=${id}`, {
         method: 'PUT',
@@ -90,6 +92,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
         });
       }
     }
+    setIsLoading(false);
   };
 
   return (
@@ -129,8 +132,8 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
               </FormItem>
             )}
           />
-          <Button className="w-full mt-6" type="submit">
-            Cadastrar
+          <Button className="w-full mt-6" type="submit" disabled={isLoading}>
+            {isLoading ? 'Cadastrando...' : 'Cadastrar'}
           </Button>
         </form>
       </Form>
