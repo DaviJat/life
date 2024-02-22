@@ -66,6 +66,8 @@ const SelectContent = React.forwardRef<
 >(({ className, children, position = 'popper', ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
+      // Foi adicionado essa condição no ref para corrigir um erro do select onde ao clicar em alguma opção, o click
+      // se propagava para o que tivesse atrás dele. (https://github.com/radix-ui/primitives/issues/1658#issuecomment-1664079551)
       ref={(ref) => {
         if (!ref) return;
         ref.ontouchstart = (e) => {

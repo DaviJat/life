@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
 
+// Define o esquema de validação do formulário usando Zod
 const FormSchema = z
   .object({
     username: z
@@ -27,11 +28,14 @@ const FormSchema = z
     message: 'As senhas não coincidem',
   });
 
+// Componente do formulário de cadastro
 const SignUpForm = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Estado para controlar o carregamento
   const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+    // Hook useForm para gerenciar o estado do formulário
+    resolver: zodResolver(FormSchema), // Usa o resolvedor Zod para validação do esquema
     defaultValues: {
+      // Valores padrão do formulário
       username: '',
       email: '',
       password: '',
@@ -39,11 +43,14 @@ const SignUpForm = () => {
     },
   });
 
-  const router = useRouter();
-  const { toast } = useToast();
+  const router = useRouter(); // Hook useRouter para obter o objeto router do Next.js
+  const { toast } = useToast(); // Hook personalizado para exibir toasts
 
+  // Função para lidar com o envio do formulário
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    setIsLoading(true);
+    setIsLoading(true); // Define isLoading como true para indicar carregamento
+
+    // Envia uma requisição POST para '/api/user' com os dados do formulário
     const response = await fetch('/api/user', {
       method: 'POST',
       headers: {
@@ -56,26 +63,33 @@ const SignUpForm = () => {
       }),
     });
 
-    const data = await response.json();
+    const data = await response.json(); // Extrai os dados da resposta
 
     if (response.ok) {
+      // Se a resposta for bem-sucedida
       toast({
+        // Exibe um toast de sucesso
         description: data.message,
       });
-      router.push('/sign-in');
+      router.push('/sign-in'); // Redireciona para a página de login
     } else {
+      // Se a resposta não for bem-sucedida
       toast({
+        // Exibe um toast de erro
         description: data.message,
         variant: 'destructive',
       });
     }
-    setIsLoading(false);
+    setIsLoading(false); // Define isLoading como false após o término da requisição
   };
 
   return (
     <Form {...form}>
+      {' '}
+      {/* Componente de formulário com props do hook-form */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <div className="space-y-2">
+          {/* Nome de usuário */}
           <FormField
             control={form.control}
             name="username"
@@ -89,6 +103,7 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
+          {/* E-mail */}
           <FormField
             control={form.control}
             name="email"
@@ -102,6 +117,7 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
+          {/* Senha */}
           <FormField
             control={form.control}
             name="password"
@@ -115,6 +131,7 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
+          {/* Confirmação de senha */}
           <FormField
             control={form.control}
             name="confirmPassword"
@@ -129,6 +146,7 @@ const SignUpForm = () => {
             )}
           />
         </div>
+        {/* Botão de envio do formulário */}
         <Button className="w-full mt-6" type="submit" disabled={isLoading}>
           {isLoading ? 'Cadastrando...' : 'Cadastrar'}
         </Button>
@@ -136,6 +154,7 @@ const SignUpForm = () => {
       <div className="text-white mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-white after:ml-4 after:block after:h-px after:flex-grow after:bg-white">
         ou
       </div>
+      {/* Link para página de login */}
       <p className="text-center text-sm text-white mt-2">
         Já possui uma conta?&nbsp;
         <Link className="text-primary hover:underline" href="/sign-in">
