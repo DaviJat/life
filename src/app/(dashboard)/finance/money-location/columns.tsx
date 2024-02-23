@@ -75,7 +75,7 @@ export const columns: ColumnDef<MoneyLocation>[] = [
             <DropdownMenuItem onClick={() => (window.location.href = '/finance/money-location/' + payment.id)}>
               Editar
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log('Delete', payment.id)}>Excluir</DropdownMenuItem>
+            {/* <DropdownMenuItem onClick={() => console.log('Delete', payment.id)}>Excluir</DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );
