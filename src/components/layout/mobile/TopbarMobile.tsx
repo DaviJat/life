@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 
 function TopbarMobile() {
@@ -12,11 +13,11 @@ function TopbarMobile() {
 
   return (
     <div className="w-full bg-surface flex justify-between items-center mb-4 shadow-lg">
-      <button className="ml-2 text-surface-foreground" onClick={goBack}>
+      <Button variant="secondary" className="ml-2" onClick={goBack}>
         Voltar
-      </button>
+      </Button>
       <img className="w-28" src="/images/logo-fundo-transparente.png" alt="" />
-      <div className="w-11 mr-2"></div>
+      <div className="mr-4 w-16"></div>
     </div>
   );
 }

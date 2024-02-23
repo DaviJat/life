@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -14,13 +15,18 @@ interface MoneyLocationFormProps {
   id?: string;
 }
 
+// Define o esquema de validação para o formulário
 const FormSchema = z.object({
-  description: z.string().max(20),
-  type: z.enum(['Physical', 'Virtual']),
+  description: z.string().min(1, 'Campo obrigatório').max(30, 'A descrição deve ter no máximo 30 caracteres'),
+  type: z.enum(['Physical', 'Virtual'], {
+    required_error: 'Campo obrigatório',
+  }),
 });
 
 function MoneyLocationForm({ id }: MoneyLocationFormProps) {
+  // Estado para controlar o carregamento
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  // Configuração do formulário utilizando useForm do react-hook-form
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -29,12 +35,16 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
     },
   });
 
+  const router = useRouter(); // Hook useRouter para obter o objeto router do Next.js
+
+  // Efeito para carregar os dados por ID quando o ID é fornecido
   useEffect(() => {
     if (id) {
       getDataById();
     }
   }, [form, id]);
 
+  // Função para obter os dados por ID
   const getDataById = async () => {
     try {
       const response = await fetch(`/api/finance/money-location/?id=${id}`);
@@ -45,60 +55,50 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
     }
   };
 
+  // Função de submissão do formulário
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     setIsLoading(true);
-    if (id) {
-      const response = await fetch(`/api/finance/money-location/?id=${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          description: values.description,
-          type: values.type,
-        }),
-      });
+    const url = id ? `/api/finance/money-location/?id=${id}` : '/api/finance/money-location';
+    const method = id ? 'PUT' : 'POST';
 
-      if (response.ok) {
-        toast({
-          description: 'Localização dinheiro editada com sucesso',
-        });
-      } else {
-        toast({
-          description: 'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde.',
-          variant: 'destructive',
-        });
-      }
+    // Requisição para enviar os dados do formulário
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        description: values.description,
+        type: values.type,
+      }),
+    });
+
+    const data = await response.json(); // Extrai os dados da resposta
+
+    if (response.ok) {
+      // Se a resposta for bem-sucedida
+      toast({
+        // Exibe um toast de sucesso
+        description: data.message,
+      });
+      router.push('/finance/money-location'); // Redireciona para a listagem
     } else {
-      const response = await fetch('/api/finance/money-location', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          description: values.description,
-          type: values.type,
-        }),
+      // Se a resposta não for bem-sucedida
+      toast({
+        // Exibe um toast de erro
+        description: data.message,
+        variant: 'destructive',
       });
-
-      if (response.ok) {
-        toast({
-          description: 'Localização dinheiro cadastrada com sucesso',
-        });
-      } else {
-        toast({
-          description: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.',
-          variant: 'destructive',
-        });
-      }
     }
-    setIsLoading(false);
+    setIsLoading(false); // Define isLoading como false após o término da requisição
   };
 
   return (
     <>
+      {/* Componente de formulário */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
+          {/* Descrição do local dinheiro */}
           <FormField
             name="description"
             render={({ field }) => (
@@ -111,6 +111,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
               </FormItem>
             )}
           />
+          {/* Tipo do dinheiro */}
           <FormField
             control={form.control}
             name="type"
@@ -132,8 +133,9 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
               </FormItem>
             )}
           />
+          {/* Botão de envio do formulário */}
           <Button className="w-full mt-6" type="submit" disabled={isLoading}>
-            {isLoading ? 'Cadastrando...' : 'Cadastrar'}
+            {id ? (isLoading ? 'Salvando...' : 'Salvar') : 'Cadastrar'}
           </Button>
         </form>
       </Form>

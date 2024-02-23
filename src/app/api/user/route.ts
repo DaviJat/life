@@ -53,6 +53,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ user: rest, message: 'Cadastro realizado com sucesso! Agora você pode fazer login.' }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde.' }, { status: 500 });
+    return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
   }
 }

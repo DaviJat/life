@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import { useToast } from '../ui/use-toast';
+import { toast } from '../ui/use-toast';
 
 // Define o esquema de validação do formulário usando Zod
 const FormSchema = z
@@ -44,7 +44,6 @@ const SignUpForm = () => {
   });
 
   const router = useRouter(); // Hook useRouter para obter o objeto router do Next.js
-  const { toast } = useToast(); // Hook personalizado para exibir toasts
 
   // Função para lidar com o envio do formulário
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {

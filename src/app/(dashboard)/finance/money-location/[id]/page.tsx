@@ -8,7 +8,7 @@ function Page() {
 
   return (
     <div>
-      <h1>Money Location</h1>
+      <h1 className="font-semibold text-2xl">Editar local dinheiro</h1>
       <MoneyLocationForm id={params.id} />
     </div>
   );
