@@ -27,7 +27,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(moneyLocation);
     } else {
       // Se não houver 'id' na URL, busca todos os registros de moneyLocation no banco de dados.
-      const moneyLocations = await db.moneyLocation.findMany();
+      const moneyLocations = await db.moneyLocation.findMany({
+        orderBy: {
+          id: 'desc'
+        }
+      });
       // Retorna os registros encontrados em formato JSON.
       return NextResponse.json(moneyLocations);
     }

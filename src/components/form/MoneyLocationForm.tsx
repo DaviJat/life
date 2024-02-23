@@ -50,14 +50,10 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
 
   // Função para obter os dados por ID
   const getDataById = async () => {
-    try {
-      const response = await fetch(`/api/finance/money-location/?id=${id}`);
-      const data = await response.json();
-      setIsDataLoading(false);
-      form.reset(data);
-    } catch (error) {
-      console.error('Erro ao obter dados por ID:', error);
-    }
+    const response = await fetch(`/api/finance/money-location/?id=${id}`);
+    const data = await response.json();
+    setIsDataLoading(false);
+    form.reset(data);
   };
 
   // Função de submissão do formulário

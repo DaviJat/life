@@ -1,17 +1,27 @@
+'use client';
+
 import DataTable from '@/app/(dashboard)/finance/money-location/data-table';
 import { Button } from '@/components/ui/button';
 import { MoneyLocation } from '@prisma/client';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { columns } from './columns';
 
-async function getMoneyLocations(): Promise<MoneyLocation[]> {
-  const response = await fetch(process.env.URL + '/api/finance/money-location', { cache: 'no-store' });
-  const data = await response.json();
-  return data;
-}
+function Page() {
+  const [data, setData] = useState<MoneyLocation[]>([]);
 
-async function page() {
-  const data = await getMoneyLocations();
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/finance/money-location', { cache: 'no-store' });
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -26,4 +36,4 @@ async function page() {
   );
 }
 
-export default page;
+export default Page;
