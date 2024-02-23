@@ -30,7 +30,9 @@ const FormSchema = z
 
 // Componente do formulário de cadastro
 const SignUpForm = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Estado para controlar o carregamento
+  // Estado para controlar o carregamento e evitar multiplos submits do formulário
+  const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     // Hook useForm para gerenciar o estado do formulário
     resolver: zodResolver(FormSchema), // Usa o resolvedor Zod para validação do esquema
@@ -47,7 +49,7 @@ const SignUpForm = () => {
 
   // Função para lidar com o envio do formulário
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    setIsLoading(true); // Define isLoading como true para indicar carregamento
+    setIsFormSubmitting(true);
 
     // Envia uma requisição POST para '/api/user' com os dados do formulário
     const response = await fetch('/api/user', {
@@ -79,7 +81,7 @@ const SignUpForm = () => {
         variant: 'destructive',
       });
     }
-    setIsLoading(false); // Define isLoading como false após o término da requisição
+    setIsFormSubmitting(false);
   };
 
   return (
@@ -146,8 +148,8 @@ const SignUpForm = () => {
           />
         </div>
         {/* Botão de envio do formulário */}
-        <Button className="w-full mt-6" type="submit" disabled={isLoading}>
-          {isLoading ? 'Cadastrando...' : 'Cadastrar'}
+        <Button className="w-full mt-6" type="submit" disabled={isFormSubmitting}>
+          {isFormSubmitting ? 'Cadastrando...' : 'Cadastrar'}
         </Button>
       </form>
       <div className="text-white mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-white after:ml-4 after:block after:h-px after:flex-grow after:bg-white">

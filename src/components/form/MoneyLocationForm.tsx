@@ -24,8 +24,11 @@ const FormSchema = z.object({
 });
 
 function MoneyLocationForm({ id }: MoneyLocationFormProps) {
-  // Estado para controlar o carregamento
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // Estado para controlar o carregamento e evitar multiplos submits do formulário
+  const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
+  // Estado para controlar o carregamento dos dados da página
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
+
   // Configuração do formulário utilizando useForm do react-hook-form
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -40,6 +43,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
   // Efeito para carregar os dados por ID quando o ID é fornecido
   useEffect(() => {
     if (id) {
+      setIsDataLoading(true);
       getDataById();
     }
   }, [form, id]);
@@ -49,6 +53,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
     try {
       const response = await fetch(`/api/finance/money-location/?id=${id}`);
       const data = await response.json();
+      setIsDataLoading(false);
       form.reset(data);
     } catch (error) {
       console.error('Erro ao obter dados por ID:', error);
@@ -57,7 +62,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
 
   // Função de submissão do formulário
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    setIsLoading(true);
+    setIsFormSubmitting(true);
     const url = id ? `/api/finance/money-location/?id=${id}` : '/api/finance/money-location';
     const method = id ? 'PUT' : 'POST';
 
@@ -90,7 +95,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
         variant: 'destructive',
       });
     }
-    setIsLoading(false); // Define isLoading como false após o término da requisição
+    setIsFormSubmitting(false); // Define isFormSubmitting como false após o término da requisição
   };
 
   return (
@@ -105,7 +110,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
               <FormItem>
                 <FormLabel className="text-black">Descrição</FormLabel>
                 <FormControl>
-                  <Input placeholder="Descrição do local" {...field} />
+                  <Input placeholder={isDataLoading ? 'Carregando dados...' : 'Descrição do local'} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -121,7 +126,9 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecione o tipo do dinheiro" />
+                      <SelectValue
+                        placeholder={isDataLoading ? 'Carregando dados...' : 'Selecione o tipo do dinheiro'}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -134,8 +141,8 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
             )}
           />
           {/* Botão de envio do formulário */}
-          <Button className="w-full mt-6" type="submit" disabled={isLoading}>
-            {id ? (isLoading ? 'Salvando...' : 'Salvar') : 'Cadastrar'}
+          <Button className="w-full mt-6" type="submit" disabled={isFormSubmitting}>
+            {id ? (isFormSubmitting ? 'Salvando...' : 'Salvar') : 'Cadastrar'}
           </Button>
         </form>
       </Form>
