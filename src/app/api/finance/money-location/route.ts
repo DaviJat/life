@@ -94,19 +94,3 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
   }
 }
-
-// Função assíncrona para lidar com requisições DELETE.
-export async function DELETE(request: NextRequest) {
-  try {
-    // Obtém o 'id' da URL da requisição.
-    const id = request.nextUrl.searchParams.get("id");
-
-    // Realiza a exclusão do registro de moneyLocation no banco de dados.
-
-    // Retorna uma resposta de sucesso após a exclusão.
-    return NextResponse.json({ message: 'Local dinheiro excluído com sucesso' }, { status: 200 });
-  } catch (error) {
-    // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
-    return NextResponse.json({ message: 'Ops! Houve um problema durante a exclusão. Por favor, tente novamente mais tarde' }, { status: 500 });
-  }
-}
