@@ -1,4 +1,4 @@
-import MoneyLocationForm from '@/components/form/MoneyLocationForm';
+import MoneyLocationForm from '@/components/forms/MoneyLocationForm';
 
 const page = () => (
   <div>

@@ -1,27 +1,11 @@
-'use client';
-
-import DataTable from '@/app/(dashboard)/finance/money-location/data-table';
+import DataTable from '@/components/DataTable';
 import { Button } from '@/components/ui/button';
-import { MoneyLocation } from '@prisma/client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { columns } from './columns';
 
-function Page() {
-  const [data, setData] = useState<MoneyLocation[]>([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/finance/money-location', { cache: 'no-store' });
-        const data = await response.json();
-        setData(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    fetchData();
-  }, []);
+async function Page() {
+  const response = await fetch(process.env.URL + '/api/finance/money-location', { cache: 'no-store' });
+  const data = await response.json();
 
   return (
     <>

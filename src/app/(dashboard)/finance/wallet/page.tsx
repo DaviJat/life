@@ -1,4 +1,4 @@
-import WalletForm from '@/components/form/WalletForm';
+import WalletForm from '@/components/forms/WalletForm';
 
 function page() {
   return (

@@ -2,7 +2,7 @@
 
 import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
 import { FC, ReactNode, useContext } from 'react';
-import { DeviceContext } from '../DeviceProvider';
+import { DeviceContext } from '../providers/DeviceProvider';
 import Navbar from './desktop/Navbar';
 import NavbarItem from './desktop/NavbarItem';
 import NavbarMobile from './mobile/NavbarMobile';
