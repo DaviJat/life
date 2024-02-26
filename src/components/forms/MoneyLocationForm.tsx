@@ -65,6 +65,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
     // Requisição para enviar os dados do formulário
     const response = await fetch(url, {
       method,
+      cache: 'no-store',
       headers: {
         'Content-type': 'application/json',
       },

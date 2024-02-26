@@ -3,9 +3,13 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { columns } from './columns';
 
-async function Page() {
+async function getData() {
   const response = await fetch(process.env.URL + '/api/finance/money-location', { cache: 'no-store' });
-  const data = await response.json();
+  return await response.json();
+}
+
+async function Page() {
+  const data = await getData();
 
   return (
     <>
