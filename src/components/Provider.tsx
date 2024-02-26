@@ -2,16 +2,21 @@
 
 import { SessionProvider } from 'next-auth/react';
 import { FC, ReactNode } from 'react';
+import { DeviceProvider } from './DeviceProvider';
 
 // Define as propriedades esperadas para o componente Provider.
 interface ProviderProps {
   children: ReactNode;
 }
 
-// Componente Provider é uma função de componente funcional (FC) que recebe as propriedades definidas em ProviderProps.
+// Componente Provider é uma função para promover recursos englobando os componentes no layout do app
 const Provider: FC<ProviderProps> = ({ children }) => {
-  // Retorna o SessionProvider do pacote next-auth/react, que envolverá os componentes filhos e fornecerá informações de sessão.
-  return <SessionProvider>{children}</SessionProvider>;
+  // Retorna o SessionProvider e o DeviceProvider, envolvendo os componentes filhos
+  return (
+    <SessionProvider>
+      <DeviceProvider>{children}</DeviceProvider>
+    </SessionProvider>
+  );
 };
 
 export default Provider;
