@@ -1,7 +1,4 @@
-import DataTable from '@/components/DataTable';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { columns } from './columns';
+import Table from '@/components/tables/money-location/Table';
 
 async function getData() {
   const response = await fetch(process.env.URL + '/api/finance/money-location', { cache: 'no-store' });
@@ -11,17 +8,7 @@ async function getData() {
 async function Page() {
   const data = await getData();
 
-  return (
-    <>
-      <div className="flex items-center justify-between">
-        <h1 className="font-semibold text-2xl">Local dinheiro</h1>
-        <Link href="money-location/create">
-          <Button>Criar</Button>
-        </Link>
-      </div>
-      <DataTable columns={columns} data={data} />
-    </>
-  );
+  return <Table data={data}></Table>;
 }
 
 export default Page;
