@@ -127,6 +127,7 @@ function WalletForm({ id }: WalletFormProps) {
                 <FormControl>
                   <Input
                     type="number"
+                    currency
                     placeholder={!isDataLoading ? 'Saldo da carteira...' : 'Carregando...'}
                     {...field}
                   />
