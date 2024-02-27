@@ -7,11 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoneyLocation } from '@prisma/client';
+import { Wallet } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
 
-export const columns: ColumnDef<MoneyLocation>[] = [
+export const columns: ColumnDef<Wallet>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
@@ -72,7 +72,7 @@ export const columns: ColumnDef<MoneyLocation>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => (window.location.href = '/finance/money-location/' + payment.id)}>
+            <DropdownMenuItem onClick={() => (window.location.href = '/finance/wallet/' + payment.id)}>
               Editar
             </DropdownMenuItem>
             {/* <DropdownMenuItem onClick={() => console.log('Delete', payment.id)}>Excluir</DropdownMenuItem> */}

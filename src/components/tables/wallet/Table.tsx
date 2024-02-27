@@ -18,7 +18,7 @@ function Table({ data }) {
     <>
       <div className="flex items-center justify-between">
         <h1 className="font-semibold text-2xl">Carteira</h1>
-        <Link href="money-location/create">
+        <Link href="wallet/create">
           <Button>Criar</Button>
         </Link>
       </div>

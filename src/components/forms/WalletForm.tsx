@@ -18,6 +18,7 @@ interface WalletFormProps {
 // Define o esquema de validação para o formulário
 const FormSchema = z.object({
   description: z.string().min(1, 'Campo obrigatório').max(30, 'A descrição deve ter no máximo 30 caracteres'),
+  balance: z.number().max(Number.MAX_SAFE_INTEGER, 'O saldo é muito grande'),
   type: z.enum(['Physical', 'Virtual'], {
     required_error: 'Campo obrigatório',
   }),
@@ -85,7 +86,7 @@ function WalletForm({ id }: WalletFormProps) {
         // Exibe um toast de sucesso
         description: data.message,
       });
-      router.push('/finance/money-location'); // Redireciona para a listagem
+      router.push('/finance/wallet'); // Redireciona para a listagem
     } else {
       // Se a resposta não for bem-sucedida
       toast({
@@ -102,7 +103,7 @@ function WalletForm({ id }: WalletFormProps) {
       {/* Componente de formulário */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          {/* Descrição do carteira */}
+          {/* Descrição da carteira */}
           <FormField
             name="description"
             render={({ field }) => (
@@ -115,7 +116,20 @@ function WalletForm({ id }: WalletFormProps) {
               </FormItem>
             )}
           />
-          {/* Tipo do dinheiro */}
+          {/* Saldo da carteira */}
+          <FormField
+            name="balance"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-black">Saldo</FormLabel>
+                <FormControl>
+                  <Input placeholder={!isDataLoading ? 'Saldo da carteira...' : 'Carregando...'} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Tipo de carteira */}
           <FormField
             control={form.control}
             name="type"
@@ -125,12 +139,12 @@ function WalletForm({ id }: WalletFormProps) {
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={!isDataLoading ? 'Selecione o tipo do dinheiro' : 'Carregando...'} />
+                      <SelectValue placeholder={!isDataLoading ? 'Selecione o tipo de carteira' : 'Carregando...'} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="Virtual">Virtual</SelectItem>
-                    <SelectItem value="Physical">Físico</SelectItem>
+                    <SelectItem value="Physical">Física</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

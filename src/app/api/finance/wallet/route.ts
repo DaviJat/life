@@ -7,6 +7,7 @@ import db from "@/lib/db";
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const userSchema = z.object({
   description: z.string().min(1, 'Description is required').max(30),
+  balance: z.number().max(Number.MAX_SAFE_INTEGER),
   type: z.enum(['Physical', 'Virtual']),
 });
 
@@ -16,28 +17,28 @@ export async function GET(request: NextRequest) {
   const id = request.nextUrl.searchParams.get("id");
   try {
     if (id) {
-      // Busca um registro de moneyLocation pelo id no banco de dados.
-      const moneyLocation = await db.moneyLocation.findUnique({
+      // Busca um registro de wallet pelo id no banco de dados.
+      const wallet = await db.wallet.findUnique({
         where: {
           id: parseInt(id)
         }
       });
 
       // Retorna o registro encontrado em formato JSON.
-      return NextResponse.json(moneyLocation);
+      return NextResponse.json(wallet);
     } else {
-      // Se não houver 'id' na URL, busca todos os registros de moneyLocation no banco de dados.
-      const moneyLocations = await db.moneyLocation.findMany({
+      // Se não houver 'id' na URL, busca todos os registros de wallet no banco de dados.
+      const wallets = await db.wallet.findMany({
         orderBy: {
           id: 'desc'
         }
       });
       // Retorna os registros encontrados em formato JSON.
-      return NextResponse.json(moneyLocations);
+      return NextResponse.json(wallets);
     }
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante a busca no banco de dados.
-    return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
+    return NextResponse.json({ message: 'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde' }, { status: 500 });
   }
 }
 
@@ -47,18 +48,19 @@ export async function POST(request: NextRequest) {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, type } = userSchema.parse(body);
+    const { description, balance, type } = userSchema.parse(body);
 
-    // Cria um novo registro de moneyLocation no banco de dados com os dados recebidos.
-    const newMoneyLocation = await db.moneyLocation.create({
+    // Cria um novo registro de wallet no banco de dados com os dados recebidos.
+    const newMoneyLocation = await db.wallet.create({
       data: {
         description,
+        balance,
         type
       }
     })
 
     // Retorna uma resposta de sucesso com o novo registro criado.
-    return NextResponse.json({ moneyLocation: newMoneyLocation, message: 'Carteira cadastrada com sucesso' }, { status: 201 });
+    return NextResponse.json({ wallet: newMoneyLocation, message: 'Carteira cadastrada com sucesso' }, { status: 201 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
@@ -76,8 +78,8 @@ export async function PUT(request: NextRequest) {
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { description, type } = userSchema.parse(body);
 
-    // Atualiza o registro de moneyLocation no banco de dados com os dados recebidos.
-    const updatedMoneyLocation = await db.moneyLocation.update({
+    // Atualiza o registro de wallet no banco de dados com os dados recebidos.
+    const updatedMoneyLocation = await db.wallet.update({
       where: {
         id: parseInt(id, 10),
       },
@@ -88,10 +90,10 @@ export async function PUT(request: NextRequest) {
     });
 
     // Retorna uma resposta de sucesso com o registro atualizado.
-    return NextResponse.json({ moneyLocation: updatedMoneyLocation, message: 'Carteira editada com sucesso' }, { status: 200 });
+    return NextResponse.json({ wallet: updatedMoneyLocation, message: 'Carteira editada com sucesso' }, { status: 200 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
-    return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
+    return NextResponse.json({ message: 'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde' }, { status: 500 });
   }
 }
 
@@ -101,7 +103,7 @@ export async function DELETE(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = request.nextUrl.searchParams.get("id");
 
-    // Realiza a exclusão do registro de moneyLocation no banco de dados.
+    // Realiza a exclusão do registro de wallet no banco de dados.
 
     // Retorna uma resposta de sucesso após a exclusão.
     return NextResponse.json({ message: 'Carteira excluída com sucesso' }, { status: 200 });
