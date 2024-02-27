@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { NumericFormat } from 'react-number-format';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
@@ -19,7 +18,7 @@ interface WalletFormProps {
 // Define o esquema de validação para o formulário
 const FormSchema = z.object({
   description: z.string().min(1, 'Campo obrigatório').max(30, 'A descrição deve ter no máximo 30 caracteres'),
-  balance: z.string().transform((val) => parseFloat(val.replace(/[^\d.,]/g, '').replace(',', '.'))),
+  balance: z.coerce.number().max(Number.MAX_SAFE_INTEGER, 'O saldo é muito grande'),
   type: z.enum(['Physical', 'Virtual'], {
     required_error: 'Campo obrigatório',
   }),
@@ -122,20 +121,14 @@ function WalletForm({ id }: WalletFormProps) {
           {/* Saldo da carteira */}
           <FormField
             name="balance"
-            render={({ field: { value, ref, ...rest } }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Saldo</FormLabel>
                 <FormControl>
-                  <NumericFormat
-                    decimalScale={2}
-                    customInput={Input}
-                    decimalSeparator=","
-                    thousandSeparator="."
-                    fixedDecimalScale
-                    prefix={'R$ '}
-                    getInputRef={ref}
+                  <Input
+                    type="number"
                     placeholder={!isDataLoading ? 'Saldo da carteira...' : 'Carregando...'}
-                    {...rest}
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
