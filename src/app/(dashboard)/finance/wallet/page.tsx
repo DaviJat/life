@@ -1,12 +1,14 @@
-import WalletForm from '@/components/forms/WalletForm';
+import Table from '@/components/tables/wallet/Table';
 
-function page() {
-  return (
-    <div>
-      <h1>Carteira</h1>
-      <WalletForm />
-    </div>
-  );
+async function getData() {
+  const response = await fetch(process.env.URL + '/api/finance/wallet', { cache: 'no-store' });
+  return await response.json();
 }
 
-export default page;
+async function Page() {
+  const data = await getData();
+
+  return <Table data={data}></Table>;
+}
+
+export default Page;

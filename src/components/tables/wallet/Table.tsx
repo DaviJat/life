@@ -1,7 +1,7 @@
 'use client';
 
-import { columns } from '@/components/tables/money-location/columns';
-import DataTable from '@/components/tables/money-location/data-table';
+import { columns } from '@/components/tables/wallet/columns';
+import DataTable from '@/components/tables/wallet/data-table';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -17,7 +17,7 @@ function Table({ data }) {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h1 className="font-semibold text-2xl">Local dinheiro</h1>
+        <h1 className="font-semibold text-2xl">Carteira</h1>
         <Link href="money-location/create">
           <Button>Criar</Button>
         </Link>

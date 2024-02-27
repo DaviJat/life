@@ -23,9 +23,6 @@ const NavbarMobile = () => {
           <CircleDollarSign />
         </MenubarTrigger>
         <MenubarContent>
-          <Link href={'/finance/money-location'}>
-            <MenubarItem>Local dinheiro</MenubarItem>
-          </Link>
           <Link href={'/finance/wallet'}>
             <MenubarItem>Carteira</MenubarItem>
           </Link>

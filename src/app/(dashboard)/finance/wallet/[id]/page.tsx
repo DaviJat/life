@@ -1,6 +1,6 @@
 'use client';
 
-import MoneyLocationForm from '@/components/forms/MoneyLocationForm';
+import WalletForm from '@/components/forms/WalletForm';
 import { useParams } from 'next/navigation';
 
 function Page() {
@@ -8,8 +8,8 @@ function Page() {
 
   return (
     <div>
-      <h1 className="font-semibold text-2xl">Editar local dinheiro</h1>
-      <MoneyLocationForm id={params.id} />
+      <h1 className="font-semibold text-2xl">Editar carteira</h1>
+      <WalletForm id={params.id} />
     </div>
   );
 }
