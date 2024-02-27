@@ -18,7 +18,7 @@ interface WalletFormProps {
 // Define o esquema de validação para o formulário
 const FormSchema = z.object({
   description: z.string().min(1, 'Campo obrigatório').max(30, 'A descrição deve ter no máximo 30 caracteres'),
-  balance: z.number().max(Number.MAX_SAFE_INTEGER, 'O saldo é muito grande'),
+  balance: z.coerce.number().max(Number.MAX_SAFE_INTEGER, 'O saldo é muito grande'),
   type: z.enum(['Physical', 'Virtual'], {
     required_error: 'Campo obrigatório',
   }),
@@ -75,6 +75,7 @@ function WalletForm({ id }: WalletFormProps) {
       },
       body: JSON.stringify({
         description: values.description,
+        balance: values.balance,
         type: values.type,
       }),
     });
@@ -124,7 +125,11 @@ function WalletForm({ id }: WalletFormProps) {
               <FormItem>
                 <FormLabel className="text-black">Saldo</FormLabel>
                 <FormControl>
-                  <Input placeholder={!isDataLoading ? 'Saldo da carteira...' : 'Carregando...'} {...field} />
+                  <Input
+                    type="number"
+                    placeholder={!isDataLoading ? 'Saldo da carteira...' : 'Carregando...'}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -136,7 +141,7 @@ function WalletForm({ id }: WalletFormProps) {
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tipo do dinheiro</FormLabel>
+                <FormLabel>Tipo de carteira</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>

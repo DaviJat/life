@@ -41,6 +41,10 @@ export const columns: ColumnDef<Wallet>[] = [
     },
   },
   {
+    accessorKey: 'balance',
+    header: 'Saldo',
+  },
+  {
     accessorKey: 'type',
     header: 'Tipo',
     cell: ({ row }) => {
