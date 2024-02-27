@@ -27,7 +27,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
   // Estado para controlar o carregamento e evitar multiplos submits do formulário
   const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
   // Estado para controlar o carregamento dos dados da página
-  const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
 
   // Configuração do formulário utilizando useForm do react-hook-form
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -45,6 +45,8 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
     if (id) {
       setIsDataLoading(true);
       getDataById();
+    } else {
+      setIsDataLoading(false);
     }
   }, [form, id]);
 
@@ -107,7 +109,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
               <FormItem>
                 <FormLabel className="text-black">Descrição</FormLabel>
                 <FormControl>
-                  <Input placeholder={isDataLoading ? 'Carregando dados...' : 'Descrição do local'} {...field} />
+                  <Input placeholder={!isDataLoading ? 'Descrição do local' : 'Carregando...'} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,9 +125,7 @@ function MoneyLocationForm({ id }: MoneyLocationFormProps) {
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue
-                        placeholder={isDataLoading ? 'Carregando dados...' : 'Selecione o tipo do dinheiro'}
-                      />
+                      <SelectValue placeholder={!isDataLoading ? 'Selecione o tipo do dinheiro' : 'Carregando...'} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
