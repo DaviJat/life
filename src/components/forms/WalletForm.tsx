@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 import { z } from 'zod';
@@ -100,8 +100,6 @@ function WalletForm({ id }: WalletFormProps) {
     }
     setIsFormSubmitting(false); // Define isFormSubmitting como false após o término da requisição
   };
-
-  const [internalValue, setInternalValue] = React.useState('');
 
   return (
     <>
