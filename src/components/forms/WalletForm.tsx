@@ -110,7 +110,7 @@ function WalletForm({ id }: WalletFormProps) {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-black">Descrição</FormLabel>
+                <FormLabel>Descrição</FormLabel>
                 <FormControl>
                   <Input placeholder={!isDataLoading ? 'Descrição do local' : 'Carregando...'} {...field} />
                 </FormControl>
@@ -123,7 +123,7 @@ function WalletForm({ id }: WalletFormProps) {
             name="balance"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-black">Saldo</FormLabel>
+                <FormLabel>Saldo</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
