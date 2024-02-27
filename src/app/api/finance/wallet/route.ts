@@ -76,7 +76,7 @@ export async function PUT(request: NextRequest) {
     // Obtém o corpo da requisição PUT.
     const body = await request.json();
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, type } = userSchema.parse(body);
+    const { description, balance, type } = userSchema.parse(body);
 
     // Atualiza o registro de wallet no banco de dados com os dados recebidos.
     const updatedMoneyLocation = await db.wallet.update({
@@ -85,6 +85,7 @@ export async function PUT(request: NextRequest) {
       },
       data: {
         description,
+        balance,
         type,
       },
     });
