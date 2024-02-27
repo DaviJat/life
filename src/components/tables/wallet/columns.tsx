@@ -43,6 +43,11 @@ export const columns: ColumnDef<Wallet>[] = [
   {
     accessorKey: 'balance',
     header: 'Saldo',
+    cell: ({ row }) => {
+      const balance = Number(row.getValue('balance'));
+      const formattedBalance = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(balance);
+      return <div className="px-2">{formattedBalance}</div>;
+    },
   },
   {
     accessorKey: 'type',
