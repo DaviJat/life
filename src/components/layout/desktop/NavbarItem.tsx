@@ -21,8 +21,8 @@ function NavbarItem({ icon, text, route }: NavbarItemProps) {
         className={`
           relative flex items-center py-2 px-3 my-1
           font-medium rounded-md cursor-pointer
-          transition-colors group text-primary-foreground
-          ${isActive ? 'bg-primary ' : 'hover:bg-primary-hover'}
+          transition-colors group
+          ${isActive ? 'bg-accent text-accent-foreground' : 'hover:bg-surface-hover text-surface-foreground'}
         `}
       >
         {icon}
@@ -32,7 +32,7 @@ function NavbarItem({ icon, text, route }: NavbarItemProps) {
           <div
             className={`
               absolute left-full rounded-md px-2 py-1 ml-6
-              bg-primary text-primary-foreground text-sm
+              ${isActive ? 'bg-accent text-accent-foreground' : 'bg-surface text-surface-foreground'} text-sm
               invisible opacity-80 -translate-x-3 transition-all
               group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
           `}

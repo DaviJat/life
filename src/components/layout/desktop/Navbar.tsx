@@ -14,7 +14,7 @@ const Navbar = ({ children }: NavbarProps) => {
 
   return (
     <aside className="h-screen">
-      <nav className="h-full inline-flex flex-col bg-navbar shadow-sm">
+      <nav className="h-full inline-flex flex-col bg-surface shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src="/images/logo-fundo-transparente.png"
@@ -23,7 +23,7 @@ const Navbar = ({ children }: NavbarProps) => {
           />
           <button
             onClick={() => setExpanded((curr) => !curr)}
-            className="p-1.5 rounded-lg transition-colors text-primary-foreground hover:bg-primary-hover"
+            className="p-1.5 rounded-lg transition-colors text-surface-foreground hover:bg-surface-hover"
           >
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
@@ -31,7 +31,7 @@ const Navbar = ({ children }: NavbarProps) => {
         <NavbarContext.Provider value={{ expanded }}>
           <ul className="flex-1 px-3">{children}</ul>
         </NavbarContext.Provider>
-        <div className="border-t flex p-3 text-navbar-foreground justify-center">
+        <div className="border-t flex p-3 text-surface-foreground justify-center">
           <CircleUserRound className="h-full" size={28} />
           <div
             className={`

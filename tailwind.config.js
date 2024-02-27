@@ -18,9 +18,10 @@ module.exports = {
         border: 'var(--border)',
         input: 'var(--input)',
         ring: 'var(--ring)',
-        navbar: {
-          DEFAULT: 'var(--navbar)',
-          foreground: 'var(--navbar-foreground)',
+        surface: {
+          DEFAULT: 'var(--surface)',
+          foreground: 'var(--surface-foreground)',
+          hover: 'var(--surface-hover)',
         },
         primary: {
           DEFAULT: 'var(--primary)',
@@ -42,6 +43,10 @@ module.exports = {
         accent: {
           DEFAULT: 'var(--accent)',
           foreground: 'var(--accent-foreground)',
+        },
+        'surface-accent': {
+          DEFAULT: 'var(--surface-accent)',
+          foreground: 'var(--surface-accent-foreground)',
         },
         popover: {
           DEFAULT: 'var(--popover)',

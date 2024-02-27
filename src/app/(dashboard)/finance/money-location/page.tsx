@@ -1,12 +1,14 @@
-import MoneyLocationForm from '@/components/form/MoneyLocationForm';
+import Table from '@/components/tables/money-location/Table';
 
-function page() {
-  return (
-    <div>
-      <h1>Money Location</h1>
-      <MoneyLocationForm />
-    </div>
-  );
+async function getData() {
+  const response = await fetch(process.env.URL + '/api/finance/money-location', { cache: 'no-store' });
+  return await response.json();
 }
 
-export default page;
+async function Page() {
+  const data = await getData();
+
+  return <Table data={data}></Table>;
+}
+
+export default Page;
