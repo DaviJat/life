@@ -35,6 +35,7 @@ function WalletForm({ id }: WalletFormProps) {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       description: '',
+      balance: '' as unknown as number,
       type: undefined,
     },
   });
