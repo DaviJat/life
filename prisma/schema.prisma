@@ -54,26 +54,26 @@ model WalletEntry {
 }
 
 model ReceivedPayments {
-  id             Int              @id @default(autoincrement())
-  paymentDate    DateTime
-  amountReceived Float
-  walletEntry    WalletEntry      @relation(fields: [walletEntryId], references: [id])
-  walletEntryId  Int
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  BillsToReceive BillsToReceive[]
+  id               Int            @id @default(autoincrement())
+  paymentDate      DateTime
+  amountReceived   Float
+  walletEntry      WalletEntry    @relation(fields: [walletEntryId], references: [id])
+  walletEntryId    Int
+  billsToReceive   BillsToReceive @relation(fields: [billsToReceiveId], references: [id])
+  billsToReceiveId Int
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 }
 
 model BillsToReceive {
-  id                 Int              @id @default(autoincrement())
-  description        String
-  value              Float
-  person             Person           @relation(fields: [personId], references: [id])
-  personId           Int
-  receivedPayments   ReceivedPayments @relation(fields: [receivedPaymentsId], references: [id])
-  receivedPaymentsId Int
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
+  id               Int                @id @default(autoincrement())
+  description      String
+  value            Float
+  person           Person             @relation(fields: [personId], references: [id])
+  personId         Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  ReceivedPayments ReceivedPayments[]
 }
 
 model WalletExit {
@@ -88,24 +88,24 @@ model WalletExit {
 }
 
 model PaidPayments {
-  id           Int          @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   paymentDate  DateTime
   amountPaid   Float
-  walletExit   WalletExit   @relation(fields: [walletExitId], references: [id])
+  walletExit   WalletExit @relation(fields: [walletExitId], references: [id])
   walletExitId Int
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  BillsToPay   BillsToPay[]
+  billsToPay   BillsToPay @relation(fields: [billsToPayId], references: [id])
+  billsToPayId Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 model BillsToPay {
-  id             Int          @id @default(autoincrement())
-  description    String
-  value          Float
-  person         Person       @relation(fields: [personId], references: [id])
-  personId       Int
-  paidPayments   PaidPayments @relation(fields: [paidPaymentsId], references: [id])
-  paidPaymentsId Int
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  id           Int            @id @default(autoincrement())
+  description  String
+  value        Float
+  person       Person         @relation(fields: [personId], references: [id])
+  personId     Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  PaidPayments PaidPayments[]
 }
