@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum MoneyLocationType {
+enum WalletType {
   Physical
   Virtual
 }
@@ -31,20 +31,11 @@ model Person {
   updatedAt      DateTime         @updatedAt
 }
 
-model MoneyLocation {
-  id          Int               @id @default(autoincrement())
-  description String
-  type        MoneyLocationType
-  Wallets     Wallet[]
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-}
-
 model Wallet {
   id              Int           @id @default(autoincrement())
-  amount          Float
-  moneyLocation   MoneyLocation @relation(fields: [moneyLocationId], references: [id])
-  moneyLocationId Int
+  description     String
+  balance          Float
+  type            WalletType
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   WalletEntry     WalletEntry[]
