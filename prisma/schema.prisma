@@ -32,58 +32,80 @@ model Person {
 }
 
 model Wallet {
-  id              Int           @id @default(autoincrement())
-  description     String
-  balance          Float
-  type            WalletType
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  WalletEntry     WalletEntry[]
-  WalletExit      WalletExit[]
+  id          Int           @id @default(autoincrement())
+  description String
+  balance     Float
+  type        WalletType
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  WalletEntry WalletEntry[]
+  WalletExit  WalletExit[]
 }
 
 model WalletEntry {
-  id             Int             @id @default(autoincrement())
-  description    String
-  value          Float
-  wallet         Wallet          @relation(fields: [walletId], references: [id])
-  walletId       Int             
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  id               Int                @id @default(autoincrement())
+  description      String
+  value            Float
+  wallet           Wallet             @relation(fields: [walletId], references: [id])
+  walletId         Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  ReceivedPayments ReceivedPayments[]
+}
+
+model ReceivedPayments {
+  id             Int              @id @default(autoincrement())
+  paymentDate    DateTime
+  amountReceived Float
+  walletEntry    WalletEntry      @relation(fields: [walletEntryId], references: [id])
+  walletEntryId  Int
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   BillsToReceive BillsToReceive[]
 }
 
+model BillsToReceive {
+  id                 Int              @id @default(autoincrement())
+  description        String
+  value              Float
+  person             Person           @relation(fields: [personId], references: [id])
+  personId           Int
+  receivedPayments   ReceivedPayments @relation(fields: [receivedPaymentsId], references: [id])
+  receivedPaymentsId Int
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+}
+
 model WalletExit {
-  id          Int         @id @default(autoincrement())
-  description String
-  value       Float
-  wallet      Wallet      @relation(fields: [walletId], references: [id])
-  walletId    Int         
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  BillsToPay  BillsToPay[]
+  id           Int            @id @default(autoincrement())
+  description  String
+  value        Float
+  wallet       Wallet         @relation(fields: [walletId], references: [id])
+  walletId     Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  PaidPayments PaidPayments[]
+}
+
+model PaidPayments {
+  id           Int          @id @default(autoincrement())
+  paymentDate  DateTime
+  amountPaid   Float
+  walletExit   WalletExit   @relation(fields: [walletExitId], references: [id])
+  walletExitId Int
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  BillsToPay   BillsToPay[]
 }
 
 model BillsToPay {
-  id           Int        @id @default(autoincrement())
-  description  String
-  value        Float
-  walletExit   WalletExit @relation(fields: [walletExitId], references: [id])
-  walletExitId Int        
-  person       Person     @relation(fields: [personId], references: [id])
-  personId     Int
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-}
-
-model BillsToReceive {
-  id            Int         @id @default(autoincrement())
-  description   String
-  value         Float
-  walletEntry   WalletEntry @relation(fields: [walletEntryId], references: [id])
-  walletEntryId Int         
-  person        Person      @relation(fields: [personId], references: [id])
-  personId      Int
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id             Int          @id @default(autoincrement())
+  description    String
+  value          Float
+  person         Person       @relation(fields: [personId], references: [id])
+  personId       Int
+  paidPayments   PaidPayments @relation(fields: [paidPaymentsId], references: [id])
+  paidPaymentsId Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
