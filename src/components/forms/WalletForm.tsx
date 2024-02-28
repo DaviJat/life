@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
+import MoneyInput from '../ui/money-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { toast } from '../ui/use-toast';
 
@@ -18,7 +19,7 @@ interface WalletFormProps {
 // Define o esquema de validação para o formulário
 const FormSchema = z.object({
   description: z.string().min(1, 'Campo obrigatório').max(30, 'A descrição deve ter no máximo 30 caracteres'),
-  balance: z.coerce.number().max(Number.MAX_SAFE_INTEGER, 'O saldo é muito grande'),
+  balance: z.coerce.number().min(0.01, 'Campo obrigatório'),
   type: z.enum(['Physical', 'Virtual'], {
     required_error: 'Campo obrigatório',
   }),
@@ -30,12 +31,14 @@ function WalletForm({ id }: WalletFormProps) {
   // Estado para controlar o carregamento dos dados da página
   const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
 
+  const [balanceValue, setBalanceValue] = useState('');
+
   // Configuração do formulário utilizando useForm do react-hook-form
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       description: '',
-      balance: '' as unknown as number,
+      balance: 0,
       type: undefined,
     },
   });
@@ -56,6 +59,7 @@ function WalletForm({ id }: WalletFormProps) {
   const getDataById = async () => {
     const response = await fetch(`/api/finance/wallet/?id=${id}`);
     const data = await response.json();
+    setBalanceValue(data.balance.toString());
     setIsDataLoading(false);
     form.reset(data);
   };
@@ -119,21 +123,12 @@ function WalletForm({ id }: WalletFormProps) {
             )}
           />
           {/* Saldo da carteira */}
-          <FormField
+          <MoneyInput
+            form={form}
+            value={balanceValue}
+            label="Saldo"
             name="balance"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Saldo</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder={!isDataLoading ? 'Saldo da carteira...' : 'Carregando...'}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            placeholder={!isDataLoading ? 'Saldo da carteira...' : 'Carregando...'}
           />
           {/* Tipo de carteira */}
           <FormField
