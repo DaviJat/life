@@ -68,7 +68,3 @@ https://github.com/bysxx/next14-ts-template-fullstack
 
 `Color names:` <a>https://m3.material.io/styles/color/roles</a>
 
-<h1>Tabela de relacionamento do Financeiro</h1>
-
-![image](https://github.com/DaviJat/life/assets/91758001/d1652f72-3009-44be-ab1d-73dca6ea5fdf)
-
