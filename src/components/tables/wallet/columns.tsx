@@ -54,7 +54,7 @@ export const columns: ColumnDef<Wallet>[] = [
     header: 'Tipo',
     cell: ({ row }) => {
       const type = row.getValue('type');
-      const typeTranslated = type === 'Physical' ? 'Físico' : type === 'Virtual' ? 'Virtual' : type;
+      const typeTranslated = type === 'Physical' ? 'Física' : type === 'Virtual' ? 'Virtual' : type;
       return typeTranslated;
     },
   },
