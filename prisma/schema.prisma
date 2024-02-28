@@ -34,7 +34,7 @@ model Person {
 model Wallet {
   id              Int           @id @default(autoincrement())
   description     String
-  amount          Float
+  balance          Float
   type            WalletType
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
