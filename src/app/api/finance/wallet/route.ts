@@ -102,12 +102,18 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     // Obtém o 'id' da URL da requisição.
-    const id = request.nextUrl.searchParams.get("id");
+    const id = Number(request.nextUrl.searchParams.get("id"));
 
-    // Realiza a exclusão do registro de wallet no banco de dados.
+    console.log(id);
+
+    const deleteWallet = await prisma.wallet.delete({
+      where: {
+        id: id,
+      },
+    })
 
     // Retorna uma resposta de sucesso após a exclusão.
-    return NextResponse.json({ message: 'Carteira excluída com sucesso' }, { status: 200 });
+    return NextResponse.json({ wallet: deleteWallet, message: 'Carteira excluída com sucesso' }, { status: 200 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: 'Ops! Houve um problema durante a exclusão. Por favor, tente novamente mais tarde' }, { status: 500 });

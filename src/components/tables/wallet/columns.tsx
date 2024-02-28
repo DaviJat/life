@@ -2,6 +2,18 @@
 
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { toast } from '@/components/ui/use-toast';
+
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -10,6 +22,8 @@ import {
 import { Wallet } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export const columns: ColumnDef<Wallet>[] = [
   {
@@ -72,21 +86,79 @@ export const columns: ColumnDef<Wallet>[] = [
     cell: ({ row }) => {
       const payment = row.original;
 
+      const router = useRouter();
+
+      const [openDialog, setOpenDialog] = useState(false);
+
+      // Função para lidar com a exclusão do item
+      const handleDelete = async (id) => {
+        const response = await fetch(`/api/finance/wallet/?id=${id}`, {
+          method: 'DELETE',
+          cache: 'no-store',
+          headers: {
+            'Content-type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Se a resposta for bem-sucedida
+          toast({
+            // Exibe um toast de sucesso
+            description: data.message,
+          });
+          setOpenDialog(false);
+          router.refresh();
+        } else {
+          // Se a resposta não for bem-sucedida
+          toast({
+            // Exibe um toast de erro
+            description: data.message,
+            variant: 'destructive',
+          });
+        }
+      };
+
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => (window.location.href = '/finance/wallet/' + payment.id)}>
-              Editar
-            </DropdownMenuItem>
-            {/* <DropdownMenuItem onClick={() => console.log('Delete', payment.id)}>Excluir</DropdownMenuItem> */}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <Dialog open={openDialog}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => (window.location.href = '/finance/wallet/' + payment.id)}>
+                  Editar
+                </DropdownMenuItem>
+                <DialogTrigger asChild>
+                  <DropdownMenuItem onClick={() => setOpenDialog(true)}>Excluir</DropdownMenuItem>
+                </DialogTrigger>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Excluir</DialogTitle>
+                <DialogDescription>Você tem certeza que quer excluir esse item definitivamente?</DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <div className="flex items-center justify-center">
+                  <Button onClick={async () => handleDelete(payment.id)} variant="destructive">
+                    Excluir
+                  </Button>
+                  <DialogClose asChild>
+                    <Button className="ml-2" variant="outline">
+                      Cancelar
+                    </Button>
+                  </DialogClose>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </>
       );
     },
   },
