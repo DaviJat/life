@@ -32,7 +32,7 @@ export default function MoneyInput(props: TextInputProps) {
 
   useEffect(() => {
     if (props.value) {
-      setValue(props.value);
+      setValue((Number(props.value) * 100).toString());
     }
   }, [props.form, props.value]);
 
