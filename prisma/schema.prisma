@@ -45,7 +45,7 @@ model Wallet {
 model WalletEntry {
   id               Int                @id @default(autoincrement())
   description      String
-  value            Float
+  amount            Float
   wallet           Wallet             @relation(fields: [walletId], references: [id])
   walletId         Int
   createdAt        DateTime           @default(now())
@@ -79,7 +79,7 @@ model BillsToReceive {
 model WalletExit {
   id           Int            @id @default(autoincrement())
   description  String
-  value        Float
+  amount        Float
   wallet       Wallet         @relation(fields: [walletId], references: [id])
   walletId     Int
   createdAt    DateTime       @default(now())
