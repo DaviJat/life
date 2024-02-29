@@ -6,8 +6,8 @@ import db from "@/lib/db";
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const userSchema = z.object({
-  description: z.string().min(1, 'Description is required').max(30),
-  balance: z.number().max(Number.MAX_SAFE_INTEGER),
+  description: z.string().min(1).max(30),
+  balance: z.number().max(9999999999999),
   type: z.enum(['Physical', 'Virtual']),
 });
 
@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
   try {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
+
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { description, balance, type } = userSchema.parse(body);
 
@@ -71,17 +72,18 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     // Obtém o 'id' da URL da requisição.
-    const id = request.nextUrl.searchParams.get("id");
+    const id = Number(request.nextUrl.searchParams.get("id"));
 
     // Obtém o corpo da requisição PUT.
     const body = await request.json();
+
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { description, balance, type } = userSchema.parse(body);
 
-    // Atualiza o registro de wallet no banco de dados com os dados recebidos.
+    // Atualiza o registro de wallet no banco de dados com o id recebido.
     const updatedMoneyLocation = await db.wallet.update({
       where: {
-        id: parseInt(id, 10),
+        id: id,
       },
       data: {
         description,
@@ -104,8 +106,7 @@ export async function DELETE(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
-    console.log(id);
-
+    // Deleta o registro de wallet no banco de dados com o id recebido.
     const deleteWallet = await prisma.wallet.delete({
       where: {
         id: id,

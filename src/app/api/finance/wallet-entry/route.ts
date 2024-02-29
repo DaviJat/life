@@ -7,7 +7,7 @@ import db from "@/lib/db";
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const userSchema = z.object({
     description: z.string().min(1, 'Description is required').max(60),
-    amount: z.number().max(Number.MAX_SAFE_INTEGER),
+    amount: z.number().max(9999999999999),
     walletId: z.number(),
 });
 

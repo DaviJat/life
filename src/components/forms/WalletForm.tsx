@@ -12,26 +12,32 @@ import MoneyInput from '../ui/money-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { toast } from '../ui/use-toast';
 
-interface WalletFormProps {
-  formType: 'edit' | 'create';
-}
-
-// Define o esquema de validação para o formulário
+// Esquema para validação de formulário usando zod
 const FormSchema = z.object({
   description: z.string().min(1, 'Campo obrigatório').max(30, 'A descrição deve ter no máximo 30 caracteres'),
-  balance: z.coerce.number().min(0.01, 'Campo obrigatório'),
+  balance: z.coerce
+    .number()
+    .min(0.01, 'Campo obrigatório')
+    .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
   type: z.enum(['Physical', 'Virtual'], {
     required_error: 'Campo obrigatório',
   }),
 });
 
-function WalletForm({ formType }: WalletFormProps) {
+// Componente para formulário de cadastro e edição de objetos
+function WalletForm() {
+  // Recupera o id do objeto e utilizada para identificar o tipo de formulário
   const id = useParams<{ id: string }>().id;
-  const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
-  const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
+  // Estado para controlar o carregamento e evitar multiplos submits do formulário
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  // Estado para controlar mensagens de carregamento dos dados da página
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  // Estado para passar o value do balance no componente MoneyInput
   const [balanceValue, setBalanceValue] = useState('');
+
   const router = useRouter();
 
+  // Utilizando hook useForm com o esquema de validação do zod, e atribuindo valores default para os inputs
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -41,27 +47,30 @@ function WalletForm({ formType }: WalletFormProps) {
     },
   });
 
-  useEffect(() => {
-    if (formType == 'edit') {
-      setIsDataLoading(true);
-      getDataById();
-    } else {
-      setIsDataLoading(false);
-    }
-  }, [form, id]);
-
-  // Função para obter os dados por ID
+  // Função para recuperar os dados para a edição do objeto
   const getDataById = async () => {
     const response = await fetch(`/api/finance/wallet/?id=${id}`);
     const data = await response.json();
     setBalanceValue(data.balance.toString());
-    setIsDataLoading(false);
-    form.reset();
+    setIsDataLoading(false); // Desativa o estado de carregamento de dados
+    form.reset(data); // Atualiza os dados com do formulário com os dados recuperados
   };
+
+  useEffect(() => {
+    if (id) {
+      // Se estiver na edição recupera os dados do objeto da API
+      getDataById();
+    } else {
+      // Se estiver no cadastro desativa o estado de carregamento de dados
+      setIsDataLoading(false);
+    }
+  }, [form, id]);
 
   // Função de submissão do formulário
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    setIsFormSubmitting(true);
+    setIsFormSubmitting(true); // Ativa o estado de envio de formulário
+
+    // Configurações para o fetch API, com base no tipo de formuário
     const url = id ? `/api/finance/wallet/?id=${id}` : '/api/finance/wallet';
     const method = id ? 'PUT' : 'POST';
 
@@ -79,19 +88,17 @@ function WalletForm({ formType }: WalletFormProps) {
       }),
     });
 
-    const data = await response.json(); // Extrai os dados da resposta
+    const data = await response.json();
 
     if (response.ok) {
-      // Se a resposta for bem-sucedida
+      // Se a resposta for bem-sucedida, redireciona para a listagem e mostra mensagem de sucesso
       toast({
-        // Exibe um toast de sucesso
         description: data.message,
       });
-      router.push('/finance/wallet'); // Redireciona para a listagem
+      router.push('/finance/wallet');
     } else {
-      // Se a resposta não for bem-sucedida
+      // Se a resposta não for bem-sucedida, mostra mensagem de erro
       toast({
-        // Exibe um toast de erro
         description: data.message,
         variant: 'destructive',
       });
@@ -101,6 +108,7 @@ function WalletForm({ formType }: WalletFormProps) {
 
   return (
     <>
+      <h1 className="font-semibold text-2xl">{id ? 'Editar carteira' : 'Cadastrar carteira'} </h1>
       {/* Componente de formulário */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
