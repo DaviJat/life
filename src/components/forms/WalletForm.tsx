@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { toast } from '../ui/use-toast';
 
 interface WalletFormProps {
-  id?: string;
+  formType: 'edit' | 'create';
 }
 
 // Define o esquema de validação para o formulário
@@ -25,15 +25,12 @@ const FormSchema = z.object({
   }),
 });
 
-function WalletForm({ id }: WalletFormProps) {
-  // Estado para controlar o carregamento e evitar multiplos submits do formulário
+function WalletForm({ formType }: WalletFormProps) {
+  const id = useParams<{ id: string }>().id;
   const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
-  // Estado para controlar o carregamento dos dados da página
   const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
-
   const [balanceValue, setBalanceValue] = useState('');
 
-  // Configuração do formulário utilizando useForm do react-hook-form
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
