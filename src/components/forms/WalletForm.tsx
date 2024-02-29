@@ -30,6 +30,7 @@ function WalletForm({ formType }: WalletFormProps) {
   const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
   const [balanceValue, setBalanceValue] = useState('');
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -40,11 +41,8 @@ function WalletForm({ formType }: WalletFormProps) {
     },
   });
 
-  const router = useRouter(); // Hook useRouter para obter o objeto router do Next.js
-
-  // Efeito para carregar os dados por ID quando o ID é fornecido
   useEffect(() => {
-    if (id) {
+    if (formType == 'edit') {
       setIsDataLoading(true);
       getDataById();
     } else {
@@ -58,7 +56,7 @@ function WalletForm({ formType }: WalletFormProps) {
     const data = await response.json();
     setBalanceValue(data.balance.toString());
     setIsDataLoading(false);
-    form.reset(data);
+    form.reset();
   };
 
   // Função de submissão do formulário
