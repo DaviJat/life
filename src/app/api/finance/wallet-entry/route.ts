@@ -7,8 +7,8 @@ import db from "@/lib/db";
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const userSchema = z.object({
     description: z.string().min(1, 'Description is required').max(60),
-    value: z.number().max(Number.MAX_SAFE_INTEGER),
-    type: z.enum(['Physical', 'Virtual']),
+    amount: z.number().max(Number.MAX_SAFE_INTEGER),
+    walletId: z.number(),
 });
 
 // Função assíncrona para lidar com requisições GET.
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     try {
         if (id) {
             // Busca um registro de wallet pelo id no banco de dados.
-            const wallet = await db.wallet.findUnique({
+            const wallet = await db.walletEntry.findUnique({
                 where: {
                     id: parseInt(id)
                 }
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(wallet);
         } else {
             // Se não houver 'id' na URL, busca todos os registros de wallet no banco de dados.
-            const wallets = await db.wallet.findMany({
+            const wallets = await db.walletEntry.findMany({
                 orderBy: {
                     id: 'desc'
                 }
@@ -48,19 +48,19 @@ export async function POST(request: NextRequest) {
         // Obtém o corpo da requisição POST.
         const body = await request.json();
         // Valida o corpo da requisição com o schema definido anteriormente.
-        const { description, balance, type } = userSchema.parse(body);
+        const { description, amount, walletId } = userSchema.parse(body);
 
         // Cria um novo registro de wallet no banco de dados com os dados recebidos.
-        const newMoneyLocation = await db.wallet.create({
+        const newMoneyLocation = await db.walletEntry.create({
             data: {
                 description,
-                balance,
-                type
+                amount,
+                walletId
             }
         })
 
         // Retorna uma resposta de sucesso com o novo registro criado.
-        return NextResponse.json({ wallet: newMoneyLocation, message: 'Carteira cadastrada com sucesso' }, { status: 201 });
+        return NextResponse.json({ wallet: newMoneyLocation, message: 'Entrada carteira registrada com sucesso' }, { status: 201 });
     } catch (error) {
         // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
         return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
@@ -76,17 +76,17 @@ export async function PUT(request: NextRequest) {
         // Obtém o corpo da requisição PUT.
         const body = await request.json();
         // Valida o corpo da requisição com o schema definido anteriormente.
-        const { description, balance, type } = userSchema.parse(body);
+        const { description, amount, walletId } = userSchema.parse(body);
 
         // Atualiza o registro de wallet no banco de dados com os dados recebidos.
-        const updatedMoneyLocation = await db.wallet.update({
+        const updatedMoneyLocation = await db.walletEntry.update({
             where: {
                 id: parseInt(id, 10),
             },
             data: {
                 description,
-                balance,
-                type,
+                amount,
+                walletId,
             },
         });
 
