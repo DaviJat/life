@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     const { description, balance, type } = userSchema.parse(body);
 
     // Cria um novo registro de wallet no banco de dados com os dados recebidos.
-    const newMoneyLocation = await db.wallet.create({
+    const newWallet = await db.wallet.create({
       data: {
         description,
         balance,
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Retorna uma resposta de sucesso com o novo registro criado.
-    return NextResponse.json({ wallet: newMoneyLocation, message: 'Carteira cadastrada com sucesso' }, { status: 201 });
+    return NextResponse.json({ wallet: newWallet, message: 'Carteira cadastrada com sucesso' }, { status: 201 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
@@ -81,7 +81,7 @@ export async function PUT(request: NextRequest) {
     const { description, balance, type } = userSchema.parse(body);
 
     // Atualiza o registro de wallet no banco de dados com o id recebido.
-    const updatedMoneyLocation = await db.wallet.update({
+    const updatedWallet = await db.wallet.update({
       where: {
         id: id,
       },
@@ -93,7 +93,7 @@ export async function PUT(request: NextRequest) {
     });
 
     // Retorna uma resposta de sucesso com o registro atualizado.
-    return NextResponse.json({ wallet: updatedMoneyLocation, message: 'Carteira editada com sucesso' }, { status: 200 });
+    return NextResponse.json({ wallet: updatedWallet, message: 'Carteira editada com sucesso' }, { status: 200 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: 'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde' }, { status: 500 });
