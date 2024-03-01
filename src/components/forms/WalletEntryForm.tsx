@@ -14,26 +14,26 @@ import { toast } from '../ui/use-toast';
 
 // Esquema para validação de formulário usando zod
 const FormSchema = z.object({
-  description: z.string().min(1, 'Campo obrigatório').max(30, 'A descrição deve ter no máximo 30 caracteres'),
-  balance: z.coerce
+  description: z.string().min(1, 'Campo obrigatório').max(60, 'A descrição deve ter no máximo 60 caracteres'),
+  amount: z.coerce
     .number()
     .min(0.01, 'Campo obrigatório')
     .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
-  type: z.enum(['Physical', 'Virtual'], {
-    required_error: 'Campo obrigatório',
-  }),
+  walletId: z.string({ required_error: 'Campo obrigatório' }),
 });
 
 // Componente para formulário de cadastro e edição de objetos
-function WalletForm() {
+function WalletEntryForm() {
   // Recupera o id do objeto e utilizada para identificar o tipo de formulário
   const id = useParams<{ id: string }>().id;
   // Estado para controlar o carregamento e evitar multiplos submits do formulário
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   // Estado para controlar mensagens de carregamento dos dados da página
   const [isDataLoading, setIsDataLoading] = useState(true);
-  // Estado para passar o value do balance no componente MoneyInput
-  const [balanceValue, setBalanceValue] = useState('');
+  // Estado para passar o value do amount no componente MoneyInput
+  const [amountValue, setAmountValue] = useState('');
+  // Estado para armazenar as wallets recuperadas pelo getWallet
+  const [wallets, setWallets] = useState([]);
 
   const router = useRouter();
 
@@ -42,21 +42,30 @@ function WalletForm() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       description: '',
-      balance: 0,
-      type: undefined,
+      amount: 0,
+      walletId: '',
     },
   });
 
+  // Função para recuperar wallets para popular o select
+  const getWallets = async () => {
+    const response = await fetch(`/api/finance/wallet`);
+    const data = await response.json();
+    setWallets(data);
+  };
+
   // Função para recuperar os dados para a edição do objeto
   const getDataById = async () => {
-    const response = await fetch(`/api/finance/wallet/?id=${id}`);
+    const response = await fetch(`/api/finance/walletEntry/?id=${id}`);
     const data = await response.json();
-    setBalanceValue(data.balance.toString());
+    setAmountValue(data.amount.toString());
     setIsDataLoading(false); // Desativa o estado de carregamento de dados
     form.reset(data); // Atualiza os dados com do formulário com os dados recuperados
   };
 
   useEffect(() => {
+    // Recupera os wallets da API
+    getWallets();
     if (id) {
       // Se estiver na edição recupera os dados do objeto da API
       getDataById();
@@ -71,7 +80,7 @@ function WalletForm() {
     setIsFormSubmitting(true); // Ativa o estado de envio de formulário
 
     // Configurações para o fetch API, com base no tipo de formuário
-    const url = id ? `/api/finance/wallet/?id=${id}` : '/api/finance/wallet';
+    const url = id ? `/api/finance/walletEntry/?id=${id}` : '/api/finance/walletEntry';
     const method = id ? 'PUT' : 'POST';
 
     // Requisição para enviar os dados do formulário
@@ -83,8 +92,8 @@ function WalletForm() {
       },
       body: JSON.stringify({
         description: values.description,
-        balance: values.balance,
-        type: values.type,
+        amount: values.amount,
+        walletId: values.walletId,
       }),
     });
 
@@ -95,7 +104,7 @@ function WalletForm() {
       toast({
         description: data.message,
       });
-      router.push('/finance/wallet');
+      router.push('/finance/walletEntry');
     } else {
       // Se a resposta não for bem-sucedida, mostra mensagem de erro
       toast({
@@ -108,47 +117,50 @@ function WalletForm() {
 
   return (
     <>
-      <h1 className="font-semibold text-2xl">{id ? 'Editar carteira' : 'Cadastrar carteira'} </h1>
+      <h1 className="font-semibold text-2xl">{id ? 'Editar entrada' : 'Cadastrar entrada'} </h1>
       {/* Componente de formulário */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          {/* Descrição da carteira */}
+          {/* Descrição da entrada */}
           <FormField
             name="description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Input placeholder={!isDataLoading ? 'Descrição do local' : 'Carregando...'} {...field} />
+                  <Input placeholder={!isDataLoading ? 'Descrição da entrada' : 'Carregando...'} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {/* Saldo da carteira */}
+          {/* Valor da entrada */}
           <MoneyInput
             form={form}
-            value={balanceValue}
-            label="Saldo"
-            name="balance"
-            placeholder={!isDataLoading ? 'Saldo da carteira...' : 'Carregando...'}
+            value={amountValue}
+            label="Valor"
+            name="amount"
+            placeholder={!isDataLoading ? 'Valor da entrada...' : 'Carregando...'}
           />
-          {/* Tipo de carteira */}
+          {/* Carteira */}
           <FormField
             control={form.control}
-            name="type"
+            name="walletId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tipo de carteira</FormLabel>
+                <FormLabel>Carteira</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={!isDataLoading ? 'Selecione o tipo de carteira' : 'Carregando...'} />
+                      <SelectValue placeholder={!isDataLoading ? 'Selecione a carteira' : 'Carregando...'} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Virtual">Virtual</SelectItem>
-                    <SelectItem value="Physical">Física</SelectItem>
+                    {wallets.map((wallet) => (
+                      <SelectItem key={wallet.id} value={wallet.id.toString()}>
+                        {wallet.description}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -165,4 +177,4 @@ function WalletForm() {
   );
 }
 
-export default WalletForm;
+export default WalletEntryForm;
