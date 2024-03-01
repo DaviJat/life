@@ -31,6 +31,9 @@ export async function GET(request: NextRequest) {
             const walletEntries = await db.walletEntry.findMany({
                 orderBy: {
                     id: 'desc'
+                },
+                include: {
+                    wallet: true
                 }
             });
             // Retorna os registros encontrados em formato JSON.
@@ -95,7 +98,7 @@ export async function PUT(request: NextRequest) {
         // Encontra a entrada de carteira no banco de dados com o id fornecido.
         const walletEntry = await db.walletEntry.findUnique({ where: { id: id } });
 
-        // Salva a quantia anterior.
+        // Salva o valor anterior.
         const previousAmount = walletEntry.amount;
 
         // Atualiza o registro da entrada de carteira no banco de dados com o id fornecido.
@@ -104,7 +107,7 @@ export async function PUT(request: NextRequest) {
             data: { description, amount, walletId }
         });
 
-        // Calcula a diferença entre a nova quantia e o anterior.
+        // Calcula a diferença entre o novo valor e o anterior.
         const difference = amount - previousAmount;
 
         // Atualiza o saldo da carteira com base na diferença.
