@@ -63,24 +63,16 @@ export const columns: ColumnDef<Wallet>[] = [
       return formattedBalance;
     },
   },
-  {
-    accessorKey: 'type',
-    header: 'Tipo',
-    cell: ({ row }) => {
-      const type = row.getValue('type');
-      const typeTranslated = type === 'Physical' ? 'Física' : type === 'Virtual' ? 'Virtual' : type;
-      return typeTranslated;
-    },
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Data cadastro',
-    cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'));
-      const formatted = date.toLocaleDateString();
-      return formatted;
-    },
-  },
+  // Comentado para lembrar como mostrar dados de enum na listagem
+  // {
+  //   accessorKey: 'type',
+  //   header: 'Tipo',
+  //   cell: ({ row }) => {
+  //     const type = row.getValue('type');
+  //     const typeTranslated = type === 'Physical' ? 'Física' : type === 'Virtual' ? 'Virtual' : type;
+  //     return typeTranslated;
+  //   },
+  // },
   {
     id: 'actions',
     cell: ({ row }) => {

@@ -117,7 +117,7 @@ export async function PUT(request: NextRequest) {
         });
 
         // Retorna uma resposta de sucesso com o registro atualizado.
-        return NextResponse.json({ walletEntry: updatedWalletEntry, message: 'Entrada editada com sucesso' }, { status: 200 });
+        return NextResponse.json({ walletEntry: updatedWalletEntry, message: 'Entrada alterada com sucesso' }, { status: 200 });
     } catch (error) {
         // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
         return NextResponse.json({ message: 'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde' }, { status: 500 });
