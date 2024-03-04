@@ -93,7 +93,7 @@ function WalletEntryForm() {
       body: JSON.stringify({
         description: values.description,
         amount: values.amount,
-        walletId: values.walletId,
+        walletId: Number(values.walletId),
       }),
     });
 
