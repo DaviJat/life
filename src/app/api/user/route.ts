@@ -64,6 +64,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ user: rest, message: 'Cadastro realizado com sucesso! Agora você pode fazer login.' }, { status: 201 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
-    return NextResponse.json({ message: error }, { status: 500 });
+    return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
   }
 }

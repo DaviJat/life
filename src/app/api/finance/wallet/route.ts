@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ wallet: newWallet, message: 'Carteira cadastrada com sucesso' }, { status: 201 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
-    return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
+    return NextResponse.json({ message: error }, { status: 500 });
   }
 }
 
