@@ -32,13 +32,11 @@ export async function GET() {
 
 // Função assíncrona para lidar com requisições POST de criação de usuário.
 export async function POST(request: NextRequest) {
-  console.log('teste' + process.env.DATABASE_URL)
   try {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
     // Valida os dados recebidos com o schema definido anteriormente.
     const { email, username, password } = userSchema.parse(body);
-    console.log('teste' + email + username + password)
 
     // Verifica se já existe um usuário com o mesmo e-mail no banco de dados.
     const existingUserByEmail = await db.user.findUnique({
@@ -66,7 +64,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ user: rest, message: 'Cadastro realizado com sucesso! Agora você pode fazer login.' }, { status: 201 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
-    console.log('teste' + error)
     return NextResponse.json({ message: 'Ops! Houve um problema durante o cadastro. Por favor, tente novamente mais tarde' }, { status: 500 });
   }
 }

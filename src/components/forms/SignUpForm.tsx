@@ -64,8 +64,6 @@ const SignUpForm = () => {
       }),
     });
 
-    console.log(response);
-
     const data = await response.json(); // Extrai os dados da resposta
 
     if (response.ok) {
