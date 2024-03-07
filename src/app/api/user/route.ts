@@ -32,6 +32,7 @@ export async function GET() {
 
 // Função assíncrona para lidar com requisições POST de criação de usuário.
 export async function POST(request: NextRequest) {
+  console.log(process.env.DATABASE_URL)
   try {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
