@@ -11,7 +11,7 @@ Projeto criado com `npx create-next-app@latest` - Oct 11, 2023
 ![image](https://github.com/DaviJat/life/assets/91758001/1a746a79-b42f-4296-8a4c-a3ebcb26468c)
 
 
-Extensões do VSCode - Prettier, EditorConfig, Prisma e ESLint
+Extensões do VSCode - Prettier, EditorConfig, Prisma, Tailwind CSS IntelliSense e ESLint
 
 Eslint Airbnb - `npx install-peerdeps --dev eslint-config-airbnb` <br/> 
 `yarn add -D eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest`
