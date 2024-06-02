@@ -54,7 +54,7 @@ Prisma - `npm install prisma --save-dev` <br>
 <a>https://www.youtube.com/watch?v=bicCg4GxOP8&t=2179s&ab_channel=CandDev</a>
 
 `Prisma Schema:` Esquema do banco de dados. <br>
-`Prisma Cliente:` Tabelas convertidas para objetos em typescript para podermos trabalhar com eles. <br>
+`Prisma Client:` Tabelas convertidas para objetos em typescript para podermos trabalhar com eles. <br>
 `Prisma generate:` Atualiza/gera o Prisma Client. <br>
 `Prisma migrate:` Atualiza/gera o banco de dados com base no Prisma Schema.
 
