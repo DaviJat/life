@@ -1,8 +1,8 @@
-import Table from '@/components/tables/walletEntry/Table';
+import Table from '@/components/tables/walletExit/Table';
 
 // Recupera função para recuperar dados da api
 async function getData() {
-  const response = await fetch(process.env.URL + '/api/finance/walletEntry', { cache: 'no-store' });
+  const response = await fetch(process.env.URL + '/api/finance/walletExit', { cache: 'no-store' });
   return await response.json();
 }
 
