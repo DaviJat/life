@@ -8,7 +8,7 @@ import db from '@/lib/db';
 const userSchema = z.object({
   description: z.string().min(1).max(30),
   balance: z.number().max(9999999999999),
-  type: z.enum(['Physical', 'Virtual'])
+  type: z.enum(['Physical', 'Virtual']),
 });
 
 // Função assíncrona para lidar com requisições GET.
@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
       // Busca um registro de wallet pelo id no banco de dados.
       const wallet = await db.wallet.findUnique({
         where: {
-          id: parseInt(id, 10)
-        }
+          id: parseInt(id, 10),
+        },
       });
 
       // Retorna o registro encontrado em formato JSON.
@@ -30,8 +30,8 @@ export async function GET(request: NextRequest) {
     // Se não houver 'id' na URL, busca todos os registros de wallet no banco de dados.
     const wallets = await db.wallet.findMany({
       orderBy: {
-        id: 'desc'
-      }
+        id: 'desc',
+      },
     });
     // Retorna os registros encontrados em formato JSON.
     return NextResponse.json(wallets);
@@ -40,9 +40,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         message:
-          'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde'
+          'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -61,14 +61,14 @@ export async function POST(request: NextRequest) {
       data: {
         description,
         balance,
-        type
-      }
+        type,
+      },
     });
 
     // Retorna uma resposta de sucesso com o novo registro criado.
     return NextResponse.json(
       { wallet: newWallet, message: 'Carteira cadastrada com sucesso' },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
@@ -91,28 +91,28 @@ export async function PUT(request: NextRequest) {
     // Atualiza o registro de wallet no banco de dados com o id recebido.
     const updatedWallet = await db.wallet.update({
       where: {
-        id
+        id,
       },
       data: {
         description,
         balance,
-        type
-      }
+        type,
+      },
     });
 
     // Retorna uma resposta de sucesso com o registro atualizado.
     return NextResponse.json(
       { wallet: updatedWallet, message: 'Carteira editada com sucesso' },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json(
       {
         message:
-          'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde'
+          'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -126,23 +126,23 @@ export async function DELETE(request: NextRequest) {
     // Deleta o registro de wallet no banco de dados com o id recebido.
     const deleteWallet = await prisma.wallet.delete({
       where: {
-        id
-      }
+        id,
+      },
     });
 
     // Retorna uma resposta de sucesso após a exclusão.
     return NextResponse.json(
       { wallet: deleteWallet, message: 'Carteira excluída com sucesso' },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json(
       {
         message:
-          'Ops! Houve um problema durante a exclusão. Por favor, tente novamente mais tarde'
+          'Ops! Houve um problema durante a exclusão. Por favor, tente novamente mais tarde',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
