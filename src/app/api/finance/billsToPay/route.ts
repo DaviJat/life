@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     // Retorna uma resposta de sucesso com o novo registro criado.
     return NextResponse.json(
       {
-        wallet: newBillsToPay,
+        billsToPay: newBillsToPay,
         message: 'Conta a pagar cadastrada com sucesso'
       },
       { status: 201 }
@@ -75,5 +75,58 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: error }, { status: 500 });
+  }
+}
+
+// Função assíncrona para lidar com requisições PUT.
+export async function PUT(request: NextRequest) {
+  try {
+    // Obtém o 'id' da URL da requisição.
+    const id = Number(request.nextUrl.searchParams.get("id"));
+
+    // Obtém o corpo da requisição PUT.
+    const body = await request.json();
+
+    // Valida o corpo da requisição com o schema definido anteriormente.
+    const { description, value, personId } = userSchema.parse(body);
+
+    // Atualiza o registro de billsToPay no banco de dados com o id recebido.
+    const updatedBillsToPay = await db.billsToPay.update({
+      where: {
+        id: id,
+      },
+      data: {
+        description,
+        value,
+        personId,
+      },
+    });
+
+    // Retorna uma resposta de sucesso com o registro atualizado.
+    return NextResponse.json({ billsToPay: updatedBillsToPay, message: 'Conta a pagar editada com sucesso' }, { status: 200 });
+  } catch (error) {
+    // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
+    return NextResponse.json({ message: 'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde' }, { status: 500 });
+  }
+}
+
+// Função assíncrona para lidar com requisições DELETE.
+export async function DELETE(request: NextRequest) {
+  try {
+    // Obtém o 'id' da URL da requisição.
+    const id = Number(request.nextUrl.searchParams.get("id"));
+
+    // Deleta o registro de billsToPay no banco de dados com o id recebido.
+    const deleteBillsToPay = await prisma.billsToPay.delete({
+      where: {
+        id: id,
+      },
+    })
+
+    // Retorna uma resposta de sucesso após a excslusão.
+    return NextResponse.json({ billsToPay: deleteBillsToPay, message: 'Conta a pagar excluída com sucesso' }, { status: 200 });
+  } catch (error) {
+    // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
+    return NextResponse.json({ message: 'Ops! Houve um problema durante a exclusão. Por favor, tente novamente mais tarde' }, { status: 500 });
   }
 }
