@@ -4,14 +4,14 @@
     "airbnb-typescript",
     "airbnb/hooks",
     "plugin:@next/next/recommended",
-    "prettier",
+    "prettier"
   ],
   "plugins": ["simple-import-sort", "import"],
   "parserOptions": {
-    "project": "./tsconfig.json",
+    "project": "./tsconfig.json"
   },
   "globals": {
-    "React": "readonly",
+    "React": "readonly"
   },
   "rules": {
     "simple-import-sort/imports": "error",
@@ -22,8 +22,8 @@
       "error",
       {
         "namedComponents": "arrow-function",
-        "unnamedComponents": "arrow-function",
-      },
+        "unnamedComponents": "arrow-function"
+      }
     ],
     "react/jsx-props-no-spreading": "off",
     "import/extensions": [
@@ -32,8 +32,8 @@
         "js": "never",
         "jsx": "never",
         "ts": "never",
-        "tsx": "never",
-      },
-    ],
-  },
+        "tsx": "never"
+      }
+    ]
+  }
 }
