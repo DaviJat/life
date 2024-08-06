@@ -30,6 +30,9 @@ export async function GET(request: NextRequest) {
     const billsToPay = await db.billsToPay.findMany({
       orderBy: {
         id: 'desc'
+      },
+      include: {
+        person: true
       }
     });
     // Retorna os registros encontrados em formato JSON.

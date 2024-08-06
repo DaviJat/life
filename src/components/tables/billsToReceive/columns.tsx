@@ -19,13 +19,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { WalletEntry } from '@prisma/client';
+import { BillsToReceive } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export const columns: ColumnDef<WalletEntry>[] = [
+export const columns: ColumnDef<BillsToReceive>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
@@ -55,26 +55,17 @@ export const columns: ColumnDef<WalletEntry>[] = [
     },
   },
   {
-    accessorKey: 'amount',
+    accessorKey: 'value',
     header: 'Valor',
     cell: ({ row }) => {
-      const amount = Number(row.getValue('amount'));
-      const formattedBalance = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount);
-      return formattedBalance;
+      const value = Number(row.getValue('value'));
+      const formattedValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+      return formattedValue;
     },
   },
   {
-    accessorKey: 'wallet.description',
-    header: 'Carteira',
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Data cadastro',
-    cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'));
-      const formatted = date.toLocaleDateString();
-      return formatted;
-    },
+    accessorKey: 'person.name',
+    header: 'Pessoa',
   },
   {
     id: 'actions',
@@ -87,7 +78,7 @@ export const columns: ColumnDef<WalletEntry>[] = [
 
       // Função para lidar com a exclusão do item
       const handleDelete = async (id) => {
-        const response = await fetch(`/api/finance/walletEntry/?id=${id}`, {
+        const response = await fetch(`/api/finance/billsToReceive/?id=${id}`, {
           method: 'DELETE',
           cache: 'no-store',
           headers: {
@@ -126,7 +117,7 @@ export const columns: ColumnDef<WalletEntry>[] = [
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => (window.location.href = '/finance/walletEntry/' + payment.id)}>
+                <DropdownMenuItem onClick={() => (window.location.href = '/finance/billsToReceive/' + payment.id)}>
                   Editar
                 </DropdownMenuItem>
                 <DialogTrigger asChild>
