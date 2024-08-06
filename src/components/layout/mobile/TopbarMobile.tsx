@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 function TopbarMobile() {
@@ -16,7 +17,9 @@ function TopbarMobile() {
       <Button variant="secondary" className="ml-2" onClick={goBack}>
         Voltar
       </Button>
-      <img className="w-28" src="/images/logo-fundo-transparente.png" alt="" />
+      <Link href={'/home'}>
+        <img className="w-28" src="/images/logo-fundo-transparente.png" alt="" />
+      </Link>
       <div className="mr-4 w-16"></div>
     </div>
   );

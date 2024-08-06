@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/menubar';
 import Link from 'next/link';
 
-import { CircleDollarSign, ClipboardList, Home } from 'lucide-react';
+import { CircleDollarSign, ClipboardList, User } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 const NavbarMobile = () => {
@@ -43,11 +43,11 @@ const NavbarMobile = () => {
         </MenubarContent>
       </MenubarMenu>
 
-      {/* ------- Home ------- */}
+      {/* ------- Person ------- */}
       <MenubarMenu>
-        <Link href={'/home'}>
-          <div className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'home' ? 'bg-accent' : ''}`}>
-            <Home />
+        <Link href={'/person'}>
+          <div className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'person' ? 'bg-accent' : ''}`}>
+            <User />
           </div>
         </Link>
       </MenubarMenu>
