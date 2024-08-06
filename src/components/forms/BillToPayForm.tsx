@@ -128,7 +128,7 @@ function BillsToPayForm() {
               <FormItem>
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Input placeholder={!isDataLoading ? 'Descrição da entrada' : 'Carregando...'} {...field} />
+                  <Input placeholder={!isDataLoading ? 'Descrição da conta' : 'Carregando...'} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -139,8 +139,8 @@ function BillsToPayForm() {
             form={form}
             value={billValue}
             label="Valor"
-            name="amount"
-            placeholder={!isDataLoading ? 'Valor a ser pago' : 'Carregando...'}
+            name="value"
+            placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
           />
           {/* Pessoa */}
           <FormField

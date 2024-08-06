@@ -140,7 +140,7 @@ function BillsToReceiveForm() {
             value={billValue}
             label="Valor"
             name="value"
-            placeholder={!isDataLoading ? 'Valor da conta...' : 'Carregando...'}
+            placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
           />
           {/* Carteira */}
           <FormField
@@ -152,7 +152,7 @@ function BillsToReceiveForm() {
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={!isDataLoading ? 'Selecione a pessoa' : 'Carregando...'} />
+                      <SelectValue placeholder={!isDataLoading ? 'Selecione a pessoa a receber' : 'Carregando...'} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
