@@ -1,7 +1,7 @@
-import BillToPayForm from '@/components/forms/BillToPayForm';
+import BillsToPayForm from '@/components/forms/BillToPayForm';
 
 function Page() {
-  return <BillToPayForm />;
+  return <BillsToPayForm />;
 }
 
 export default Page;

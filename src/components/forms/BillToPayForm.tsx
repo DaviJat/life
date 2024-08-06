@@ -58,7 +58,7 @@ function BillsToPayForm() {
   const getDataById = async () => {
     const response = await fetch(`/api/finance/billsToPay/?id=${id}`);
     const data = await response.json();
-    setBillValue(data.amount.toString());
+    setBillValue(data.value.toString());
     setIsDataLoading(false); // Desativa o estado de carregamento de dados
     form.reset(data); // Atualiza os dados com do formulário com os dados recuperados
   };
