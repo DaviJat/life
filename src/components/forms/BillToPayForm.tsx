@@ -23,16 +23,16 @@ const FormSchema = z.object({
 });
 
 // Componente para formulário de cadastro e edição de objetos
-function BillsToReceiveForm() {
+function BillsToPayForm() {
   // Recupera o id do objeto e utilizada para identificar o tipo de formulário
   const id = useParams<{ id: string }>().id;
   // Estado para controlar o carregamento e evitar multiplos submits do formulário
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   // Estado para controlar mensagens de carregamento dos dados da página
   const [isDataLoading, setIsDataLoading] = useState(true);
-  // Estado para passar o value da conta no componente MoneyInput
+  // Estado para passar o value do amount no componente MoneyInput
   const [billValue, setBillValue] = useState('');
-  // Estado para armazenar as persons recuperadas pelo getPerson
+  // Estado para armazenar as persons recuperadas pelo getPersons
   const [persons, setPersons] = useState([]);
 
   const router = useRouter();
@@ -56,7 +56,7 @@ function BillsToReceiveForm() {
 
   // Função para recuperar os dados para a edição do objeto
   const getDataById = async () => {
-    const response = await fetch(`/api/finance/billsToReceive/?id=${id}`);
+    const response = await fetch(`/api/finance/billsToPay/?id=${id}`);
     const data = await response.json();
     setBillValue(data.value.toString());
     setIsDataLoading(false); // Desativa o estado de carregamento de dados
@@ -64,7 +64,7 @@ function BillsToReceiveForm() {
   };
 
   useEffect(() => {
-    // Recupera os persons da API
+    // Recupera as persons da API
     getPersons();
     if (id) {
       // Se estiver na edição recupera os dados do objeto da API
@@ -80,7 +80,7 @@ function BillsToReceiveForm() {
     setIsFormSubmitting(true); // Ativa o estado de envio de formulário
 
     // Configurações para o fetch API, com base no tipo de formuário
-    const url = id ? `/api/finance/billsToReceive/?id=${id}` : '/api/finance/billsToReceive';
+    const url = id ? `/api/finance/billsToPay/?id=${id}` : '/api/finance/billsToPay';
     const method = id ? 'PUT' : 'POST';
 
     // Requisição para enviar os dados do formulário
@@ -104,7 +104,7 @@ function BillsToReceiveForm() {
       toast({
         description: data.message,
       });
-      router.push('/finance/billsToReceive');
+      router.push('/finance/billsToPay');
     } else {
       // Se a resposta não for bem-sucedida, mostra mensagem de erro
       toast({
@@ -117,7 +117,7 @@ function BillsToReceiveForm() {
 
   return (
     <>
-      <h1 className="font-semibold text-2xl">{id ? 'Editar conta a receber' : 'Cadastrar conta a receber'} </h1>
+      <h1 className="font-semibold text-2xl">{id ? 'Editar Conta a Pagar' : 'Cadastrar Conta a Pagar'} </h1>
       {/* Componente de formulário */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -134,7 +134,7 @@ function BillsToReceiveForm() {
               </FormItem>
             )}
           />
-          {/* Valor da conta */}
+          {/* Valor da entrada */}
           <MoneyInput
             form={form}
             value={billValue}
@@ -142,17 +142,17 @@ function BillsToReceiveForm() {
             name="value"
             placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
           />
-          {/* Carteira */}
+          {/* Pessoa */}
           <FormField
             control={form.control}
             name="personId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Carteira</FormLabel>
+                <FormLabel>Pessoa a ser paga</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={!isDataLoading ? 'Selecione a pessoa a receber' : 'Carregando...'} />
+                      <SelectValue placeholder={!isDataLoading ? 'Selecione a pessoa a ser paga' : 'Carregando...'} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -177,4 +177,4 @@ function BillsToReceiveForm() {
   );
 }
 
-export default BillsToReceiveForm;
+export default BillsToPayForm;

@@ -19,7 +19,7 @@ const FormSchema = z.object({
     .number()
     .min(0.01, 'Campo obrigatório')
     .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
-  walletId: z.string({ required_error: 'Campo obrigatório' }),
+  walletId: z.string().min(1, { message: 'Campo obrigatório' }),
 });
 
 // Componente para formulário de cadastro e edição de objetos
