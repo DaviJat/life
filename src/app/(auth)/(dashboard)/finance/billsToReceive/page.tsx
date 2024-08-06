@@ -9,7 +9,6 @@ async function getData() {
 // Renderiza tabela com os dados da API
 async function Page() {
   const data = await getData();
-  console.log(data);
   return <Table data={data}></Table>;
 }
 

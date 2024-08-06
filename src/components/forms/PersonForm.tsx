@@ -77,8 +77,6 @@ function WalletForm() {
 
     const data = await response.json();
 
-    console.log(response);
-
     if (response.ok) {
       // Se a resposta for bem-sucedida, redireciona para a listagem e mostra mensagem de sucesso
       toast({
