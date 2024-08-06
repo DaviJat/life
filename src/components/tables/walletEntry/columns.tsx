@@ -19,13 +19,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Wallet } from '@prisma/client';
+import { WalletEntry } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export const columns: ColumnDef<Wallet>[] = [
+export const columns: ColumnDef<WalletEntry>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {

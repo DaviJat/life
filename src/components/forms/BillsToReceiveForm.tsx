@@ -30,7 +30,7 @@ function BillsToReceiveForm() {
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   // Estado para controlar mensagens de carregamento dos dados da página
   const [isDataLoading, setIsDataLoading] = useState(true);
-  // Estado para passar o value do amount no componente MoneyInput
+  // Estado para passar o value da conta no componente MoneyInput
   const [billValue, setBillValue] = useState('');
   // Estado para armazenar as persons recuperadas pelo getPerson
   const [persons, setPersons] = useState([]);
@@ -58,7 +58,7 @@ function BillsToReceiveForm() {
   const getDataById = async () => {
     const response = await fetch(`/api/finance/billsToReceive/?id=${id}`);
     const data = await response.json();
-    setBillValue(data.amount.toString());
+    setBillValue(data.value.toString());
     setIsDataLoading(false); // Desativa o estado de carregamento de dados
     form.reset(data); // Atualiza os dados com do formulário com os dados recuperados
   };
