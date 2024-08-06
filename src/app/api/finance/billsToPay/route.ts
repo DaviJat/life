@@ -4,7 +4,7 @@ import { z } from 'zod';
 import db from '@/lib/db';
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
-const userSchema = z.object({
+const billsToPaySchema = z.object({
   description: z.string().min(1).max(30),
   value: z.number().max(9999999999999),
   personId: z.number()
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, value, personId } = userSchema.parse(body);
+    const { description, value, personId } = billsToPaySchema.parse(body);
 
     // Cria um novo registro de billsToPay no banco de dados com os dados recebidos.
     const newBillsToPay = await db.billsToPay.create({
@@ -91,7 +91,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, value, personId } = userSchema.parse(body);
+    const { description, value, personId } = billsToPaySchema.parse(body);
 
     // Atualiza o registro de billsToPay no banco de dados com o id recebido.
     const updatedBillsToPay = await db.billsToPay.update({
