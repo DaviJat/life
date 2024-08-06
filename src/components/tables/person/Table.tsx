@@ -3,7 +3,7 @@
 import { columns } from '@/components/tables/person/columns';
 import DataTable from '@/components/tables/person/data-table';
 import { Button } from '@/components/ui/button';
-import { Link } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
