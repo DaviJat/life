@@ -64,7 +64,7 @@ export const columns: ColumnDef<BillsToReceive>[] = [
     },
   },
   {
-    accessorKey: '',
+    accessorKey: 'person.name',
     header: 'Pessoa',
   },
   {
