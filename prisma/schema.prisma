@@ -23,6 +23,7 @@ model User {
 
 model Person {
   id             Int              @id @default(autoincrement())
+  userId         Int
   name           String
   phone          String
   BillToPay     BillToPay[]
@@ -33,6 +34,7 @@ model Person {
 
 model Wallet {
   id          Int           @id @default(autoincrement())
+  userId      Int  
   description String
   balance     Float
   type        WalletType

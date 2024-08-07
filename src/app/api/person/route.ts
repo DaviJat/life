@@ -5,6 +5,7 @@ import { z } from "zod";
 const personSchema = z.object({
     name: z.string().min(1).max(30),
     phone: z.string().min(1).max(30),
+    userId: z.number()
 });
 
 // Função assíncrona para lidar com requisições GET.
@@ -24,7 +25,11 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(person);
         } else {
             // Se não houver 'id' na URL, busca todos os registros de person no banco de dados.
+            const userId = request.nextUrl.searchParams.get("userId");
             const persons = await db.person.findMany({
+                where: {
+                    userId: parseInt(userId)
+                },
                 orderBy: {
                     id: 'desc'
                 }
@@ -45,13 +50,14 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
 
         // Valida o corpo da requisição com o schema definido anteriormente.
-        const { name, phone } = personSchema.parse(body);
+        const { name, phone, userId } = personSchema.parse(body);
 
         // Cria um novo registro de person no banco de dados com os dados recebidos.
         const newPerson = await db.person.create({
             data: {
                 name,
-                phone
+                phone,
+                userId
             }
         })
 

@@ -79,7 +79,8 @@ const authOptions: NextAuthOptions = {
                 // Adiciona o nome de usuário ao token JWT
                 return {
                     ...token,
-                    username: user.username
+                    username: user.username,
+                    id: user.id
                 }
             }
             // Retorna o token JWT sem modificações
@@ -92,6 +93,7 @@ const authOptions: NextAuthOptions = {
                 ...session,
                 user: {
                     ...session.user,
+                    id: token.id,
                     username: token.username
                 }
             }
