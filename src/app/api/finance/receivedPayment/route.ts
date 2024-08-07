@@ -1,44 +1,49 @@
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
-// Importa o objeto 'db' que parece ser um ORM (Object-Relational Mapping) para interagir com o banco de dados.
-import db from "@/lib/db";
+import db from '@/lib/db';
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
-const userSchema = z.object({
-  description: z.string().min(1).max(30),
-  balance: z.number().max(9999999999999),
-  type: z.enum(['Physical', 'Virtual']),
+const receivedPaymentSchema = z.object({
+  paymentDate: z.string().datetime(),
+  amountReceived: z.number().max(9999999999999),
+  walletEntryId: z.number(),
+  billToReceiveId: z.number()
 });
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
   // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get("id");
+  const id = request.nextUrl.searchParams.get('id');
   try {
     if (id) {
-      // Busca um registro de wallet pelo id no banco de dados.
-      const wallet = await db.wallet.findUnique({
+      // Busca um registro de receivedPayments pelo id no banco de dados.
+      const receivedPayments = await db.receivedPayments.findUnique({
         where: {
-          id: parseInt(id)
+          id: parseInt(id, 10)
         }
       });
 
       // Retorna o registro encontrado em formato JSON.
-      return NextResponse.json(wallet);
-    } else {
-      // Se não houver 'id' na URL, busca todos os registros de wallet no banco de dados.
-      const wallets = await db.wallet.findMany({
-        orderBy: {
-          id: 'desc'
-        }
-      });
-      // Retorna os registros encontrados em formato JSON.
-      return NextResponse.json(wallets);
+      return NextResponse.json(receivedPayments);
     }
+    // Se não houver 'id' na URL, busca todos os registros de receivedPayments no banco de dados.
+    const receivedPayments = await db.receivedPayments.findMany({
+      orderBy: {
+        id: 'desc'
+      }
+    });
+    // Retorna os registros encontrados em formato JSON.
+    return NextResponse.json(receivedPayments);
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante a busca no banco de dados.
-    return NextResponse.json({ message: 'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde' }, { status: 500 });
+    return NextResponse.json(
+      {
+        message:
+          'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde'
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -49,19 +54,26 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, balance, type } = userSchema.parse(body);
+    const { paymentDate, amountReceived, walletEntryId, billToReceiveId } = receivedPaymentSchema.parse(body);
 
-    // Cria um novo registro de wallet no banco de dados com os dados recebidos.
-    const newWallet = await db.wallet.create({
+    // Cria um novo registro de receivedPayments no banco de dados com os dados recebidos.
+    const newReceivedPayments = await db.receivedPayments.create({
       data: {
-        description,
-        balance,
-        type
+        paymentDate,
+        amountReceived,
+        walletEntryId,
+        billToReceiveId
       }
-    })
+    });
 
     // Retorna uma resposta de sucesso com o novo registro criado.
-    return NextResponse.json({ wallet: newWallet, message: 'Carteira cadastrada com sucesso' }, { status: 201 });
+    return NextResponse.json(
+      {
+        receivedPayments: newReceivedPayments,
+        message: 'Pagamento cadastrado com sucesso'
+      },
+      { status: 201 }
+    );
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: error }, { status: 500 });
@@ -78,25 +90,26 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, balance, type } = userSchema.parse(body);
+    const { paymentDate, amountReceived, walletEntryId, billToReceiveId } = receivedPaymentSchema.parse(body);
 
-    // Atualiza o registro de wallet no banco de dados com o id recebido.
-    const updatedWallet = await db.wallet.update({
+    // Atualiza o registro de receivedPayments no banco de dados com o id recebido.
+    const updatedReceivedPayments = await db.receivedPayments.update({
       where: {
         id: id,
       },
       data: {
-        description,
-        balance,
-        type,
+        paymentDate,
+        amountReceived,
+        walletEntryId,
+        billToReceiveId
       },
     });
 
     // Retorna uma resposta de sucesso com o registro atualizado.
-    return NextResponse.json({ wallet: updatedWallet, message: 'Carteira editada com sucesso' }, { status: 200 });
+    return NextResponse.json({ receivedPayments: updatedReceivedPayments, message: 'Pagamento editado com sucesso' }, { status: 200 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
-    return NextResponse.json({ message: 'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde' }, { status: 500 });
+    return NextResponse.json({ message: error }, { status: 500 });
   }
 }
 
@@ -106,15 +119,15 @@ export async function DELETE(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
-    // Deleta o registro de wallet no banco de dados com o id recebido.
-    const deleteWallet = await prisma.wallet.delete({
+    // Deleta o registro de ReceivedPayments no banco de dados com o id recebido.
+    const deleteReceivedPayments = await prisma.receivedPayments.delete({
       where: {
         id: id,
       },
     })
 
-    // Retorna uma resposta de sucesso após a exclusão.
-    return NextResponse.json({ wallet: deleteWallet, message: 'Carteira excluída com sucesso' }, { status: 200 });
+    // Retorna uma resposta de sucesso após a excslusão.
+    return NextResponse.json({ ReceivedPayments: deleteReceivedPayments, message: 'Pagamento excluído com sucesso' }, { status: 200 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: 'Ops! Houve um problema durante a exclusão. Por favor, tente novamente mais tarde' }, { status: 500 });

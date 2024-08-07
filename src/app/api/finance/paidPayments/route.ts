@@ -8,7 +8,7 @@ const paidPaymentsSchema = z.object({
   paymentDate: z.string().datetime(),
   amountPaid: z.number().max(9999999999999),
   walletExitId: z.number(),
-  billsToPayId: z.number()
+  billToPayId: z.number()
 });
 
 // Função assíncrona para lidar com requisições GET.
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { paymentDate, amountPaid, walletExitId, billsToPayId } = paidPaymentsSchema.parse(body);
+    const { paymentDate, amountPaid, walletExitId, billToPayId } = paidPaymentsSchema.parse(body);
 
     // Cria um novo registro de paidPayments no banco de dados com os dados recebidos.
     const newpaidPayments = await db.paidPayments.create({
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
         paymentDate,
         amountPaid,
         walletExitId,
-        billsToPayId
+        billToPayId
       }
     });
 
@@ -90,7 +90,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { paymentDate, amountPaid, walletExitId, billsToPayId } = paidPaymentsSchema.parse(body);
+    const { paymentDate, amountPaid, walletExitId, billToPayId } = paidPaymentsSchema.parse(body);
 
     // Atualiza o registro de paidPayments no banco de dados com o id recebido.
     const updatedpaidPayments = await db.paidPayments.update({
@@ -101,7 +101,7 @@ export async function PUT(request: NextRequest) {
         paymentDate,
         amountPaid,
         walletExitId,
-        billsToPayId
+        billToPayId
       },
     });
 
