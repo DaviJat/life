@@ -1,7 +1,7 @@
 'use client';
 
-import { columns } from '@/components/tables/billsToPay/columns';
-import DataTable from '@/components/tables/billsToPay/data-table';
+import { columns } from '@/components/tables/billToPay/columns';
+import DataTable from '@/components/tables/billToPay/data-table';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -18,7 +18,7 @@ function Table({ data }) {
     <>
       <div className="flex items-center justify-between">
         <h1 className="font-semibold text-2xl">Carteira</h1>
-        <Link href="billsToPay/create">
+        <Link href="billToPay/create">
           <Button>Criar</Button>
         </Link>
       </div>

@@ -5,7 +5,7 @@ import { z } from "zod";
 import db from "@/lib/db";
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
-const userSchema = z.object({
+const walletExitSchema = z.object({
   description: z.string().min(1).max(60),
   amount: z.number().max(9999999999999),
   walletId: z.number(),
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, amount, walletId } = userSchema.parse(body);
+    const { description, amount, walletId } = walletExitSchema.parse(body);
 
     // Cria um novo registro de wallet no banco de dados com os dados recebidos.
     const newWalletExit = await db.walletExit.create({
@@ -93,7 +93,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, amount, walletId } = userSchema.parse(body);
+    const { description, amount, walletId } = walletExitSchema.parse(body);
 
     // Encontra a entrada de carteira no banco de dados com o id fornecido.
     const walletExit = await db.walletExit.findUnique({ where: { id: id } });

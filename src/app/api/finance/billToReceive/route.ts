@@ -4,7 +4,7 @@ import { z } from 'zod';
 import db from '@/lib/db';
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
-const billsToPaySchema = z.object({
+const billToReceiveSchema = z.object({
   description: z.string().min(1).max(30),
   value: z.number().max(9999999999999),
   personId: z.number()
@@ -16,18 +16,18 @@ export async function GET(request: NextRequest) {
   const id = request.nextUrl.searchParams.get('id');
   try {
     if (id) {
-      // Busca um registro de billsToPay pelo id no banco de dados.
-      const billsToPay = await db.billsToPay.findUnique({
+      // Busca um registro de conta a receber pelo id no banco de dados.
+      const billToReceive = await db.billToReceive.findUnique({
         where: {
           id: parseInt(id, 10)
         }
       });
 
       // Retorna o registro encontrado em formato JSON.
-      return NextResponse.json(billsToPay);
+      return NextResponse.json(billToReceive);
     }
-    // Se não houver 'id' na URL, busca todos os registros de billsToPay no banco de dados.
-    const billsToPay = await db.billsToPay.findMany({
+    // Se não houver 'id' na URL, busca todos os registros de conta a receber no banco de dados.
+    const billsToReceive = await db.billToReceive.findMany({
       orderBy: {
         id: 'desc'
       },
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       }
     });
     // Retorna os registros encontrados em formato JSON.
-    return NextResponse.json(billsToPay);
+    return NextResponse.json(billsToReceive);
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante a busca no banco de dados.
     return NextResponse.json(
@@ -56,10 +56,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, value, personId } = billsToPaySchema.parse(body);
+    const { description, value, personId } = billToReceiveSchema.parse(body);
 
-    // Cria um novo registro de billsToPay no banco de dados com os dados recebidos.
-    const newBillsToPay = await db.billsToPay.create({
+    // Cria um novo registro de conta a receber no banco de dados com os dados recebidos.
+    const newBillToReceive = await db.billToReceive.create({
       data: {
         description,
         value,
@@ -70,8 +70,8 @@ export async function POST(request: NextRequest) {
     // Retorna uma resposta de sucesso com o novo registro criado.
     return NextResponse.json(
       {
-        billsToPay: newBillsToPay,
-        message: 'Conta a pagar cadastrada com sucesso'
+        billToReceive: newBillToReceive,
+        message: 'Conta a receber cadastrada com sucesso'
       },
       { status: 201 }
     );
@@ -91,10 +91,10 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, value, personId } = billsToPaySchema.parse(body);
+    const { description, value, personId } = billToReceiveSchema.parse(body);
 
-    // Atualiza o registro de billsToPay no banco de dados com o id recebido.
-    const updatedBillsToPay = await db.billsToPay.update({
+    // Atualiza o registro de conta a receber no banco de dados com o id recebido.
+    const updatedBillToReceive = await db.billToReceive.update({
       where: {
         id: id,
       },
@@ -106,7 +106,7 @@ export async function PUT(request: NextRequest) {
     });
 
     // Retorna uma resposta de sucesso com o registro atualizado.
-    return NextResponse.json({ billsToPay: updatedBillsToPay, message: 'Conta a pagar editada com sucesso' }, { status: 200 });
+    return NextResponse.json({ billToReceive: updatedBillToReceive, message: 'Conta a receber editada com sucesso' }, { status: 200 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: 'Ops! Houve um problema durante a edição. Por favor, tente novamente mais tarde' }, { status: 500 });
@@ -119,15 +119,15 @@ export async function DELETE(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
-    // Deleta o registro de billsToPay no banco de dados com o id recebido.
-    const deleteBillsToPay = await prisma.billsToPay.delete({
+    // Deleta o registro de conta a receber no banco de dados com o id recebido.
+    const deleteBillToReceive = await prisma.billToReceive.delete({
       where: {
         id: id,
       },
     })
 
     // Retorna uma resposta de sucesso após a excslusão.
-    return NextResponse.json({ billsToPay: deleteBillsToPay, message: 'Conta a pagar excluída com sucesso' }, { status: 200 });
+    return NextResponse.json({ billToReceive: deleteBillToReceive, message: 'Conta a receber excluída com sucesso' }, { status: 200 });
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
     return NextResponse.json({ message: 'Ops! Houve um problema durante a exclusão. Por favor, tente novamente mais tarde' }, { status: 500 });

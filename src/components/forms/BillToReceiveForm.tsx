@@ -23,7 +23,7 @@ const FormSchema = z.object({
 });
 
 // Componente para formulário de cadastro e edição de objetos
-function BillsToReceiveForm() {
+function BillToReceiveForm() {
   // Recupera o id do objeto e utilizada para identificar o tipo de formulário
   const id = useParams<{ id: string }>().id;
   // Estado para controlar o carregamento e evitar multiplos submits do formulário
@@ -56,7 +56,7 @@ function BillsToReceiveForm() {
 
   // Função para recuperar os dados para a edição do objeto
   const getDataById = async () => {
-    const response = await fetch(`/api/finance/billsToReceive/?id=${id}`);
+    const response = await fetch(`/api/finance/billToReceive/?id=${id}`);
     const data = await response.json();
     setBillValue(data.value.toString());
     setIsDataLoading(false); // Desativa o estado de carregamento de dados
@@ -80,7 +80,7 @@ function BillsToReceiveForm() {
     setIsFormSubmitting(true); // Ativa o estado de envio de formulário
 
     // Configurações para o fetch API, com base no tipo de formuário
-    const url = id ? `/api/finance/billsToReceive/?id=${id}` : '/api/finance/billsToReceive';
+    const url = id ? `/api/finance/billToReceive/?id=${id}` : '/api/finance/billToReceive';
     const method = id ? 'PUT' : 'POST';
 
     // Requisição para enviar os dados do formulário
@@ -104,7 +104,7 @@ function BillsToReceiveForm() {
       toast({
         description: data.message,
       });
-      router.push('/finance/billsToReceive');
+      router.push('/finance/billToReceive');
     } else {
       // Se a resposta não for bem-sucedida, mostra mensagem de erro
       toast({
@@ -121,7 +121,7 @@ function BillsToReceiveForm() {
       {/* Componente de formulário */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          {/* Descrição da entrada */}
+          {/* Descrição da conta */}
           <FormField
             name="description"
             render={({ field }) => (
@@ -142,7 +142,7 @@ function BillsToReceiveForm() {
             name="value"
             placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
           />
-          {/* Carteira */}
+          {/* Pessoa */}
           <FormField
             control={form.control}
             name="personId"
@@ -177,4 +177,4 @@ function BillsToReceiveForm() {
   );
 }
 
-export default BillsToReceiveForm;
+export default BillToReceiveForm;

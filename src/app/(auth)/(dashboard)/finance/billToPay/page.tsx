@@ -1,8 +1,8 @@
-import Table from '@/components/tables/billsToReceive/Table';
+import Table from '@/components/tables/billToPay/Table';
 
 // Recupera função para recuperar dados da api
 async function getData() {
-  const response = await fetch(process.env.URL + '/api/finance/billsToReceive', { cache: 'no-store' });
+  const response = await fetch(process.env.URL + '/api/finance/billToPay', { cache: 'no-store' });
   return await response.json();
 }
 
