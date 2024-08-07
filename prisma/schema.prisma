@@ -58,7 +58,7 @@ model ReceivedPayments {
   paymentDate      DateTime
   amountReceived   Float
   walletEntry      WalletEntry    @relation(fields: [walletEntryId], references: [id])
-  walletEntryId    Int
+  walletEntryId    Int            @unique
   billsToReceive   BillsToReceive @relation(fields: [billsToReceiveId], references: [id])
   billsToReceiveId Int
   createdAt        DateTime       @default(now())
@@ -92,7 +92,7 @@ model PaidPayments {
   paymentDate  DateTime
   amountPaid   Float
   walletExit   WalletExit @relation(fields: [walletExitId], references: [id])
-  walletExitId Int
+  walletExitId Int        @unique
   billsToPay   BillsToPay @relation(fields: [billsToPayId], references: [id])
   billsToPayId Int
   createdAt    DateTime   @default(now())
