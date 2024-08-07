@@ -23,7 +23,7 @@ const FormSchema = z.object({
 });
 
 // Componente para formulário de cadastro e edição de objetos
-function BillsToPayForm() {
+function BillToPayForm() {
   // Recupera o id do objeto e utilizada para identificar o tipo de formulário
   const id = useParams<{ id: string }>().id;
   // Estado para controlar o carregamento e evitar multiplos submits do formulário
@@ -56,7 +56,7 @@ function BillsToPayForm() {
 
   // Função para recuperar os dados para a edição do objeto
   const getDataById = async () => {
-    const response = await fetch(`/api/finance/billsToPay/?id=${id}`);
+    const response = await fetch(`/api/finance/billToPay/?id=${id}`);
     const data = await response.json();
     setBillValue(data.value.toString());
     setIsDataLoading(false); // Desativa o estado de carregamento de dados
@@ -80,7 +80,7 @@ function BillsToPayForm() {
     setIsFormSubmitting(true); // Ativa o estado de envio de formulário
 
     // Configurações para o fetch API, com base no tipo de formuário
-    const url = id ? `/api/finance/billsToPay/?id=${id}` : '/api/finance/billsToPay';
+    const url = id ? `/api/finance/billToPay/?id=${id}` : '/api/finance/billToPay';
     const method = id ? 'PUT' : 'POST';
 
     // Requisição para enviar os dados do formulário
@@ -104,7 +104,7 @@ function BillsToPayForm() {
       toast({
         description: data.message,
       });
-      router.push('/finance/billsToPay');
+      router.push('/finance/billToPay');
     } else {
       // Se a resposta não for bem-sucedida, mostra mensagem de erro
       toast({
@@ -117,11 +117,11 @@ function BillsToPayForm() {
 
   return (
     <>
-      <h1 className="font-semibold text-2xl">{id ? 'Editar Conta a Pagar' : 'Cadastrar Conta a Pagar'} </h1>
+      <h1 className="font-semibold text-2xl">{id ? 'Editar conta a pagar' : 'Cadastrar conta a pagar'} </h1>
       {/* Componente de formulário */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          {/* Descrição da entrada */}
+          {/* Descrição da conta */}
           <FormField
             name="description"
             render={({ field }) => (
@@ -134,7 +134,7 @@ function BillsToPayForm() {
               </FormItem>
             )}
           />
-          {/* Valor da entrada */}
+          {/* Valor da conta */}
           <MoneyInput
             form={form}
             value={billValue}
@@ -177,4 +177,4 @@ function BillsToPayForm() {
   );
 }
 
-export default BillsToPayForm;
+export default BillToPayForm;

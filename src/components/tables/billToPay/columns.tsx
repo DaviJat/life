@@ -19,13 +19,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { BillsToPay } from '@prisma/client';
+import { BillToPay } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export const columns: ColumnDef<BillsToPay>[] = [
+export const columns: ColumnDef<BillToPay>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
@@ -78,7 +78,7 @@ export const columns: ColumnDef<BillsToPay>[] = [
 
       // Função para lidar com a exclusão do item
       const handleDelete = async (id) => {
-        const response = await fetch(`/api/finance/billsToPay/?id=${id}`, {
+        const response = await fetch(`/api/finance/billToPay/?id=${id}`, {
           method: 'DELETE',
           cache: 'no-store',
           headers: {
@@ -117,7 +117,7 @@ export const columns: ColumnDef<BillsToPay>[] = [
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => (window.location.href = '/finance/billsToPay/' + payment.id)}>
+                <DropdownMenuItem onClick={() => (window.location.href = '/finance/billToPay/' + payment.id)}>
                   Editar
                 </DropdownMenuItem>
                 <DialogTrigger asChild>

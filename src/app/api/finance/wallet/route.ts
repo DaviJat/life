@@ -5,7 +5,7 @@ import { z } from "zod";
 import db from "@/lib/db";
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
-const userSchema = z.object({
+const walletSchema = z.object({
   description: z.string().min(1).max(30),
   balance: z.number().max(9999999999999),
   type: z.enum(['Physical', 'Virtual']),
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, balance, type } = userSchema.parse(body);
+    const { description, balance, type } = walletSchema.parse(body);
 
     // Cria um novo registro de wallet no banco de dados com os dados recebidos.
     const newWallet = await db.wallet.create({
@@ -78,7 +78,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, balance, type } = userSchema.parse(body);
+    const { description, balance, type } = walletSchema.parse(body);
 
     // Atualiza o registro de wallet no banco de dados com o id recebido.
     const updatedWallet = await db.wallet.update({
