@@ -148,7 +148,7 @@ function BillToReceiveForm() {
             name="personId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Carteira</FormLabel>
+                <FormLabel>Pessoa</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
