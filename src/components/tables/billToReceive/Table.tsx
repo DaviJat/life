@@ -17,7 +17,7 @@ function Table({ data }) {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h1 className="font-semibold text-2xl">Contas a recever</h1>
+        <h1 className="font-semibold text-2xl">Contas a receber</h1>
         <Link href="billToReceive/create">
           <Button>Criar</Button>
         </Link>
