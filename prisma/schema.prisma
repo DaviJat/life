@@ -19,25 +19,36 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Wallet           Wallet[]
+  Person           Person[]
+  WalletExit       WalletExit[]
+  BillToReceive    BillToReceive[]
+  PaidPayments     PaidPayments[]
+  BillToPay        BillToPay[]
+  ReceivedPayments ReceivedPayments[]
+  WalletEntry      WalletEntry[]
 }
 
 model Person {
-  id             Int              @id @default(autoincrement())
-  userId         Int
-  name           String
-  phone          String
+  id            Int             @id @default(autoincrement())
+  name          String
+  phone         String
   BillToPay     BillToPay[]
   BillToReceive BillToReceive[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  userId        Int
+  user          User            @relation(fields: [userId], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 model Wallet {
   id          Int           @id @default(autoincrement())
-  userId      Int  
   description String
   balance     Float
   type        WalletType
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id])
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   WalletEntry WalletEntry[]
@@ -50,21 +61,25 @@ model WalletEntry {
   amount           Float
   wallet           Wallet             @relation(fields: [walletId], references: [id])
   walletId         Int
+  userId           Int
+  user             User               @relation(fields: [userId], references: [id])
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   ReceivedPayments ReceivedPayments[]
 }
 
 model ReceivedPayments {
-  id               Int            @id @default(autoincrement())
-  paymentDate      DateTime
-  amountReceived   Float
-  walletEntry      WalletEntry    @relation(fields: [walletEntryId], references: [id])
-  walletEntryId    Int            @unique
+  id              Int           @id @default(autoincrement())
+  paymentDate     DateTime
+  amountReceived  Float
+  walletEntry     WalletEntry   @relation(fields: [walletEntryId], references: [id])
+  walletEntryId   Int           @unique
   billToReceive   BillToReceive @relation(fields: [billToReceiveId], references: [id])
   billToReceiveId Int
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  userId          Int
+  user            User          @relation(fields: [userId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
 model BillToReceive {
@@ -73,6 +88,8 @@ model BillToReceive {
   value            Float
   person           Person             @relation(fields: [personId], references: [id])
   personId         Int
+  userId           Int
+  user             User               @relation(fields: [userId], references: [id])
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   ReceivedPayments ReceivedPayments[]
@@ -84,6 +101,8 @@ model WalletExit {
   amount       Float
   wallet       Wallet         @relation(fields: [walletId], references: [id])
   walletId     Int
+  userId       Int
+  user         User           @relation(fields: [userId], references: [id])
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   PaidPayments PaidPayments[]
@@ -95,8 +114,10 @@ model PaidPayments {
   amountPaid   Float
   walletExit   WalletExit @relation(fields: [walletExitId], references: [id])
   walletExitId Int        @unique
-  billToPay   BillToPay @relation(fields: [billToPayId], references: [id])
-  billToPayId Int
+  billToPay    BillToPay  @relation(fields: [billToPayId], references: [id])
+  billToPayId  Int
+  userId       Int
+  user         User       @relation(fields: [userId], references: [id])
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
@@ -107,6 +128,8 @@ model BillToPay {
   value        Float
   person       Person         @relation(fields: [personId], references: [id])
   personId     Int
+  userId       Int
+  user         User           @relation(fields: [userId], references: [id])
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   PaidPayments PaidPayments[]
