@@ -1,8 +1,12 @@
 import Table from '@/components/tables/person/Table';
+import authOptions from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 
 // Recupera função para recuperar dados da api
 async function getData() {
-  const response = await fetch(process.env.URL + '/api/person', { cache: 'no-store' });
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+  const response = await fetch(process.env.URL + `/api/person/?userId=${user.id}`, { cache: 'no-store' });
   return await response.json();
 }
 

@@ -9,6 +9,7 @@ const walletSchema = z.object({
   description: z.string().min(1).max(30),
   balance: z.number().max(9999999999999),
   type: z.enum(['Physical', 'Virtual']),
+  userId: z.number()
 });
 
 // Função assíncrona para lidar com requisições GET.
@@ -28,7 +29,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(wallet);
     } else {
       // Se não houver 'id' na URL, busca todos os registros de wallet no banco de dados.
+      const userId = request.nextUrl.searchParams.get("userId");
       const wallets = await db.wallet.findMany({
+        where: {
+          userId: parseInt(userId)
+      },
         orderBy: {
           id: 'desc'
         }
@@ -49,14 +54,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, balance, type } = walletSchema.parse(body);
+    const { description, balance, type, userId } = walletSchema.parse(body);
 
     // Cria um novo registro de wallet no banco de dados com os dados recebidos.
     const newWallet = await db.wallet.create({
       data: {
         description,
         balance,
-        type
+        type,
+        userId
       }
     })
 
