@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
         }
       });
 
-      if (parseInt(userId) != wallet.userId) {
+      if (parseInt(userId) != walletEntry.userId) {
         return NextResponse.json(
           {
             message:
