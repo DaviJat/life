@@ -30,6 +30,16 @@ export async function GET(request: NextRequest) {
         }
       });
 
+      if (parseInt(userId) != billToPay.userId) {
+        return NextResponse.json(
+          {
+            message:
+              'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde'
+          },
+          { status: 401 }
+        );
+      }
+
       // Retorna o registro encontrado em formato JSON.
       return NextResponse.json(billToPay);
     }
