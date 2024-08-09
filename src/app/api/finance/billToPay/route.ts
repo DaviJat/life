@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       // Busca um registro de conta a pagar pelo id no banco de dados.
       const billToPay = await db.billToPay.findUnique({
         where: {
-          id: parseInt(id, 10)
+          id: parseInt(id),
         }
       });
 

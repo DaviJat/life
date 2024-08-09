@@ -28,9 +28,20 @@ export async function GET(request: NextRequest) {
       // Busca um registro de paidPayments pelo id no banco de dados.
       const paidPayments = await db.paidPayments.findUnique({
         where: {
-          id: parseInt(id, 10)
+          id: parseInt(id)
         }
       });
+
+      if (parseInt(userId) != paidPayments.userId) {
+        return NextResponse.json(
+          {
+            message:
+              'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde'
+          },
+          { status: 401 }
+        );
+      }
+
 
       // Retorna o registro encontrado em formato JSON.
       return NextResponse.json(paidPayments);

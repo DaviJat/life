@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 // Importa o objeto 'db' que parece ser um ORM (Object-Relational Mapping) para interagir com o banco de dados.
+import authOptions from "@/lib/auth";
 import db from "@/lib/db";
+import { getServerSession } from "next-auth";
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const walletSchema = z.object({
@@ -18,6 +20,10 @@ export async function GET(request: NextRequest) {
     // Obtém o parâmetro 'id' da URL da requisição.
     const id = request.nextUrl.searchParams.get("id");
 
+    // Recuperando id do usuário na sessão
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     if (id) {
       // Busca um registro de wallet pelo id no banco de dados.
       const wallet = await db.wallet.findUnique({
@@ -26,11 +32,20 @@ export async function GET(request: NextRequest) {
         }
       });
 
+      if (parseInt(userId) != wallet.userId) {
+        return NextResponse.json(
+          {
+            message:
+              'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde'
+          },
+          { status: 401 }
+        );
+      }
+
       // Retorna o registro encontrado em formato JSON.
       return NextResponse.json(wallet);
     } else {
       // Se não houver 'id' na URL, busca todos os registros de wallet no banco de dados.
-      const userId = request.nextUrl.searchParams.get("userId");
       const wallets = await db.wallet.findMany({
         where: {
           userId: parseInt(userId)
