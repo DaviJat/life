@@ -14,9 +14,10 @@ const walletSchema = z.object({
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
-  // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get("id");
   try {
+    // Obtém o parâmetro 'id' da URL da requisição.
+    const id = request.nextUrl.searchParams.get("id");
+
     if (id) {
       // Busca um registro de wallet pelo id no banco de dados.
       const wallet = await db.wallet.findUnique({
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
       const wallets = await db.wallet.findMany({
         where: {
           userId: parseInt(userId)
-      },
+        },
         orderBy: {
           id: 'desc'
         }

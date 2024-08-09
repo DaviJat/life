@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
+import authOptions from '@/lib/auth';
+import { getServerSession } from 'next-auth';
+
 import db from '@/lib/db';
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
@@ -13,9 +16,14 @@ const receivedPaymentSchema = z.object({
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
-  // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get('id');
   try {
+    // Obtém o parâmetro 'id' da URL da requisição.
+    const id = request.nextUrl.searchParams.get('id');
+
+    // Recuperando id do usuário na sessão
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     if (id) {
       // Busca um registro de receivedPayments pelo id no banco de dados.
       const receivedPayments = await db.receivedPayments.findUnique({
@@ -29,6 +37,9 @@ export async function GET(request: NextRequest) {
     }
     // Se não houver 'id' na URL, busca todos os registros de receivedPayments no banco de dados.
     const receivedPayments = await db.receivedPayments.findMany({
+      where: {
+        userId: parseInt(userId)
+      },
       orderBy: {
         id: 'desc'
       }
@@ -56,12 +67,17 @@ export async function POST(request: NextRequest) {
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { paymentDate, amountReceived, walletEntryId, billToReceiveId } = receivedPaymentSchema.parse(body);
 
+    // Recuperando id do usuário na sessão
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Cria um novo registro de receivedPayments no banco de dados com os dados recebidos.
     const newReceivedPayments = await db.receivedPayments.create({
       data: {
         paymentDate,
         amountReceived,
         walletEntryId,
+        userId: parseInt(userId),
         billToReceiveId
       }
     });

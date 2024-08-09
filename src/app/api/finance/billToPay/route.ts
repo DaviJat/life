@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
+import authOptions from '@/lib/auth';
 import db from '@/lib/db';
+import { getServerSession } from 'next-auth';
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const billToPaySchema = z.object({
@@ -12,9 +14,14 @@ const billToPaySchema = z.object({
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
-  // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get('id');
   try {
+    // Obtém o parâmetro 'id' da URL da requisição.
+    const id = request.nextUrl.searchParams.get('id');
+
+    // Recuperando id do usuário na sessão
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     if (id) {
       // Busca um registro de conta a pagar pelo id no banco de dados.
       const billToPay = await db.billToPay.findUnique({
@@ -28,6 +35,9 @@ export async function GET(request: NextRequest) {
     }
     // Se não houver 'id' na URL, busca todos os registros de conta a pagar no banco de dados.
     const billsToPay = await db.billToPay.findMany({
+      where: {
+        userId: parseInt(userId)
+      },
       orderBy: {
         id: 'desc'
       },
@@ -58,11 +68,16 @@ export async function POST(request: NextRequest) {
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { description, value, personId } = billToPaySchema.parse(body);
 
+    // Recuperando id do usuário na sessão
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Cria um novo registro de conta a pagar no banco de dados com os dados recebidos.
     const newBillToPay = await db.billToPay.create({
       data: {
         description,
         value,
+        userId: parseInt(userId),
         personId
       }
     });

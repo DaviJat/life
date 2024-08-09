@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import authOptions from '@/lib/auth';
+import { getServerSession } from 'next-auth';
+
 // Importa o objeto 'db' ORM (Object-Relational Mapping) do prisma para interagir com o banco de dados.
 import db from "@/lib/db";
 
@@ -13,9 +16,14 @@ const walletExitSchema = z.object({
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
-  // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get("id");
   try {
+    // Obtém o parâmetro 'id' da URL da requisição.
+    const id = request.nextUrl.searchParams.get("id");
+
+    // Recuperando id do usuário na sessão
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     if (id) {
       // Busca um registro de walletExit pelo id no banco de dados.
       const walletExit = await db.walletExit.findUnique({
@@ -29,6 +37,9 @@ export async function GET(request: NextRequest) {
     } else {
       // Se não houver 'id' na URL, busca todos os registros de walletExit no banco de dados.
       const walletExits = await db.walletExit.findMany({
+        where: {
+          userId: parseInt(userId)
+        },
         orderBy: {
           id: 'desc'
         },
@@ -54,11 +65,16 @@ export async function POST(request: NextRequest) {
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { description, amount, walletId } = walletExitSchema.parse(body);
 
+    // Recuperando id do usuário na sessão
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Cria um novo registro de wallet no banco de dados com os dados recebidos.
     const newWalletExit = await db.walletExit.create({
       data: {
         description,
         amount,
+        userId: parseInt(userId),
         walletId
       }
     })
