@@ -42,7 +42,6 @@ export async function GET(request: NextRequest) {
         );
       }
 
-
       // Retorna o registro encontrado em formato JSON.
       return NextResponse.json(paidPayments);
     }
