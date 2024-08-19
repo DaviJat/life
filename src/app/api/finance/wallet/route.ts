@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       const wallets = await db.wallet.findMany({
         where: {
           userId: parseInt(userId)
-      },
+        },
         orderBy: {
           id: 'desc'
         }
@@ -54,15 +54,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, balance, type, userId } = walletSchema.parse(body);
+    const { description, balance, type } = walletSchema.parse(body);
 
     // Cria um novo registro de wallet no banco de dados com os dados recebidos.
     const newWallet = await db.wallet.create({
       data: {
         description,
         balance,
-        type,
-        userId
+        type
       }
     })
 
