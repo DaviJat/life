@@ -30,19 +30,19 @@ export async function GET(request: NextRequest) {
 
       // Retorna o registro encontrado em formato JSON.
       return NextResponse.json(person);
-    } else {
-      // Se não houver 'id' na URL, busca todos os registros de person no banco de dados.
-      const persons = await db.person.findMany({
-        where: {
-          userId: parseInt(userId)
-        },
-        orderBy: {
-          id: 'desc'
-        }
-      });
-      // Retorna os registros encontrados em formato JSON.
-      return NextResponse.json(persons);
     }
+    // Se não houver 'id' na URL, busca todos os registros de person no banco de dados.
+    const persons = await db.person.findMany({
+      where: {
+        userId: parseInt(userId)
+      },
+      orderBy: {
+        id: 'desc'
+      }
+    });
+    // Retorna os registros encontrados em formato JSON.
+    return NextResponse.json(persons);
+
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante a busca no banco de dados.
     return NextResponse.json({ message: 'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde' }, { status: 500 });
