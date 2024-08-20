@@ -82,7 +82,8 @@ export async function POST(request: NextRequest) {
     // Atualiza o saldo da carteira no banco de dados.
     await db.wallet.update({
       where: {
-        id: walletId
+        id: walletId,
+        userId: parseInt(userId)
       },
       data: {
         balance: {
