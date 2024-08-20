@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
+import authOptions from '@/lib/auth';
 import db from '@/lib/db';
+import { getServerSession } from 'next-auth';
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const billToPaySchema = z.object({
@@ -14,12 +16,18 @@ const billToPaySchema = z.object({
 export async function GET(request: NextRequest) {
   // Obtém o parâmetro 'id' da URL da requisição.
   const id = request.nextUrl.searchParams.get('id');
+
+  // Obtém o parâmetro 'userId' da sessão do usuário
+  const session = await getServerSession(authOptions);
+  const userId = session.user.id
+
   try {
     if (id) {
       // Busca um registro de conta a pagar pelo id no banco de dados.
       const billToPay = await db.billToPay.findUnique({
         where: {
-          id: parseInt(id, 10)
+          id: parseInt(id),
+          userId: parseInt(userId)
         }
       });
 
@@ -28,6 +36,9 @@ export async function GET(request: NextRequest) {
     }
     // Se não houver 'id' na URL, busca todos os registros de conta a pagar no banco de dados.
     const billsToPay = await db.billToPay.findMany({
+      where: {
+        userId: parseInt(userId)
+      },
       orderBy: {
         id: 'desc'
       },
@@ -55,6 +66,10 @@ export async function POST(request: NextRequest) {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { description, value, personId } = billToPaySchema.parse(body);
 
@@ -63,7 +78,8 @@ export async function POST(request: NextRequest) {
       data: {
         description,
         value,
-        personId
+        personId,
+        userId: parseInt(userId)
       }
     });
 
@@ -87,6 +103,10 @@ export async function PUT(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Obtém o corpo da requisição PUT.
     const body = await request.json();
 
@@ -97,6 +117,7 @@ export async function PUT(request: NextRequest) {
     const updatedBillToPay = await db.billToPay.update({
       where: {
         id: id,
+        userId: parseInt(userId)
       },
       data: {
         description,
@@ -119,10 +140,15 @@ export async function DELETE(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Deleta o registro de conta a pagar no banco de dados com o id recebido.
     const deleteBillToPay = await prisma.billToPay.delete({
       where: {
         id: id,
+        userId: parseInt(userId)
       },
     })
 
