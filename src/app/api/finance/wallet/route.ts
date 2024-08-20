@@ -8,8 +8,7 @@ import db from "@/lib/db";
 const walletSchema = z.object({
   description: z.string().min(1).max(30),
   balance: z.number().max(9999999999999),
-  type: z.enum(['Physical', 'Virtual']),
-  userId: z.number()
+  type: z.enum(['Physical', 'Virtual'])
 });
 
 // Função assíncrona para lidar com requisições GET.

@@ -4,8 +4,7 @@ import { z } from "zod";
 
 const personSchema = z.object({
   name: z.string().min(1).max(30),
-  phone: z.string().min(1).max(30),
-  userId: z.number()
+  phone: z.string().min(1).max(30)
 });
 
 // Função assíncrona para lidar com requisições GET.
