@@ -1,4 +1,6 @@
+import authOptions from "@/lib/auth";
 import db from "@/lib/db";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -11,6 +13,9 @@ const personSchema = z.object({
 export async function GET(request: NextRequest) {
   // Obtém o parâmetro 'id' da URL da requisição.
   const id = request.nextUrl.searchParams.get("id");
+  const session = await getServerSession(authOptions);
+  console.log('teste')
+  console.log(session)
   try {
     if (id) {
       // Busca um registro de person pelo id no banco de dados.

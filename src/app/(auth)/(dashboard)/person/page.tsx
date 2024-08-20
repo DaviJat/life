@@ -1,8 +1,13 @@
 import Table from '@/components/tables/person/Table';
+import { headers } from 'next/headers';
 
 // Recupera função para recuperar dados da api
 async function getData() {
-  const response = await fetch(process.env.URL + '/api/person', { cache: 'no-store' });
+  const response = await fetch(`${process.env.URL}/api/person`, {
+    method: 'GET',
+    headers: headers(), // Passa os headers atuais, incluindo os cookies
+    cache: 'no-store', // Mantém o cache desativado, se necessário
+  });
   return await response.json();
 }
 
