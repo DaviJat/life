@@ -11,17 +11,20 @@ const personSchema = z.object({
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
-  // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get("id");
-  const session = await getServerSession(authOptions);
-  console.log('teste')
-  console.log(session)
   try {
+    // Obtém o parâmetro 'id' da URL da requisição.
+    const id = request.nextUrl.searchParams.get("id");
+
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     if (id) {
       // Busca um registro de person pelo id no banco de dados.
       const person = await db.person.findUnique({
         where: {
-          id: parseInt(id)
+          id: parseInt(id),
+          userId: parseInt(userId)
         }
       });
 
@@ -30,6 +33,9 @@ export async function GET(request: NextRequest) {
     } else {
       // Se não houver 'id' na URL, busca todos os registros de person no banco de dados.
       const persons = await db.person.findMany({
+        where: {
+          userId: parseInt(userId)
+        },
         orderBy: {
           id: 'desc'
         }
@@ -49,6 +55,10 @@ export async function POST(request: NextRequest) {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { name, phone } = personSchema.parse(body);
 
@@ -56,7 +66,8 @@ export async function POST(request: NextRequest) {
     const newPerson = await db.person.create({
       data: {
         name,
-        phone
+        phone,
+        userId: parseInt(userId)
       }
     })
 
@@ -74,6 +85,10 @@ export async function PUT(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Obtém o corpo da requisição PUT.
     const body = await request.json();
 
@@ -84,6 +99,7 @@ export async function PUT(request: NextRequest) {
     const updatedPerson = await db.person.update({
       where: {
         id: id,
+        userId: parseInt(userId)
       },
       data: {
         name,
@@ -106,10 +122,15 @@ export async function DELETE(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Deleta o registro de person no banco de dados com o id recebido.
     const deletePerson = await prisma.person.delete({
       where: {
         id: id,
+        userId: parseInt(userId)
       },
     })
 
