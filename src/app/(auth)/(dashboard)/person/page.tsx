@@ -1,12 +1,13 @@
 import Table from '@/components/tables/person/Table';
-import authOptions from '@/lib/auth';
-import { getServerSession } from 'next-auth';
+import { headers } from 'next/headers';
 
 // Recupera função para recuperar dados da api
 async function getData() {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
-  const response = await fetch(process.env.URL + `/api/person/?userId=${user.id}`, { cache: 'no-store' });
+  const response = await fetch(`${process.env.URL}/api/person`, {
+    method: 'GET',
+    headers: headers(), // Passa os headers atuais, incluindo os cookies
+    cache: 'no-store', // Mantém o cache desativado, se necessário
+  });
   return await response.json();
 }
 

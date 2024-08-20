@@ -2,21 +2,27 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 // Importa o objeto 'db' que parece ser um ORM (Object-Relational Mapping) para interagir com o banco de dados.
+import authOptions from "@/lib/auth";
 import db from "@/lib/db";
+import { getServerSession } from "next-auth";
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const walletSchema = z.object({
   description: z.string().min(1).max(30),
   balance: z.number().max(9999999999999),
-  type: z.enum(['Physical', 'Virtual']),
-  userId: z.number()
+  type: z.enum(['Physical', 'Virtual'])
 });
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
-  // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get("id");
   try {
+    // Obtém o parâmetro 'id' da URL da requisição.
+    const id = request.nextUrl.searchParams.get("id");
+
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     if (id) {
       // Busca um registro de wallet pelo id no banco de dados.
       const wallet = await db.wallet.findUnique({
@@ -27,20 +33,19 @@ export async function GET(request: NextRequest) {
 
       // Retorna o registro encontrado em formato JSON.
       return NextResponse.json(wallet);
-    } else {
-      // Se não houver 'id' na URL, busca todos os registros de wallet no banco de dados.
-      const userId = request.nextUrl.searchParams.get("userId");
-      const wallets = await db.wallet.findMany({
-        where: {
-          userId: parseInt(userId)
-      },
-        orderBy: {
-          id: 'desc'
-        }
-      });
-      // Retorna os registros encontrados em formato JSON.
-      return NextResponse.json(wallets);
     }
+    // Se não houver 'id' na URL, busca todos os registros de wallet no banco de dados.
+    const wallets = await db.wallet.findMany({
+      where: {
+        userId: parseInt(userId)
+      },
+      orderBy: {
+        id: 'desc'
+      }
+    });
+    // Retorna os registros encontrados em formato JSON.
+    return NextResponse.json(wallets);
+
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante a busca no banco de dados.
     return NextResponse.json({ message: 'Ops! Houve um problema durante a operação. Por favor, tente novamente mais tarde' }, { status: 500 });
@@ -53,8 +58,12 @@ export async function POST(request: NextRequest) {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, balance, type, userId } = walletSchema.parse(body);
+    const { description, balance, type } = walletSchema.parse(body);
 
     // Cria um novo registro de wallet no banco de dados com os dados recebidos.
     const newWallet = await db.wallet.create({
@@ -62,7 +71,7 @@ export async function POST(request: NextRequest) {
         description,
         balance,
         type,
-        userId
+        userId: parseInt(userId)
       }
     })
 
@@ -80,6 +89,10 @@ export async function PUT(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Obtém o corpo da requisição PUT.
     const body = await request.json();
 
@@ -90,6 +103,7 @@ export async function PUT(request: NextRequest) {
     const updatedWallet = await db.wallet.update({
       where: {
         id: id,
+        userId: parseInt(userId)
       },
       data: {
         description,
@@ -112,10 +126,15 @@ export async function DELETE(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Deleta o registro de wallet no banco de dados com o id recebido.
     const deleteWallet = await prisma.wallet.delete({
       where: {
         id: id,
+        userId: parseInt(userId)
       },
     })
 

@@ -1,8 +1,13 @@
 import Table from '@/components/tables/billToReceive/Table';
+import { headers } from 'next/headers';
 
 // Recupera função para recuperar dados da api
 async function getData() {
-  const response = await fetch(process.env.URL + '/api/finance/billToReceive', { cache: 'no-store' });
+  const response = await fetch(`${process.env.URL}/api/finance/billToReceive`, {
+    method: 'GET',
+    headers: headers(), // Passa os headers atuais, incluindo os cookies
+    cache: 'no-store', // Mantém o cache desativado, se necessário
+  });
   return await response.json();
 }
 

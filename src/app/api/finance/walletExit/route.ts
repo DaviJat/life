@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 // Importa o objeto 'db' ORM (Object-Relational Mapping) do prisma para interagir com o banco de dados.
+import authOptions from "@/lib/auth";
 import db from "@/lib/db";
+import { getServerSession } from "next-auth";
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const walletExitSchema = z.object({
@@ -13,14 +15,20 @@ const walletExitSchema = z.object({
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
-  // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get("id");
   try {
+    // Obtém o parâmetro 'id' da URL da requisição.
+    const id = request.nextUrl.searchParams.get("id");
+
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     if (id) {
       // Busca um registro de walletExit pelo id no banco de dados.
       const walletExit = await db.walletExit.findUnique({
         where: {
-          id: parseInt(id)
+          id: parseInt(id),
+          userId: parseInt(userId)
         }
       });
 
@@ -29,6 +37,9 @@ export async function GET(request: NextRequest) {
     } else {
       // Se não houver 'id' na URL, busca todos os registros de walletExit no banco de dados.
       const walletExits = await db.walletExit.findMany({
+        where: {
+          userId: parseInt(userId)
+        },
         orderBy: {
           id: 'desc'
         },
@@ -51,6 +62,10 @@ export async function POST(request: NextRequest) {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Valida o corpo da requisição com o schema definido anteriormente.
     const { description, amount, walletId } = walletExitSchema.parse(body);
 
@@ -59,14 +74,16 @@ export async function POST(request: NextRequest) {
       data: {
         description,
         amount,
-        walletId
+        walletId,
+        userId: parseInt(userId)
       }
     })
 
     // Atualiza o saldo da carteira no banco de dados.
     await db.wallet.update({
       where: {
-        id: walletId
+        id: walletId,
+        userId: parseInt(userId)
       },
       data: {
         balance: {
@@ -89,6 +106,10 @@ export async function PUT(request: NextRequest) {
     // Extrai o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Extrai o corpo da requisição PUT.
     const body = await request.json();
 
@@ -103,8 +124,15 @@ export async function PUT(request: NextRequest) {
 
     // Atualiza o registro da entrada de carteira no banco de dados com o id fornecido.
     const updatedWalletExit = await db.walletExit.update({
-      where: { id },
-      data: { description, amount, walletId }
+      where: {
+        id: id,
+        userId: parseInt(userId)
+      },
+      data: {
+        description,
+        amount,
+        walletId
+      }
     });
 
     // Calcula a diferença entre o novo valor e o anterior.
@@ -112,8 +140,14 @@ export async function PUT(request: NextRequest) {
 
     // Atualiza o saldo da carteira com base na diferença.
     await db.wallet.update({
-      where: { id: walletId },
-      data: { balance: { decrement: difference } }
+      where: {
+        id: walletId,
+        userId: parseInt(userId)
+      },
+      data: {
+        balance:
+          { decrement: difference }
+      }
     });
 
     // Retorna uma resposta de sucesso com o registro atualizado.
@@ -131,17 +165,29 @@ export async function DELETE(request: NextRequest) {
     // Obtém o 'id' da URL da requisição.
     const id = Number(request.nextUrl.searchParams.get("id"));
 
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     // Deleta o registro de walletExit no banco de dados com o id recebido.
     const deletedWalletExit = await prisma.walletExit.delete({
       where: {
         id: id,
+        userId: parseInt(userId)
       },
     })
 
     // Atualiza o saldo da carteira subtraindo o montante da entrada excluída.
     await db.wallet.update({
-      where: { id: deletedWalletExit.walletId },
-      data: { balance: { increment: deletedWalletExit.amount } }
+      where: {
+        id: deletedWalletExit.walletId,
+        userId: parseInt(userId)
+      },
+      data: {
+        balance: {
+          increment: deletedWalletExit.amount
+        }
+      }
     });
 
     // Retorna uma resposta de sucesso após a exclusão.
