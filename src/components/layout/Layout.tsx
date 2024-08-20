@@ -4,6 +4,7 @@ import { CircleDollarSign, ClipboardList, Home, User } from 'lucide-react';
 import { FC, ReactNode, useContext } from 'react';
 import { DeviceContext } from '../providers/DeviceProvider';
 import Navbar from './desktop/Navbar';
+import NavbarCollapsible from './desktop/NavbarCollapsible';
 import NavbarItem from './desktop/NavbarItem';
 import NavbarMobile from './mobile/NavbarMobile';
 import TopbarMobile from './mobile/TopbarMobile';
@@ -30,7 +31,13 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           <Navbar>
             <NavbarItem icon={<Home size={20} />} text="Home" route="/home" />
             <NavbarItem icon={<ClipboardList size={20} />} text="Tarefas" route="/task" />
-            <NavbarItem icon={<CircleDollarSign size={20} />} text="Financeiro" route="/finance" />
+
+            <NavbarCollapsible
+              icon={<CircleDollarSign size={20} />}
+              text="Financeiro"
+              options={['Entrada', 'Saída', 'Contas a Pagar', 'Contas a Receber']}
+            />
+
             <NavbarItem icon={<User size={20} />} text="Pessoa" route="/person" />
           </Navbar>
           <div className="w-full overflow-y-auto max-h-screen">
