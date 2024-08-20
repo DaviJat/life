@@ -14,14 +14,14 @@ const billToPaySchema = z.object({
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
-  // Obtém o parâmetro 'id' da URL da requisição.
-  const id = request.nextUrl.searchParams.get('id');
-
-  // Obtém o parâmetro 'userId' da sessão do usuário
-  const session = await getServerSession(authOptions);
-  const userId = session.user.id
-
   try {
+    // Obtém o parâmetro 'id' da URL da requisição.
+    const id = request.nextUrl.searchParams.get('id');
+
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = session.user.id
+
     if (id) {
       // Busca um registro de conta a pagar pelo id no banco de dados.
       const billToPay = await db.billToPay.findUnique({
