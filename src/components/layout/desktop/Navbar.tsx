@@ -13,7 +13,7 @@ const Navbar = ({ children }: NavbarProps) => {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <aside className="h-screen">
+    <aside className="h-screen select-none">
       <nav className="h-full inline-flex flex-col bg-surface shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
