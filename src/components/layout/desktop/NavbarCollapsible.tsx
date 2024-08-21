@@ -1,17 +1,23 @@
 'use client';
 
 import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useContext, useState } from 'react';
 import { NavbarContext } from './Navbar';
 
+interface NavbarCollapsibleOption {
+  label: string;
+  path: string;
+}
 interface NavbarCollapsibleProps {
   icon: ReactNode;
   text: string;
-  options?: Array<string>;
+  modulePath: string;
+  options?: Array<NavbarCollapsibleOption>;
 }
 
-function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
+function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibleProps) {
   const { expanded } = useContext(NavbarContext);
   const [subMenuOpen, setSubMenuOpen] = useState(false);
 
@@ -22,16 +28,20 @@ function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
   };
 
   const pathname = usePathname();
-  const isActive = true;
 
   return (
-    <div onClick={toggleSubMenu}>
+    <div>
       <li
+        onClick={toggleSubMenu}
         className={`
           relative flex items-center py-2 px-3 my-1
           font-medium rounded-md cursor-pointer
           transition-colors group
-          hover:bg-surface-hover text-surface-foreground
+          ${
+            pathname.startsWith(modulePath) && subMenuOpen == false
+              ? 'bg-accent text-accent-foreground'
+              : 'hover:bg-surface-hover text-surface-foreground'
+          }
         `}
       >
         {icon}
@@ -62,17 +72,20 @@ function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
     `}
         >
           {options.map((option, index) => (
-            <li
-              key={index}
-              className={`
+            <Link href={option.path}>
+              <li
+                key={index}
+                className={`
           relative flex items-center py-2 pl-12 px-3 my-1
+          ${pathname === option.path && subMenuOpen == true ? 'bg-accent text-accent-foreground' : 'bg-surface text-surface-foreground'}
           font-medium rounded-md cursor-pointer
           transition-colors group
           hover:bg-surface-hover text-surface-foreground
         `}
-            >
-              {option}
-            </li>
+              >
+                {option.label}
+              </li>
+            </Link>
           ))}
         </ul>
       )}

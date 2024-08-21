@@ -8,15 +8,15 @@ import { NavbarContext } from './Navbar';
 interface NavbarItemProps {
   icon: ReactNode;
   text: string;
-  route: string;
+  path: string;
 }
 
-function NavbarItem({ icon, text, route }: NavbarItemProps) {
+function NavbarItem({ icon, text, path }: NavbarItemProps) {
   const { expanded } = useContext(NavbarContext);
   const pathname = usePathname();
-  const isActive = pathname === route;
+  const isActive = pathname === path;
   return (
-    <Link href={route}>
+    <Link href={path}>
       <li
         className={`
           relative flex items-center py-2 px-3 my-1

@@ -29,16 +29,22 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       ) : (
         <div className="inline-flex w-full">
           <Navbar>
-            <NavbarItem icon={<Home size={20} />} text="Home" route="/home" />
-            <NavbarItem icon={<ClipboardList size={20} />} text="Tarefas" route="/task" />
+            <NavbarItem icon={<Home size={20} />} text="Home" path="/home" />
+            <NavbarItem icon={<ClipboardList size={20} />} text="Tarefas" path="/task" />
 
             <NavbarCollapsible
               icon={<CircleDollarSign size={20} />}
               text="Financeiro"
-              options={['Entrada', 'Saída', 'Contas a Pagar', 'Contas a Receber']}
+              modulePath="/finance"
+              options={[
+                { label: 'Entrada', path: '/finance/walletEntry' },
+                { label: 'Saída', path: '/finance/walletExit' },
+                { label: 'Contas a Pagar', path: '/finance/billToPay' },
+                { label: 'Contas a Receber', path: '/finance/billToReceive' },
+              ]}
             />
 
-            <NavbarItem icon={<User size={20} />} text="Pessoa" route="/person" />
+            <NavbarItem icon={<User size={20} />} text="Pessoa" path="/person" />
           </Navbar>
           <div className="w-full overflow-y-auto max-h-screen">
             <div className="container pt-4">{children}</div>
