@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useContext, useState } from 'react';
 import { NavbarContext } from './Navbar';
@@ -12,7 +13,6 @@ interface NavbarCollapsibleProps {
 
 function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
   const { expanded } = useContext(NavbarContext);
-
   const [subMenuOpen, setSubMenuOpen] = useState(false);
 
   const toggleSubMenu = () => {
@@ -23,6 +23,7 @@ function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
 
   const pathname = usePathname();
   const isActive = true;
+
   return (
     <div onClick={toggleSubMenu}>
       <li
@@ -48,18 +49,32 @@ function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
             {text}
           </div>
         )}
+        {expanded && (
+          <span className={`ml-auto transition-transform duration-300 ${subMenuOpen ? 'rotate-90' : ''}`}>
+            <ChevronRight />
+          </span>
+        )}
       </li>
-      {subMenuOpen && expanded && (
-        <div
-          className={`
-          relative flex items-center py-2 px-3 my-1
+
+      {expanded && options && (
+        <ul
+          className={`overflow-hidden transition-[max-height] duration-300 ${subMenuOpen ? 'max-h-80' : 'max-h-0'}
+    `}
+        >
+          {options.map((option, index) => (
+            <li
+              key={index}
+              className={`
+          relative flex items-center py-2 pl-12 px-3 my-1
           font-medium rounded-md cursor-pointer
           transition-colors group
           hover:bg-surface-hover text-surface-foreground
         `}
-        >
-          teste
-        </div>
+            >
+              {option}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

@@ -33,7 +33,7 @@ function NavbarItem({ icon, text, route }: NavbarItemProps) {
             className={`
               absolute left-full rounded-md px-2 py-1 ml-6
               ${isActive ? 'bg-accent text-accent-foreground' : 'bg-surface text-surface-foreground'} text-sm
-              invisible opacity-80 -translate-x-3 transition-all
+              invisible opacity-80 translate-x-3 transition-all
               group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
           `}
           >
