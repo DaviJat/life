@@ -18,12 +18,15 @@ interface NavbarCollapsibleProps {
 }
 
 function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibleProps) {
-  const { expanded } = useContext(NavbarContext);
+  const { expanded, setExpanded } = useContext(NavbarContext);
   const [subMenuOpen, setSubMenuOpen] = useState(false);
 
   const toggleSubMenu = () => {
     if (expanded) {
       setSubMenuOpen(!subMenuOpen);
+    } else {
+      setExpanded(true);
+      setSubMenuOpen(true);
     }
   };
 
@@ -42,6 +45,11 @@ function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibl
               ? 'bg-accent text-accent-foreground'
               : 'hover:bg-surface-hover text-surface-foreground'
           }
+          ${
+            pathname.startsWith(modulePath) && subMenuOpen == true && !expanded
+              ? 'bg-accent text-accent-foreground'
+              : 'hover:bg-surface-hover text-surface-foreground'
+          }
         `}
       >
         {icon}
@@ -50,11 +58,11 @@ function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibl
         {!expanded && (
           <div
             className={`
-              absolute left-full rounded-md px-2 py-1 ml-6
-              bg-surface text-surface-foreground text-sm
-              invisible opacity-80 -translate-x-3 transition-all
-              group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-          `}
+            absolute left-full rounded-md px-2 py-1 ml-6
+            ${pathname.startsWith(modulePath) ? 'bg-accent text-accent-foreground' : 'bg-surface text-surface-foreground'} text-sm
+            invisible opacity-80 translate-x-3 transition-all
+            group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+        `}
           >
             {text}
           </div>

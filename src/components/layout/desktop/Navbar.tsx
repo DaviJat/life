@@ -7,7 +7,7 @@ interface NavbarProps {
   children: ReactNode;
 }
 
-export const NavbarContext = createContext({ expanded: true });
+export const NavbarContext = createContext({ expanded: true, setExpanded: (expanded: boolean) => {} });
 
 const Navbar = ({ children }: NavbarProps) => {
   const [expanded, setExpanded] = useState(true);
@@ -28,7 +28,7 @@ const Navbar = ({ children }: NavbarProps) => {
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
-        <NavbarContext.Provider value={{ expanded }}>
+        <NavbarContext.Provider value={{ expanded, setExpanded }}>
           <ul className="flex-1 px-3">{children}</ul>
         </NavbarContext.Provider>
         <div className="border-t flex p-3 text-surface-foreground justify-center">
