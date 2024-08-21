@@ -50,7 +50,7 @@ function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
           </div>
         )}
         {expanded && (
-          <span className={`ml-auto transition-transform duration-300 ${subMenuOpen ? 'rotate-90' : ''}`}>
+          <span className={`ml-auto transition-transform duration-500 ease-in-out ${subMenuOpen ? 'rotate-90' : ''}`}>
             <ChevronRight />
           </span>
         )}
@@ -58,7 +58,7 @@ function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
 
       {expanded && options && (
         <ul
-          className={`overflow-hidden transition-[max-height] duration-300 ${subMenuOpen ? 'max-h-80' : 'max-h-0'}
+          className={`overflow-hidden transition-[max-height] duration-500 ease-in-out ${subMenuOpen ? 'max-h-80' : 'max-h-0'}
     `}
         >
           {options.map((option, index) => (
