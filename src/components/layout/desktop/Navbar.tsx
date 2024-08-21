@@ -36,7 +36,7 @@ const Navbar = ({ children }: NavbarProps) => {
           <div
             className={`
               flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? 'w-48 ml-3' : 'w-0'}
+              overflow-hidden ${expanded ? 'w-48 ml-3' : 'w-0'}
           `}
           >
             <div className="leading-4">

@@ -88,7 +88,7 @@ function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibl
           ${pathname === option.path && subMenuOpen == true ? 'bg-accent text-accent-foreground' : 'bg-surface text-surface-foreground'}
           font-medium rounded-md cursor-pointer
           transition-colors group
-          hover:bg-surface-hover text-surface-foreground
+          hover:bg-surface-hover text-surface-foreground whitespace-nowrap
         `}
               >
                 {option.label}
