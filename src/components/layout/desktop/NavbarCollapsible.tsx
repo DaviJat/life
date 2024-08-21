@@ -16,7 +16,9 @@ function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
   const [subMenuOpen, setSubMenuOpen] = useState(false);
 
   const toggleSubMenu = () => {
-    setSubMenuOpen(!subMenuOpen);
+    if (expanded) {
+      setSubMenuOpen(!subMenuOpen);
+    }
   };
 
   const pathname = usePathname();
@@ -47,7 +49,7 @@ function NavbarCollapsible({ icon, text, options }: NavbarCollapsibleProps) {
           </div>
         )}
       </li>
-      {subMenuOpen && (
+      {subMenuOpen && expanded && (
         <div
           className={`
           relative flex items-center py-2 px-3 my-1
