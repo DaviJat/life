@@ -77,12 +77,11 @@ function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibl
       {expanded && options && (
         <ul
           className={`overflow-hidden transition-[max-height] duration-500 ease-in-out ${subMenuOpen ? 'max-h-80' : 'max-h-0'}
-    `}
+  `}
         >
-          {options.map((option, index) => (
-            <Link href={option.path}>
+          {options.map((option) => (
+            <Link key={option.path} href={option.path}>
               <li
-                key={index}
                 className={`
           relative flex items-center py-2 pl-12 px-3 my-1
           ${pathname === option.path && subMenuOpen == true ? 'bg-accent text-accent-foreground' : 'bg-surface text-surface-foreground'}
