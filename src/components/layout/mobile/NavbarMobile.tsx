@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { ClipboardList, Home, Menu, User } from 'lucide-react';
+import { CircleDollarSign, ClipboardList, Home, Menu, User } from 'lucide-react';
+import NavbarMobileCollapsible from './NavbarMobileCollapsible';
 import NavbarMobileItem from './NavbarMobileItem';
 
 const NavbarMobile = () => {
@@ -23,6 +24,16 @@ const NavbarMobile = () => {
         </SheetHeader>
         <NavbarMobileItem icon={<Home size={20} />} text="Home" path="/home" />
         <NavbarMobileItem icon={<ClipboardList size={20} />} text="Tarefas" path="/task" />
+        <NavbarMobileCollapsible
+          icon={<CircleDollarSign size={20} />}
+          text="Financeiro"
+          options={[
+            { label: 'Entrada', path: '/finance/walletEntry' },
+            { label: 'Saída', path: '/finance/walletExit' },
+            { label: 'Contas a Pagar', path: '/finance/billToPay' },
+            { label: 'Contas a Receber', path: '/finance/billToReceive' },
+          ]}
+        />
         <NavbarMobileItem icon={<User size={20} />} text="Pessoa" path="/person" />
       </SheetContent>
     </Sheet>
