@@ -1,6 +1,7 @@
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 interface NavbarMobileCollapsibleOption {
   label: string;
@@ -14,19 +15,30 @@ interface NavbarMobileCollapsibleProps {
 }
 
 function NavbarMobileCollapsible({ icon, text, options }: NavbarMobileCollapsibleProps) {
+  const [subMenuOpen, setSubMenuOpen] = useState(false);
+  const toggleSubMenu = () => {
+    setSubMenuOpen(!subMenuOpen);
+  };
   const pathname = usePathname();
   return (
     <>
-      <div
+      <li
+        onClick={toggleSubMenu}
         className="
     relative flex items-center py-2 px-3 my-1
     font-medium rounded-md cursor-pointer
     transition-colors group hover:bg-surface-hover text-surface-foreground"
       >
-        <span>{icon}</span>
-        <div className="ml-3">{text}</div>
-      </div>
-      <div>
+        {icon}
+        <span className="ml-3">{text}</span>
+        <span className={`ml-auto transition-transform duration-500 ease-in-out ${subMenuOpen ? 'rotate-90' : ''}`}>
+          <ChevronRight />
+        </span>
+      </li>
+      <ul
+        className={`overflow-hidden transition-[max-height] 
+        duration-500 ease-in-out ${subMenuOpen ? 'max-h-80' : 'max-h-0'}`}
+      >
         {options.map((option) => (
           <Link key={option.label} href={option.path}>
             <li
@@ -43,7 +55,7 @@ function NavbarMobileCollapsible({ icon, text, options }: NavbarMobileCollapsibl
             </li>
           </Link>
         ))}
-      </div>
+      </ul>
     </>
   );
 }

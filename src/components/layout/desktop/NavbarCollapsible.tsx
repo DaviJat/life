@@ -33,7 +33,7 @@ function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibl
   const pathname = usePathname();
 
   return (
-    <div>
+    <>
       <li
         onClick={toggleSubMenu}
         className={`
@@ -96,7 +96,7 @@ function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibl
           ))}
         </ul>
       )}
-    </div>
+    </>
   );
 }
 
