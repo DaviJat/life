@@ -6,7 +6,6 @@ import { DeviceContext } from '../providers/DeviceProvider';
 import Navbar from './desktop/Navbar';
 import NavbarCollapsible from './desktop/NavbarCollapsible';
 import NavbarItem from './desktop/NavbarItem';
-import NavbarMobile from './mobile/NavbarMobile';
 import TopbarMobile from './mobile/TopbarMobile';
 
 interface LayoutProps {
@@ -22,9 +21,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <div>
           <TopbarMobile />
           <div className="h-full container mb-12">{children}</div>
-          <div className="fixed bottom-0 w-full">
-            <NavbarMobile />
-          </div>
+          <div className="fixed bottom-0 w-full"></div>
         </div>
       ) : (
         <div className="inline-flex w-full">
