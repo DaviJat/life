@@ -1,15 +1,7 @@
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { ClipboardList, Home, Menu, User } from 'lucide-react';
+import NavbarMobileItem from './NavbarMobileItem';
 
 const NavbarMobile = () => {
   return (
@@ -19,17 +11,19 @@ const NavbarMobile = () => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left">
+      <SheetContent
+        side="left"
+        aria-describedby={undefined}
+        className="bg-surface text-surface-foreground border-none px-3"
+      >
         <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
-          <SheetDescription>Make changes to your profile here. Click save when you're done.</SheetDescription>
+          <SheetTitle>
+            <img src="/images/logo-fundo-transparente.png" className="w-32" alt="" />
+          </SheetTitle>
         </SheetHeader>
-        teste
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose>
-        </SheetFooter>
+        <NavbarMobileItem icon={<Home size={20} />} text="Home" path="/home" />
+        <NavbarMobileItem icon={<ClipboardList size={20} />} text="Tarefas" path="/task" />
+        <NavbarMobileItem icon={<User size={20} />} text="Pessoa" path="/person" />
       </SheetContent>
     </Sheet>
   );
