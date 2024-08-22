@@ -1,12 +1,22 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import NavbarMobile from './NavbarMobile';
+import { useRouter } from 'next/navigation';
 
 function TopbarMobile() {
+  const router = useRouter();
+
+  // Função para voltar à rota anterior
+  const goBack = () => {
+    router.back();
+  };
+
   return (
     <div className="w-full bg-surface flex justify-between items-center mb-4 shadow-lg">
-      <NavbarMobile></NavbarMobile>
+      <Button variant="secondary" className="ml-2" onClick={goBack}>
+        Voltar
+      </Button>
       <Link href={'/home'}>
         <img className="w-28" src="/images/logo-fundo-transparente.png" alt="" />
       </Link>

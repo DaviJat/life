@@ -1,27 +1,66 @@
-'use client';
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from '@/components/ui/menubar';
+import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { CircleDollarSign, ClipboardList, User } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const NavbarMobile = () => {
+  const pathname = usePathname();
+  const firstPartOfPathname = pathname.split('/')[1];
+
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="secondary" className="ml-2">
-          <Menu />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left">
-        <SheetHeader>
-          <SheetTitle className="mt-4">Are you absolutely sure?</SheetTitle>
-          <SheetDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </SheetDescription>
-        </SheetHeader>
-      </SheetContent>
-    </Sheet>
+    <Menubar className="flex justify-evenly bg-surface text-surface-foreground rounded-none border-none p-6">
+      {/* ------- Finance ------- */}
+      <MenubarMenu>
+        <MenubarTrigger className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'finance' ? '!bg-accent' : ''}`}>
+          <CircleDollarSign />
+        </MenubarTrigger>
+        <MenubarContent>
+          <Link href={'/finance/wallet'}>
+            <MenubarItem>Carteira</MenubarItem>
+          </Link>
+          <MenubarSeparator />
+          <Link href={'/finance/walletEntry'}>
+            <MenubarItem>Entrada</MenubarItem>
+          </Link>
+          <Link href={'/finance/walletExit'}>
+            <MenubarItem>Saída</MenubarItem>
+          </Link>
+          <MenubarSeparator />
+          <Link href={'/finance'}>
+            <MenubarItem>Contas a pagar</MenubarItem>
+          </Link>
+          <Link href={'/finance'}>
+            <MenubarItem>Contas a receber</MenubarItem>
+          </Link>
+        </MenubarContent>
+      </MenubarMenu>
+
+      {/* ------- Person ------- */}
+      <MenubarMenu>
+        <Link href={'/person'}>
+          <div className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'person' ? 'bg-accent' : ''}`}>
+            <User />
+          </div>
+        </Link>
+      </MenubarMenu>
+
+      {/* ------- Task ------- */}
+      <MenubarMenu>
+        <Link href={'/task'}>
+          <div className={`px-10 py-1.5 rounded ${firstPartOfPathname === 'task' ? 'bg-accent' : ''}`}>
+            <ClipboardList />
+          </div>
+        </Link>
+      </MenubarMenu>
+    </Menubar>
   );
 };
 
