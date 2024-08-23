@@ -80,7 +80,7 @@ function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibl
   `}
         >
           {options.map((option) => (
-            <Link key={option.path} href={option.path}>
+            <Link key={option.path} href={option.path} as={option.path}>
               <li
                 className={`
           relative flex items-center py-2 pl-12 px-3 my-1
