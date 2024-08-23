@@ -12,11 +12,12 @@ interface NavbarMobileCollapsibleOption {
 interface NavbarMobileCollapsibleProps {
   icon: ReactNode;
   text: string;
+  modulePath: string;
   options?: Array<NavbarMobileCollapsibleOption>;
 }
 
-function NavbarMobileCollapsible({ icon, text, options = [] }: NavbarMobileCollapsibleProps) {
-  const { setIsOpen } = useContext(NavbarMobileContext);
+function NavbarMobileCollapsible({ icon, text, modulePath, options = [] }: NavbarMobileCollapsibleProps) {
+  const { isOpen, setIsOpen } = useContext(NavbarMobileContext);
   const [subMenuOpen, setSubMenuOpen] = useState(false);
   const toggleSubMenu = () => setSubMenuOpen(!subMenuOpen);
   const pathname = usePathname();
@@ -25,10 +26,16 @@ function NavbarMobileCollapsible({ icon, text, options = [] }: NavbarMobileColla
     <>
       <li
         onClick={toggleSubMenu}
-        className="
+        className={`
           relative flex items-center py-2 px-3 my-1
           font-medium rounded-md cursor-pointer
-          transition-colors group hover:bg-surface-hover text-surface-foreground"
+          transition-colors group hover:bg-surface-hover text-surface-foreground
+          ${
+            !subMenuOpen && pathname.startsWith(modulePath)
+              ? 'bg-accent text-accent-foreground'
+              : 'hover:bg-surface-hover text-surface-foreground'
+          }
+          `}
       >
         {icon}
         <span className="ml-3">{text}</span>

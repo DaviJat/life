@@ -41,6 +41,7 @@ const NavbarMobile = () => {
           <NavbarMobileCollapsible
             icon={<CircleDollarSign size={20} />}
             text="Financeiro"
+            modulePath="/finance"
             options={[
               { label: 'Entrada', path: '/finance/walletEntry' },
               { label: 'Saída', path: '/finance/walletExit' },
