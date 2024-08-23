@@ -7,13 +7,13 @@ interface NavbarProps {
   children: ReactNode;
 }
 
-export const NavbarContext = createContext({ expanded: true });
+export const NavbarContext = createContext({ expanded: true, setExpanded: (expanded: boolean) => {} });
 
 const Navbar = ({ children }: NavbarProps) => {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <aside className="h-screen">
+    <aside className="h-screen select-none">
       <nav className="h-full inline-flex flex-col bg-surface shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
@@ -28,7 +28,7 @@ const Navbar = ({ children }: NavbarProps) => {
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
-        <NavbarContext.Provider value={{ expanded }}>
+        <NavbarContext.Provider value={{ expanded, setExpanded }}>
           <ul className="flex-1 px-3">{children}</ul>
         </NavbarContext.Provider>
         <div className="border-t flex p-3 text-surface-foreground justify-center">
@@ -36,7 +36,7 @@ const Navbar = ({ children }: NavbarProps) => {
           <div
             className={`
               flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? 'w-48 ml-3' : 'w-0'}
+              overflow-hidden ${expanded ? 'w-48 ml-3' : 'w-0'}
           `}
           >
             <div className="leading-4">
