@@ -19,6 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import useFormattedDate from '@/lib/utils';
 import { WalletExit } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
@@ -71,9 +72,8 @@ export const columns: ColumnDef<WalletExit>[] = [
     accessorKey: 'createdAt',
     header: 'Data cadastro',
     cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'));
-      const formatted = date.toLocaleDateString();
-      return formatted;
+      const date = useFormattedDate(row.getValue('createdAt'));
+      return date;
     },
   },
   {
