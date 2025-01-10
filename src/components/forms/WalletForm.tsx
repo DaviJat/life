@@ -17,7 +17,7 @@ const FormSchema = z.object({
   description: z.string().min(1, 'Campo obrigatório').max(30, 'A descrição deve ter no máximo 30 caracteres'),
   balance: z.coerce
     .number()
-    .min(0.01, 'Campo obrigatório')
+    .min(0.0, 'Campo obrigatório')
     .max(9999999999999, 'O valor informado ultrapassou o valor máximo possível'),
   type: z.enum(['Physical', 'Virtual'], {
     required_error: 'Campo obrigatório',

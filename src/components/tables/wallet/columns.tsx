@@ -100,7 +100,6 @@ export const columns: ColumnDef<Wallet>[] = [
             // Exibe um toast de sucesso
             description: data.message,
           });
-          setOpenDialog(false);
           router.refresh();
         } else {
           // Se a resposta não for bem-sucedida
@@ -114,8 +113,8 @@ export const columns: ColumnDef<Wallet>[] = [
 
       return (
         <>
-          <Dialog open={openDialog}>
-            <DropdownMenu>
+          <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
                   <span className="sr-only">Abrir menu</span>
@@ -138,9 +137,11 @@ export const columns: ColumnDef<Wallet>[] = [
               </DialogHeader>
               <DialogFooter>
                 <div className="flex items-center justify-center">
-                  <Button onClick={async () => handleDelete(payment.id)} variant="destructive">
-                    Excluir
-                  </Button>
+                  <DialogClose asChild>
+                    <Button onClick={async () => handleDelete(payment.id)} variant="destructive">
+                      Excluir
+                    </Button>
+                  </DialogClose>
                   <DialogClose asChild>
                     <Button className="ml-2" variant="outline">
                       Cancelar
