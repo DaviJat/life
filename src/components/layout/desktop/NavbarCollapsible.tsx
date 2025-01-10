@@ -58,7 +58,7 @@ function NavbarCollapsible({ icon, text, modulePath, options }: NavbarCollapsibl
         {!expanded && (
           <div
             className={`
-            absolute left-full rounded-md px-2 py-1 ml-6
+            absolute left-full rounded-md px-2 py-1 ml-6 z-10
             ${pathname.startsWith(modulePath) ? 'bg-accent text-accent-foreground' : 'bg-surface text-surface-foreground'} text-sm
             invisible opacity-80 translate-x-3 transition-all
             group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
