@@ -75,6 +75,7 @@ export const columns: ColumnDef<BillToPay>[] = [
       const router = useRouter();
 
       const [openDialog, setOpenDialog] = useState(false);
+      const [isDeleteDialog, setIsDeleteDialog] = useState(false);
 
       // Função para lidar com a exclusão do item
       const handleDelete = async (id) => {
@@ -116,33 +117,74 @@ export const columns: ColumnDef<BillToPay>[] = [
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setIsDeleteDialog(false);
+                    setOpenDialog(true);
+                  }}
+                >
+                  Gerar pagamento
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => (window.location.href = '/finance/billToPay/' + payment.id)}>
                   Editar
                 </DropdownMenuItem>
                 <DialogTrigger asChild>
-                  <DropdownMenuItem onClick={() => setOpenDialog(true)}>Excluir</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setOpenDialog(true);
+                      setIsDeleteDialog(true);
+                    }}
+                  >
+                    Excluir
+                  </DropdownMenuItem>
                 </DialogTrigger>
               </DropdownMenuContent>
             </DropdownMenu>
             <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Excluir</DialogTitle>
-                <DialogDescription>Você tem certeza que quer excluir esse item definitivamente?</DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <div className="flex items-center justify-center">
-                  <DialogClose asChild>
-                    <Button onClick={async () => handleDelete(payment.id)} variant="destructive">
-                      Excluir
-                    </Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button className="ml-2" variant="outline">
-                      Cancelar
-                    </Button>
-                  </DialogClose>
-                </div>
-              </DialogFooter>
+              {isDeleteDialog === false && (
+                <>
+                  <DialogHeader>
+                    <DialogTitle>Gerar Pagamento</DialogTitle>
+                    <DialogDescription>Insira os detalhes para gerar o pagamento.</DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <div className="flex items-center justify-center">
+                      <DialogClose asChild>
+                        <Button onClick={() => console.log('Pagamento gerado')} variant="default">
+                          Confirmar
+                        </Button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <Button className="ml-2" variant="outline">
+                          Cancelar
+                        </Button>
+                      </DialogClose>
+                    </div>
+                  </DialogFooter>
+                </>
+              )}
+              {isDeleteDialog === true && (
+                <>
+                  <DialogHeader>
+                    <DialogTitle>Excluir</DialogTitle>
+                    <DialogDescription>Você tem certeza que quer excluir esse item definitivamente?</DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <div className="flex items-center justify-center">
+                      <DialogClose asChild>
+                        <Button onClick={async () => handleDelete(payment.id)} variant="destructive">
+                          Excluir
+                        </Button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <Button className="ml-2" variant="outline">
+                          Cancelar
+                        </Button>
+                      </DialogClose>
+                    </div>
+                  </DialogFooter>
+                </>
+              )}
             </DialogContent>
           </Dialog>
         </>
