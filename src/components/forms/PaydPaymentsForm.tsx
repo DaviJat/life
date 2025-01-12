@@ -8,7 +8,6 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import IntegerInput from '../ui/integer-input';
 import MoneyInput from '../ui/money-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { toast } from '../ui/use-toast';
@@ -24,7 +23,7 @@ const FormSchema = z.object({
 });
 
 // Componente para formulário de cadastro e edição de objetos
-function BillToPayForm() {
+function PaydPaymentsForm() {
   // Recupera o id do objeto e utilizada para identificar o tipo de formulário
   const id = useParams<{ id: string }>().id;
   // Estado para controlar o carregamento e evitar multiplos submits do formulário
@@ -118,7 +117,6 @@ function BillToPayForm() {
 
   return (
     <>
-      <h1 className="font-semibold text-2xl">{id ? 'Editar conta a pagar' : 'Cadastrar conta a pagar'} </h1>
       {/* Componente de formulário */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -142,15 +140,6 @@ function BillToPayForm() {
             label="Valor"
             name="value"
             placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
-          />
-          {/* Quantidade de parcelas */}
-          <IntegerInput
-            form={form}
-            name="amount"
-            label="Parcelas"
-            placeholder="Quantidade de parcelas"
-            value={0}
-            maxLength={2}
           />
           {/* Pessoa */}
           <FormField
@@ -187,4 +176,4 @@ function BillToPayForm() {
   );
 }
 
-export default BillToPayForm;
+export default PaydPaymentsForm;
