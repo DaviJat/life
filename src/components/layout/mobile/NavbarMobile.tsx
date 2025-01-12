@@ -43,6 +43,7 @@ const NavbarMobile = () => {
             text="Financeiro"
             modulePath="/finance"
             options={[
+              { label: 'Carteira', path: '/finance/wallet' },
               { label: 'Entrada', path: '/finance/walletEntry' },
               { label: 'Saída', path: '/finance/walletExit' },
               { label: 'Contas a Pagar', path: '/finance/billToPay' },
