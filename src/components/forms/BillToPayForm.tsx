@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import IntegerInput from '../ui/integer-input';
@@ -143,6 +144,14 @@ function BillToPayForm() {
             name="value"
             placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
           />
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+            <FormControl>
+              <Checkbox />
+            </FormControl>
+            <div className="space-y-1 leading-none">
+              <FormLabel>Use different settings for my mobile devices</FormLabel>
+            </div>
+          </FormItem>
           {/* Quantidade de parcelas */}
           <IntegerInput
             form={form}
