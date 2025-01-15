@@ -7,10 +7,9 @@ type IntegerInputProps = {
   form: UseFormReturn<any>;
   name: string;
   label: string;
-  value: string | number;
+  value: string;
   placeholder: string;
-  maxLength?: number; // Parâmetro opcional maxLength
-  minValue?: number; // Parâmetro opcional minValue
+  maxLength?: number;
 };
 
 export default function IntegerInput(props: IntegerInputProps) {
@@ -23,30 +22,16 @@ export default function IntegerInput(props: IntegerInputProps) {
 
   function handleChange(realChangeFn: Function, formattedValue: string) {
     const digits = formattedValue.replace(/\D/g, '').slice(0, props.maxLength); // Aplica o limite de caracteres
-    let realValue = Number(digits);
-
-    // Aplica o valor mínimo, se definido
-    if (props.minValue !== undefined && realValue < props.minValue) {
-      realValue = props.minValue;
-    }
-
+    const realValue = Number(digits); // Converte o valor para número
     realChangeFn(realValue);
   }
 
   useEffect(() => {
     if (props.value !== undefined) {
-      let formattedValue = String(props.value).slice(0, props.maxLength); // Formata valor inicial com limite
-      let realValue = Number(formattedValue);
-
-      // Aplica o valor mínimo, se definido
-      if (props.minValue !== undefined && realValue < props.minValue) {
-        realValue = props.minValue;
-        formattedValue = String(realValue);
-      }
-
+      const formattedValue = String(props.value).slice(0, props.maxLength); // Formata valor inicial com limite
       setValue(formattedValue);
     }
-  }, [props.form, props.value, props.maxLength, props.minValue]);
+  }, [props.form, props.value, props.maxLength]);
 
   return (
     <FormField

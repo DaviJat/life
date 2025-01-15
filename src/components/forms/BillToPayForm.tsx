@@ -22,8 +22,10 @@ const FormSchema = z.object({
     .number()
     .min(0.01, 'Campo obrigatório')
     .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
+  paymentType: z.string(),
   installmentsNumber: z.coerce.number().min(2, 'A quantidade mínima é de duas parcelas'), // Verifica se o campo é obrigatório
   personId: z.string().min(1, { message: 'Campo obrigatório' }),
+  dueDate: z.date().optional(),
 });
 
 // Componente para formulário de cadastro e edição de objetos
@@ -36,6 +38,8 @@ function BillToPayForm() {
   const [isDataLoading, setIsDataLoading] = useState(true);
   // Estado para passar o value do amount no componente MoneyInput
   const [billValue, setBillValue] = useState('');
+  // Estado para passar o value do amount no componente IntegerInput
+  const [installmentsNumberValue, setInstallmentsNumberValue] = useState('');
   // Estado para armazenar as persons recuperadas pelo getPersons
   const [persons, setPersons] = useState([]);
 
@@ -98,6 +102,9 @@ function BillToPayForm() {
         description: values.description,
         value: values.value,
         personId: Number(values.personId),
+        paymentType: values.paymentType,
+        dueDate: values.dueDate,
+        installmentsNumber: values.installmentsNumber,
       }),
     });
 
@@ -178,16 +185,16 @@ function BillToPayForm() {
               <FormItem>
                 <FormLabel>Tipo do pagamento</FormLabel>
                 <FormControl>
-                  <Tabs defaultValue="account">
+                  <Tabs defaultValue="cash" onValueChange={(value) => form.setValue('paymentType', value)}>
                     <TabsList className="flex w-full max-w-96">
-                      <TabsTrigger value="account" className="w-full">
+                      <TabsTrigger value="cash" className="w-full">
                         À vista
                       </TabsTrigger>
-                      <TabsTrigger value="password" className="w-full">
+                      <TabsTrigger value="installment" className="w-full">
                         Parcelado
                       </TabsTrigger>
                     </TabsList>
-                    <TabsContent value="account">
+                    <TabsContent value="cash">
                       {/* Data do vencimento */}
                       <FormField
                         name="dueDate"
@@ -202,7 +209,7 @@ function BillToPayForm() {
                         )}
                       />
                     </TabsContent>
-                    <TabsContent value="password">
+                    <TabsContent value="installment">
                       {/* Data do vencimento */}
                       <FormField
                         name="dueDate"
@@ -222,7 +229,7 @@ function BillToPayForm() {
                         name="installmentsNumber"
                         label="Quantidade de parcelas"
                         placeholder={!isDataLoading ? 'Número de parcelas da conta' : 'Carregando...'}
-                        value={2}
+                        value={installmentsNumberValue}
                         maxLength={2}
                       />
                     </TabsContent>
