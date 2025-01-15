@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
+import DatePicker from '../ui/date-picker';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import IntegerInput from '../ui/integer-input';
@@ -186,14 +187,41 @@ function BillToPayForm() {
                         Parcelado
                       </TabsTrigger>
                     </TabsList>
-                    <TabsContent value="account"></TabsContent>
+                    <TabsContent value="account">
+                      {/* Data do vencimento */}
+                      <FormField
+                        name="dueDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data de vencimento</FormLabel>
+                            <FormControl>
+                              <DatePicker field={field} placeholder={!isDataLoading ? 'dd/mm/aaaa' : 'Carregando...'} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
                     <TabsContent value="password">
+                      {/* Data do vencimento */}
+                      <FormField
+                        name="dueDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data de vencimento (Primeira parcela)</FormLabel>
+                            <FormControl>
+                              <DatePicker field={field} placeholder={!isDataLoading ? 'dd/mm/aaaa' : 'Carregando...'} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                       {/* Quantidade de parcelas */}
                       <IntegerInput
                         form={form}
                         name="installmentsNumber"
                         label="Quantidade de parcelas"
-                        placeholder="Número de parcelas da conta"
+                        placeholder={!isDataLoading ? 'Número de parcelas da conta' : 'Carregando...'}
                         value={2}
                         maxLength={2}
                       />
