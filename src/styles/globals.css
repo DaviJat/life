@@ -33,7 +33,7 @@
     --secondary-foreground: #f8fafc;
 
     /* Muted backgrounds such as <TabsList />, <Skeleton /> and <Switch /> */
-    --muted: #f1f5f9;
+    --muted: #e4eaf0;
     --muted-foreground: #64748b;
 
     /* Background color for <Card /> */

@@ -6,18 +6,22 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import IntegerInput from '../ui/integer-input';
 import MoneyInput from '../ui/money-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { toast } from '../ui/use-toast';
 
 // Esquema para validação de formulário usando zod
 const FormSchema = z.object({
   description: z.string().min(1, 'Campo obrigatório').max(60, 'A descrição deve ter no máximo 60 caracteres'),
   value: z.coerce
+    .number()
+    .min(0.01, 'Campo obrigatório')
+    .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
+  installmentsNumber: z.coerce
     .number()
     .min(0.01, 'Campo obrigatório')
     .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
@@ -144,23 +148,6 @@ function BillToPayForm() {
             name="value"
             placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
           />
-          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-            <FormControl>
-              <Checkbox />
-            </FormControl>
-            <div className="space-y-1 leading-none">
-              <FormLabel>Use different settings for my mobile devices</FormLabel>
-            </div>
-          </FormItem>
-          {/* Quantidade de parcelas */}
-          <IntegerInput
-            form={form}
-            name="amount"
-            label="Parcelas"
-            placeholder="Quantidade de parcelas"
-            value={0}
-            maxLength={2}
-          />
           {/* Pessoa */}
           <FormField
             control={form.control}
@@ -182,6 +169,40 @@ function BillToPayForm() {
                     ))}
                   </SelectContent>
                 </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Tipo de pagamento */}
+          <FormField
+            name="paymentType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tipo do pagamento</FormLabel>
+                <FormControl>
+                  <Tabs defaultValue="account">
+                    <TabsList className="flex w-full max-w-96">
+                      <TabsTrigger value="account" className="w-full">
+                        À vista
+                      </TabsTrigger>
+                      <TabsTrigger value="password" className="w-full">
+                        Parcelado
+                      </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="account"></TabsContent>
+                    <TabsContent value="password">
+                      {/* Quantidade de parcelas */}
+                      <IntegerInput
+                        form={form}
+                        name="installmentsNumber"
+                        label="Quantidade de parcelas"
+                        placeholder="Número de parcelas da conta"
+                        value={2}
+                        maxLength={2}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

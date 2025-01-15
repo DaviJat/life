@@ -12,6 +12,12 @@ enum WalletType {
   Virtual
 }
 
+enum PaymentType {
+  Cash
+  Installment
+}
+
+
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
@@ -103,28 +109,38 @@ model WalletExit {
   walletId      Int
   userId        Int
   user          User           @relation(fields: [userId], references: [id])
+  billToPay     BillToPay?     @relation(fields: [billToPayId], references: [id])
+  billToPayId   Int?
+  installment   Installment?   @relation(fields: [installmentId], references: [id])
+  installmentId Int?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
-  paidPayment   PaidPayments   @relation(fields: [paidPaymentId], references: [id])
-  paidPaymentId Int
 }
 
-model PaidPayments {
+model Installment {
   id           Int            @id @default(autoincrement())
+  dueDate      DateTime
+  value        Float
+  isPaid       Boolean        @default(false)
   billToPay    BillToPay      @relation(fields: [billToPayId], references: [id])
   billToPayId  Int
   WalletExits  WalletExit[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model BillToPay {
   id           Int            @id @default(autoincrement())
   description  String
   value        Float
+  isPaid       Boolean        @default(false)
+  paymentType  PaymentType
   person       Person         @relation(fields: [personId], references: [id])
   personId     Int
   userId       Int
   user         User           @relation(fields: [userId], references: [id])
+  installments Installment[]
+  walletExits  WalletExit[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  PaidPayments PaidPayments[]
 }
