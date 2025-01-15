@@ -21,10 +21,7 @@ const FormSchema = z.object({
     .number()
     .min(0.01, 'Campo obrigatório')
     .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
-  installmentsNumber: z.coerce
-    .number()
-    .min(0.01, 'Campo obrigatório')
-    .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
+  installmentsNumber: z.coerce.number().min(2, 'A quantidade mínima é de duas parcelas'), // Verifica se o campo é obrigatório
   personId: z.string().min(1, { message: 'Campo obrigatório' }),
 });
 
