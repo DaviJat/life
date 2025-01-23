@@ -15,17 +15,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { toast } from '../ui/use-toast';
 
-// Esquema para validação de formulário usando zod
 const FormSchema = z.object({
   description: z.string().min(1, 'Campo obrigatório').max(60, 'A descrição deve ter no máximo 60 caracteres'),
   value: z.coerce
     .number()
     .min(0.01, 'Campo obrigatório')
     .max(9999999999999, 'O valor informado ultrapassou o saldo máximo possível'),
-  paymentType: z.string(),
-  installmentsNumber: z.coerce.number().min(2, 'A quantidade mínima é de duas parcelas'), // Verifica se o campo é obrigatório
+  paymentType: z.string().optional(),
+  installmentsNumber: z.coerce.number().optional(),
   personId: z.string().min(1, { message: 'Campo obrigatório' }),
-  dueDate: z.date().optional(),
+  dueDate: z
+    .date({
+      invalid_type_error: 'O valor deve ser uma data válida',
+    })
+    .optional(),
 });
 
 // Componente para formulário de cadastro e edição de objetos
@@ -194,35 +197,25 @@ function BillToPayForm() {
                         Parcelado
                       </TabsTrigger>
                     </TabsList>
-                    <TabsContent value="cash">
-                      {/* Data do vencimento */}
-                      <FormField
-                        name="dueDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Data de vencimento</FormLabel>
-                            <FormControl>
-                              <DatePicker field={field} placeholder={!isDataLoading ? 'dd/mm/aaaa' : 'Carregando...'} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </TabsContent>
+                    {/* Data do vencimento */}
+                    <FormField
+                      name="dueDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            {form.watch('paymentType') === 'installment'
+                              ? 'Data de vencimento (Primeira parcela)'
+                              : 'Data de vencimento'}
+                          </FormLabel>
+                          <FormControl>
+                            <DatePicker field={field} placeholder={!isDataLoading ? 'dd/mm/aaaa' : 'Carregando...'} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <TabsContent value="cash"></TabsContent>
                     <TabsContent value="installment">
-                      {/* Data do vencimento */}
-                      <FormField
-                        name="dueDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Data de vencimento (Primeira parcela)</FormLabel>
-                            <FormControl>
-                              <DatePicker field={field} placeholder={!isDataLoading ? 'dd/mm/aaaa' : 'Carregando...'} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                       {/* Quantidade de parcelas */}
                       <IntegerInput
                         form={form}

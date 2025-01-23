@@ -49,6 +49,12 @@ const DatePicker = ({ field, placeholder, value }: Props) => {
     }
 
     setStringDate(formatted.slice(0, 10)); // Limita ao formato dd/MM/yyyy
+
+    // Atualiza o valor no Zod
+    const parsedDate = parse(formatted.slice(0, 10), 'dd/MM/yyyy', new Date());
+    if (isValid(parsedDate) && !isDateDisabled(parsedDate)) {
+      field.onChange(parsedDate); // Atualiza o valor no formulário
+    }
   };
 
   const handleBlur = () => {
@@ -64,7 +70,6 @@ const DatePicker = ({ field, placeholder, value }: Props) => {
       field.onChange(parsedDate);
       setStringDate(format(parsedDate, 'dd/MM/yyyy'));
     } else {
-      setStringDate('');
       field.onChange(null);
     }
   };

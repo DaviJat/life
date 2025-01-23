@@ -66,6 +66,8 @@ export async function POST(request: NextRequest) {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
 
+    console.log(body);
+
     // Obtém o parâmetro 'userId' da sessão do usuário
     const session = await getServerSession(authOptions);
     const userId = session.user.id
