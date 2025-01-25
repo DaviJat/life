@@ -7,13 +7,13 @@ import { getServerSession } from 'next-auth';
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const billToPaySchema = z.object({
-  description: z.string().min(1, 'A descrição é obrigatória e deve ter no mínimo 1 caractere').max(60, 'A descrição deve ter no máximo 60 caracteres'),
-  value: z.number().max(9999999999999, 'O valor máximo permitido é 9999999999999'),
-  personId: z.number().int('O ID da pessoa deve ser um número inteiro').optional().nullable(),
-  dueDate: z.string().optional().nullable(),
-  paymentType: z.enum(['Cash', 'Installment']).optional().nullable(),
-  isPaid: z.boolean().optional(),
-  installmentsNumber: z.number().int().optional().refine((n) => n >= 0, 'O número de parcelas deve ser maior ou igual a 0').nullable()
+  description: z.string().min(1).max(60),
+  value: z.number().max(1000000).optional().default(0),
+  personId: z.number().int().max(1000000).optional().default(null),
+  paymentType: z.enum(['Cash', 'Installment']).optional().default('Cash'),
+  dueDate: z.date().optional().default(null),
+  installmentsNumber: z.number().int().optional().default(1),
+  isPaid: z.boolean().optional().default(false)
 });
 
 // Função assíncrona para lidar com requisições GET.
@@ -72,16 +72,10 @@ export async function POST(request: NextRequest) {
 
     // Obtém o parâmetro 'userId' da sessão do usuário
     const session = await getServerSession(authOptions);
-    const userId = session.user.id;
-
-    console.log('teste')
-    console.log(userId)
-    console.log(body);
+    const userId = parseInt(session.user.id);
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, value, personId, dueDate, paymentType, isPaid, installmentsNumber } = billToPaySchema.parse(body);
-
-    console.log(body);
+    const { description, value, personId, paymentType, dueDate, installmentsNumber, isPaid } = billToPaySchema.parse(body);
 
     // Cria um novo registro de conta a pagar no banco de dados com os dados recebidos.
     const newBillToPay = await db.billToPay.create({
@@ -89,12 +83,33 @@ export async function POST(request: NextRequest) {
         description,
         value,
         personId,
-        dueDate: dueDate ? new Date(dueDate) : null,
         paymentType,
-        isPaid: Boolean(isPaid),
-        userId: parseInt(userId)
+        dueDate,
+        isPaid,
+        userId
       }
     });
+
+    const billToPayId = newBillToPay.id;
+
+    // Se o tipo de pagamento for "Installment" (parcelado), cria as parcelas.
+    if (paymentType === "Installment") {
+      const installmentValue = parseFloat(Math.ceil((value / installmentsNumber)).toFixed(2));
+
+      for (let i = 0; i < installmentsNumber; i++) {
+        const installmentDueDate = new Date(dueDate);
+        installmentDueDate.setMonth(installmentDueDate.getMonth() + i);
+
+        await db.installment.create({
+          data: {
+            billToPayId,
+            value: installmentValue,
+            dueDate: installmentDueDate,
+            isPaid
+          }
+        });
+      }
+    }
 
     // Retorna uma resposta de sucesso com o novo registro criado.
     return NextResponse.json(

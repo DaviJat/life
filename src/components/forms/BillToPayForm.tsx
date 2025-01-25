@@ -31,7 +31,7 @@ const FormSchema = z.object({
     .optional()
     .refine((n) => n >= 0, 'O número de parcelas deve ser maior ou igual a 0'),
   personId: z.string().nullable().optional(),
-  dueDate: z.string().nullable().optional(),
+  dueDate: z.date().nullable().optional(),
   isPaid: z.boolean().optional(),
 });
 
