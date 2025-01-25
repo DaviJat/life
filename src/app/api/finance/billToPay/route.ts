@@ -7,9 +7,13 @@ import { getServerSession } from 'next-auth';
 
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const billToPaySchema = z.object({
-  description: z.string().min(1).max(30),
-  value: z.number().max(9999999999999),
-  personId: z.number()
+  description: z.string().min(1, 'A descrição é obrigatória e deve ter no mínimo 1 caractere').max(60, 'A descrição deve ter no máximo 60 caracteres'),
+  value: z.number().max(9999999999999, 'O valor máximo permitido é 9999999999999'),
+  personId: z.number().int('O ID da pessoa deve ser um número inteiro').optional().nullable(),
+  dueDate: z.string().optional().nullable(),
+  paymentType: z.enum(['Cash', 'Installment']).optional().nullable(),
+  isPaid: z.boolean().optional(),
+  installmentsNumber: z.number().int().optional().refine((n) => n >= 0, 'O número de parcelas deve ser maior ou igual a 0').nullable()
 });
 
 // Função assíncrona para lidar com requisições GET.
@@ -66,14 +70,18 @@ export async function POST(request: NextRequest) {
     // Obtém o corpo da requisição POST.
     const body = await request.json();
 
-    console.log(body);
-
     // Obtém o parâmetro 'userId' da sessão do usuário
     const session = await getServerSession(authOptions);
-    const userId = session.user.id
+    const userId = session.user.id;
+
+    console.log('teste')
+    console.log(userId)
+    console.log(body);
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, value, personId } = billToPaySchema.parse(body);
+    const { description, value, personId, dueDate, paymentType, isPaid, installmentsNumber } = billToPaySchema.parse(body);
+
+    console.log(body);
 
     // Cria um novo registro de conta a pagar no banco de dados com os dados recebidos.
     const newBillToPay = await db.billToPay.create({
@@ -81,6 +89,9 @@ export async function POST(request: NextRequest) {
         description,
         value,
         personId,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        paymentType,
+        isPaid: Boolean(isPaid),
         userId: parseInt(userId)
       }
     });
@@ -98,6 +109,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: error }, { status: 500 });
   }
 }
+
 
 // Função assíncrona para lidar com requisições PUT.
 export async function PUT(request: NextRequest) {

@@ -21,7 +21,8 @@ const DatePicker = ({ field, placeholder, value }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isDateDisabled = (date: Date) => {
-    return date > new Date() || date < new Date('1900-01-01');
+    // return date > new Date() || date < new Date('1900-01-01');
+    return date < new Date('1900-01-01') || date > new Date('2100-12-31');
   };
 
   const handleOnSelect: SelectSingleEventHandler = (date) => {

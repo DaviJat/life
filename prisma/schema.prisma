@@ -132,11 +132,11 @@ model Installment {
 model BillToPay {
   id           Int            @id @default(autoincrement())
   description  String
-  value        Float
-  dueDate      DateTime
-  paymentType  PaymentType
-  personId     Int
-  person       Person         @relation(fields: [personId], references: [id])
+  value        Float? 
+  dueDate      DateTime?
+  paymentType  PaymentType?
+  personId     Int? 
+  person       Person?         @relation(fields: [personId], references: [id])
   isPaid       Boolean        @default(false)
   userId       Int
   user         User           @relation(fields: [userId], references: [id])
