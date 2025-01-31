@@ -21,12 +21,14 @@ import { toast } from '../ui/use-toast';
 
 // Schema de validação utilizando Zod
 const FormSchema = z.object({
-  description: z.string().min(1).max(60), // Descrição da conta
-  value: z.number().max(1000000).optional(), // Valor máximo de 1.000.000
+  description: z
+    .string({ required_error: 'A descrição é obrigatória.' })
+    .max(60, 'A descrição deve ter no máximo 60 caracteres.'), // Descrição da conta
+  value: z.number().max(9999999.99, 'Valor máximo de 9.999.999,99').optional(), // Valor máximo de 9.999.999,99
   personId: z.string().max(5).optional(), // Identificação da pessoa
   paymentType: z.enum(['Cash', 'Installment']).optional(), // Tipo de pagamento
-  dueDate: z.date().optional(), // Data de vencimento
-  installmentsNumber: z.number().int().optional(), // Número de parcelas
+  dueDate: z.date({ invalid_type_error: 'O valor deve ser uma data válida.' }).optional(), // Data de vencimento
+  installmentsNumber: z.number().int().max(99, 'O número máximo de parcelas é 99.').optional(), // Número máximo de 99 parcelas
   isPaid: z.boolean().optional(), // Status de pagamento
 });
 
@@ -47,86 +49,75 @@ function BillToPayForm() {
     resolver: zodResolver(FormSchema),
   });
 
-  // Função para buscar a lista de pessoas
-  const fetchPersons = async () => {
-    try {
-      const response = await fetch('/api/person');
-      const data = await response.json();
-      setPersons(data);
-    } catch (error) {
-      console.error('Erro ao buscar pessoas:', error);
-    }
+  // Função para recuperar persons para popular o select
+  const getPersons = async () => {
+    const response = await fetch(`/api/person`);
+    const data = await response.json();
+    setPersons(data);
   };
 
-  // Função para buscar dados da conta a pagar
-  const fetchBillToPayData = async () => {
-    try {
-      const response = await fetch(`/api/finance/billToPay/?id=${id}`);
-      const data = await response.json();
-
-      // Atualiza valores e configura o formulário
-      setBillValue(data.value?.toString() || '');
-      setInstallmentsNumberValue(data.installmentsNumber?.toString() || '');
-      form.reset({
-        ...data,
-        dueDate: data.dueDate ? new Date(data.dueDate).toISOString().split('T')[0] : null,
-        personId: data.personId || null,
-      });
-    } catch (error) {
-      console.error('Erro ao buscar dados:', error);
-    } finally {
-      setIsDataLoading(false);
-    }
+  // Função para recuperar os dados para a edição do objeto
+  const getDataById = async () => {
+    const response = await fetch(`/api/finance/billToPay/?id=${id}`);
+    const data = await response.json();
+    setBillValue(data.value.toString());
+    setInstallmentsNumberValue(data.installmentsNumber?.toString() || '');
+    setIsDataLoading(false); // Desativa o estado de carregamento de dados
+    form.reset(data); // Atualiza os dados com do formulário com os dados recuperados
   };
 
-  // Efeito para carregar dados iniciais
   useEffect(() => {
-    fetchPersons();
+    // Recupera os persons da API
+    getPersons();
     if (id) {
-      fetchBillToPayData();
+      // Se estiver na edição recupera os dados do objeto da API
+      getDataById();
     } else {
+      // Se estiver no cadastro desativa o estado de carregamento de dados
       setIsDataLoading(false);
     }
-  }, [id]);
+  }, [form, id]);
 
   // Função para lidar com o envio do formulário
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    setIsFormSubmitting(true);
+    setIsFormSubmitting(true); // Ativa o estado de envio de formulário
+
+    // Configurações para o fetch API, com base no tipo de formuário
     const url = id ? `/api/finance/billToPay/?id=${id}` : '/api/finance/billToPay';
     const method = id ? 'PUT' : 'POST';
 
-    // Prepara os dados do payload
-    const payload = {
-      ...values,
-      value: values.value || null,
-      personId: values.personId || null,
-      paymentType: values.paymentType || null,
-      dueDate: values.dueDate || null,
-      installmentsNumber: values.installmentsNumber || null,
-      isPaid: values.isPaid || null,
-    };
+    // Requisição para enviar os dados do formulário
+    const response = await fetch(url, {
+      method,
+      cache: 'no-store',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        description: values.description,
+        value: values.value || null,
+        personId: values.personId || null,
+        paymentType: values.paymentType || null,
+        dueDate: values.dueDate || null,
+        installmentsNumber: values.installmentsNumber || null,
+        isPaid: values.isPaid || null,
+      }),
+    });
 
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+    const data = await response.json();
+
+    if (response.ok) {
+      // Se a resposta for bem-sucedida, redireciona para a listagem e mostra mensagem de sucesso
+      toast({
+        description: data.message,
       });
-
-      const data = await response.json();
-
-      // Exibe mensagem de sucesso ou erro
-      if (response.ok) {
-        toast({ description: data.message });
-        router.push('/finance/billToPay');
-      } else {
-        toast({ description: data.message, variant: 'destructive' });
-      }
-    } catch (error) {
-      toast({ description: 'Erro ao enviar formulário.', variant: 'destructive' });
-      console.error('Erro ao enviar formulário:', error);
-    } finally {
-      setIsFormSubmitting(false);
+      router.push('/finance/billToPay');
+    } else {
+      // Se a resposta não for bem-sucedida, mostra mensagem de erro
+      toast({
+        description: data.message,
+        variant: 'destructive',
+      });
     }
   };
 
@@ -143,7 +134,11 @@ function BillToPayForm() {
               <FormItem>
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Input placeholder={!isDataLoading ? 'Descrição da conta' : 'Carregando...'} {...field} />
+                  <Input
+                    maxLength={60}
+                    placeholder={!isDataLoading ? 'Descrição da conta' : 'Carregando...'}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -154,6 +149,7 @@ function BillToPayForm() {
             form={form}
             value={billValue}
             label="Valor"
+            maxLength={9}
             name="value"
             placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
           />
@@ -223,7 +219,7 @@ function BillToPayForm() {
                         label="Quantidade de parcelas"
                         placeholder={!isDataLoading ? 'Número de parcelas da conta' : 'Carregando...'}
                         value={installmentsNumberValue}
-                        maxLength={2}
+                        maxLength={3}
                       />
                     </TabsContent>
                   </Tabs>
@@ -246,7 +242,7 @@ function BillToPayForm() {
           />
           {/* Botão de envio */}
           <Button className="w-full mt-6" type="submit" disabled={isFormSubmitting}>
-            {isFormSubmitting ? 'Salvando...' : id ? 'Salvar' : 'Cadastrar'}
+            {id ? (isFormSubmitting ? 'Salvando...' : 'Salvar') : 'Cadastrar'}
           </Button>
         </form>
       </Form>

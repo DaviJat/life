@@ -8,11 +8,11 @@ import { getServerSession } from 'next-auth';
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const billToPaySchema = z.object({
   description: z.string().min(1).max(60),
-  value: z.number().max(1000000).nullable(),
-  personId: z.string().max(1000000).nullable(),
+  value: z.number().max(9999999.99).nullable(),
+  personId: z.string().max(5).nullable(),
   paymentType: z.enum(['Cash', 'Installment']).nullable(),
   dueDate: z.string().nullable(),
-  installmentsNumber: z.number().int().nullable(),
+  installmentsNumber: z.number().int().max(99).nullable(),
   isPaid: z.boolean().nullable()
 });
 
@@ -81,7 +81,6 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
-    console.log(error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
