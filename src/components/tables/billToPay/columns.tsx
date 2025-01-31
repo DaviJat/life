@@ -68,6 +68,13 @@ export const columns: ColumnDef<BillToPay>[] = [
     header: 'Pessoa',
   },
   {
+    accessorKey: 'isPaid',
+    header: 'Situação',
+    cell: ({ row }) => {
+      return row.getValue('isPaid') ? 'Paga' : 'Pendente';
+    },
+  },
+  {
     id: 'actions',
     cell: ({ row }) => {
       const payment = row.original;
