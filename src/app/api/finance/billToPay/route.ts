@@ -8,13 +8,83 @@ import { getServerSession } from 'next-auth';
 // Define um schema utilizando a biblioteca Zod para validar os dados recebidos nas requisições.
 const billToPaySchema = z.object({
   description: z.string().min(1).max(60),
-  value: z.number().max(1000000).optional().default(0),
-  personId: z.number().int().max(1000000).optional().default(null),
-  paymentType: z.enum(['Cash', 'Installment']).optional().default('Cash'),
-  dueDate: z.date().optional().default(null),
-  installmentsNumber: z.number().int().optional().default(1),
-  isPaid: z.boolean().optional().default(false)
+  value: z.number().max(1000000).nullable(),
+  personId: z.string().max(1000000).nullable(),
+  paymentType: z.enum(['Cash', 'Installment']).nullable(),
+  dueDate: z.string().nullable(),
+  installmentsNumber: z.number().int().nullable(),
+  isPaid: z.boolean().nullable()
 });
+
+// Função assíncrona para lidar com requisições POST.
+export async function POST(request: NextRequest) {
+  try {
+    // Obtém o corpo da requisição POST.
+    const body = await request.json();
+
+    // Obtém o parâmetro 'userId' da sessão do usuário
+    const session = await getServerSession(authOptions);
+    const userId = parseInt(session.user.id);
+
+    // Valida o corpo da requisição com o schema definido anteriormente.
+    const { description, value, personId, paymentType, dueDate, installmentsNumber, isPaid } = billToPaySchema.parse(body);
+
+    // Define o número de parcelas como 1 se for null ou undefined
+    const totalInstallments = installmentsNumber ?? 1;
+
+    // Cria um novo registro de conta a pagar no banco de dados com os dados recebidos.
+    const newBillToPay = await db.billToPay.create({
+      data: {
+        description,
+        value: value !== null ? value : 0, // Valor padrão: 0
+        personId: personId !== null ? parseInt(personId) : null, // Valor padrão: null
+        paymentType: paymentType !== null ? paymentType : 'Cash', // Valor padrão: 'Cash'
+        dueDate: dueDate !== null ? dueDate : null, // Valor padrão: null
+        isPaid: isPaid !== null ? isPaid : false, // Valor padrão: false
+        userId,
+      }
+    });
+
+    const billToPayId = newBillToPay.id;
+
+    // Se o tipo de pagamento for "Installment" (parcelado), cria as parcelas.
+    if (paymentType === "Installment") {
+      const installmentValue = parseFloat((value / totalInstallments).toFixed(2));
+
+      for (let i = 0; i < totalInstallments; i++) {
+        let installmentDueDate = null;
+
+        // Define a data de vencimento da parcela, se `dueDate` não for nulo
+        if (dueDate) {
+          installmentDueDate = new Date(dueDate);
+          installmentDueDate.setMonth(installmentDueDate.getMonth() + i);
+        }
+
+        await db.installment.create({
+          data: {
+            billToPay: { connect: { id: billToPayId } },
+            value: installmentValue,
+            dueDate: installmentDueDate,
+            isPaid: isPaid !== null ? isPaid : false,
+          }
+        });
+      }
+    }
+
+    // Retorna uma resposta de sucesso com o novo registro criado.
+    return NextResponse.json(
+      {
+        billToPay: newBillToPay,
+        message: 'Conta a pagar cadastrada com sucesso'
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
+    console.log(error);
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
+}
 
 // Função assíncrona para lidar com requisições GET.
 export async function GET(request: NextRequest) {
@@ -64,68 +134,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Função assíncrona para lidar com requisições POST.
-export async function POST(request: NextRequest) {
-  try {
-    // Obtém o corpo da requisição POST.
-    const body = await request.json();
-
-    // Obtém o parâmetro 'userId' da sessão do usuário
-    const session = await getServerSession(authOptions);
-    const userId = parseInt(session.user.id);
-
-    // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, value, personId, paymentType, dueDate, installmentsNumber, isPaid } = billToPaySchema.parse(body);
-
-    // Cria um novo registro de conta a pagar no banco de dados com os dados recebidos.
-    const newBillToPay = await db.billToPay.create({
-      data: {
-        description,
-        value,
-        personId,
-        paymentType,
-        dueDate,
-        isPaid,
-        userId
-      }
-    });
-
-    const billToPayId = newBillToPay.id;
-
-    // Se o tipo de pagamento for "Installment" (parcelado), cria as parcelas.
-    if (paymentType === "Installment") {
-      const installmentValue = parseFloat(Math.ceil((value / installmentsNumber)).toFixed(2));
-
-      for (let i = 0; i < installmentsNumber; i++) {
-        const installmentDueDate = new Date(dueDate);
-        installmentDueDate.setMonth(installmentDueDate.getMonth() + i);
-
-        await db.installment.create({
-          data: {
-            billToPayId,
-            value: installmentValue,
-            dueDate: installmentDueDate,
-            isPaid
-          }
-        });
-      }
-    }
-
-    // Retorna uma resposta de sucesso com o novo registro criado.
-    return NextResponse.json(
-      {
-        billToPay: newBillToPay,
-        message: 'Conta a pagar cadastrada com sucesso'
-      },
-      { status: 201 }
-    );
-  } catch (error) {
-    // Retorna uma resposta de erro caso ocorra uma exceção durante o processamento da requisição.
-    return NextResponse.json({ message: error }, { status: 500 });
-  }
-}
-
-
 // Função assíncrona para lidar com requisições PUT.
 export async function PUT(request: NextRequest) {
   try {
@@ -151,7 +159,7 @@ export async function PUT(request: NextRequest) {
       data: {
         description,
         value,
-        personId,
+        personId: parseInt(personId),
       },
     });
 

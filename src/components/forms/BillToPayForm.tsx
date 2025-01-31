@@ -1,10 +1,13 @@
 'use client';
 
+// Importações de dependências externas
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+// Componentes e utilitários da UI
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import DatePicker from '../ui/date-picker';
@@ -16,47 +19,32 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { toast } from '../ui/use-toast';
 
-// Schema de validação com Zod
+// Schema de validação utilizando Zod
 const FormSchema = z.object({
-  description: z.string().min(1, 'Campo obrigatório').max(60, 'A descrição deve ter no máximo 60 caracteres'),
-  value: z
-    .number()
-    .nonnegative('O valor deve ser maior ou igual a 0')
-    .max(9999999999999, 'O valor informado ultrapassou o saldo máximo permitido'),
-  paymentType: z.enum(['Cash', 'Installment']).nullable().optional(),
-  installmentsNumber: z
-    .number()
-    .int()
-    .nullable()
-    .optional()
-    .refine((n) => n >= 0, 'O número de parcelas deve ser maior ou igual a 0'),
-  personId: z.string().nullable().optional(),
-  dueDate: z.date().nullable().optional(),
-  isPaid: z.boolean().optional(),
+  description: z.string().min(1).max(60), // Descrição da conta
+  value: z.number().max(1000000).optional(), // Valor máximo de 1.000.000
+  personId: z.string().max(5).optional(), // Identificação da pessoa
+  paymentType: z.enum(['Cash', 'Installment']).optional(), // Tipo de pagamento
+  dueDate: z.date().optional(), // Data de vencimento
+  installmentsNumber: z.number().int().optional(), // Número de parcelas
+  isPaid: z.boolean().optional(), // Status de pagamento
 });
 
 function BillToPayForm() {
-  // Recupera parâmetros de rota e define estados necessários
+  // Recupera parâmetros de rota e navegação
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+
+  // Estados locais
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [billValue, setBillValue] = useState('');
   const [installmentsNumberValue, setInstallmentsNumberValue] = useState('');
   const [persons, setPersons] = useState([]);
 
-  // Configuração do formulário com validação Zod
+  // Configuração do formulário com validação baseada em Zod
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      description: '',
-      value: 0,
-      personId: null,
-      isPaid: false,
-      dueDate: null,
-      paymentType: null,
-      installmentsNumber: null,
-    },
   });
 
   // Função para buscar a lista de pessoas
@@ -70,11 +58,13 @@ function BillToPayForm() {
     }
   };
 
-  // Função para buscar os dados da conta a pagar por ID (edição)
+  // Função para buscar dados da conta a pagar
   const fetchBillToPayData = async () => {
     try {
       const response = await fetch(`/api/finance/billToPay/?id=${id}`);
       const data = await response.json();
+
+      // Atualiza valores e configura o formulário
       setBillValue(data.value?.toString() || '');
       setInstallmentsNumberValue(data.installmentsNumber?.toString() || '');
       form.reset({
@@ -83,12 +73,13 @@ function BillToPayForm() {
         personId: data.personId || null,
       });
     } catch (error) {
-      console.error('Erro ao buscar dados da conta a pagar:', error);
+      console.error('Erro ao buscar dados:', error);
     } finally {
       setIsDataLoading(false);
     }
   };
 
+  // Efeito para carregar dados iniciais
   useEffect(() => {
     fetchPersons();
     if (id) {
@@ -98,33 +89,33 @@ function BillToPayForm() {
     }
   }, [id]);
 
-  // Função de envio do formulário
+  // Função para lidar com o envio do formulário
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     setIsFormSubmitting(true);
     const url = id ? `/api/finance/billToPay/?id=${id}` : '/api/finance/billToPay';
     const method = id ? 'PUT' : 'POST';
 
-    // Garante valores padrão para campos opcionais
+    // Prepara os dados do payload
     const payload = {
       ...values,
-      personId: values.personId || null, // Se vazio, envia null
-      dueDate: values.dueDate || null, // Se vazio, envia null
-      paymentType: values.paymentType || null, // Se vazio, envia null
-      installmentsNumber: values.installmentsNumber || null, // Se vazio, envia null
+      value: values.value || null,
+      personId: values.personId || null,
+      paymentType: values.paymentType || null,
+      dueDate: values.dueDate || null,
+      installmentsNumber: values.installmentsNumber || null,
+      isPaid: values.isPaid || null,
     };
 
     try {
       const response = await fetch(url, {
         method,
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
       const data = await response.json();
 
+      // Exibe mensagem de sucesso ou erro
       if (response.ok) {
         toast({ description: data.message });
         router.push('/finance/billToPay');
@@ -139,6 +130,7 @@ function BillToPayForm() {
     }
   };
 
+  // Retorna o componente
   return (
     <>
       <h1 className="font-semibold text-2xl">{id ? 'Editar conta a pagar' : 'Cadastrar conta a pagar'}</h1>
@@ -157,7 +149,6 @@ function BillToPayForm() {
               </FormItem>
             )}
           />
-
           {/* Campo: Valor */}
           <MoneyInput
             form={form}
@@ -166,7 +157,6 @@ function BillToPayForm() {
             name="value"
             placeholder={!isDataLoading ? 'Valor da conta' : 'Carregando...'}
           />
-
           {/* Campo: Pessoa */}
           <FormField
             control={form.control}
@@ -177,7 +167,7 @@ function BillToPayForm() {
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={!isDataLoading ? 'Selecione a pessoa a ser paga' : 'Carregando...'} />
+                      <SelectValue placeholder={!isDataLoading ? 'Selecione a pessoa' : 'Carregando...'} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -192,7 +182,6 @@ function BillToPayForm() {
               </FormItem>
             )}
           />
-
           {/* Campo: Tipo de pagamento e Vencimento */}
           <FormField
             name="paymentType"
@@ -226,7 +215,6 @@ function BillToPayForm() {
                         </FormItem>
                       )}
                     />
-
                     <TabsContent value="Installment">
                       {/* Campo: Número de parcelas */}
                       <IntegerInput
@@ -244,7 +232,6 @@ function BillToPayForm() {
               </FormItem>
             )}
           />
-
           {/* Campo: Pago */}
           <FormField
             name="isPaid"
@@ -257,8 +244,7 @@ function BillToPayForm() {
               </FormItem>
             )}
           />
-
-          {/* Botão de submissão */}
+          {/* Botão de envio */}
           <Button className="w-full mt-6" type="submit" disabled={isFormSubmitting}>
             {isFormSubmitting ? 'Salvando...' : id ? 'Salvar' : 'Cadastrar'}
           </Button>
