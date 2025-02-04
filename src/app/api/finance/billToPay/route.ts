@@ -147,7 +147,10 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Valida o corpo da requisição com o schema definido anteriormente.
-    const { description, value, personId } = billToPaySchema.parse(body);
+    const { description, value, personId, paymentType, dueDate, installmentsNumber, isPaid } = billToPaySchema.parse(body);
+
+    // Define o número de parcelas como 1 se for null ou undefined
+    const totalInstallments = installmentsNumber ?? 1;
 
     // Atualiza o registro de conta a pagar no banco de dados com o id recebido.
     const updatedBillToPay = await db.billToPay.update({
@@ -157,10 +160,39 @@ export async function PUT(request: NextRequest) {
       },
       data: {
         description,
-        value,
-        personId: parseInt(personId),
+        value: value !== null ? value : 0, // Valor padrão: 0
+        personId: personId !== null ? parseInt(personId) : null, // Valor padrão: null
+        paymentType: paymentType !== null ? paymentType : 'Cash', // Valor padrão: 'Cash'
+        dueDate: dueDate !== null ? dueDate : null, // Valor padrão: null
+        isPaid: isPaid !== null ? isPaid : false // Valor padrão: false
       },
     });
+
+    const billToPayId = updatedBillToPay.id;
+
+    // Se o tipo de pagamento for "Installment" (parcelado), cria as parcelas.
+    if (paymentType === "Installment") {
+      const installmentValue = parseFloat((value / totalInstallments).toFixed(2));
+
+      for (let i = 0; i < totalInstallments; i++) {
+        let installmentDueDate = null;
+
+        // Define a data de vencimento da parcela, se `dueDate` não for nulo
+        if (dueDate) {
+          installmentDueDate = new Date(dueDate);
+          installmentDueDate.setMonth(installmentDueDate.getMonth() + i);
+        }
+
+        await db.installment.create({
+          data: {
+            billToPay: { connect: { id: billToPayId } },
+            value: installmentValue,
+            dueDate: installmentDueDate,
+            isPaid: isPaid !== null ? isPaid : false,
+          }
+        });
+      }
+    }
 
     // Retorna uma resposta de sucesso com o registro atualizado.
     return NextResponse.json({ billToPay: updatedBillToPay, message: 'Conta a pagar editada com sucesso' }, { status: 200 });
